@@ -7,6 +7,7 @@ export const RECRUIT_PRICE_STATS = [
   "stamina",
   "speed",
   "faith",
+  "spellDamage",
   "magicResistance",
   "attackRange",
 ] as const;

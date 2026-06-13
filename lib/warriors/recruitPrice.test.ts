@@ -17,6 +17,7 @@ const BASELINE_WARRIOR = {
   stamina: 1,
   speed: 1,
   faith: 1,
+  spellDamage: 1,
   magicResistance: 1,
   attackRange: 1,
 };

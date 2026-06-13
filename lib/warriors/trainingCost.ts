@@ -11,6 +11,7 @@ export const TRAINABLE_STATS = [
   "strength",
   "speed",
   "faith",
+  "spellDamage",
   "magicResistance",
 ] as const;
 
