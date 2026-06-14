@@ -19,3 +19,9 @@ export const MONK_STARTING_SPELL_IDS = [
   SPELL_ID.healingPrayer,
   SPELL_ID.holySmite,
 ] as const;
+
+/** One of these is granted randomly when a Paladin is created. */
+export const PALADIN_STARTING_SPELL_IDS = [
+  SPELL_ID.healingPrayer,
+  SPELL_ID.holySmite,
+] as const;

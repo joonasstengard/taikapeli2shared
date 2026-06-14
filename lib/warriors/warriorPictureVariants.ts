@@ -1,7 +1,14 @@
 // Max picture variant per class+gender combo for new warriors.
 // Spritesheets are named class+gender+picture, e.g. KnightMale1.png.
 
-export const WARRIOR_CLASSES = ["Archer", "Knight", "Monk", "Sorcerer"] as const;
+export const WARRIOR_CLASSES = [
+  "Archer",
+  "Horseman",
+  "Knight",
+  "Monk",
+  "Paladin",
+  "Sorcerer",
+] as const;
 export type WarriorClass = (typeof WARRIOR_CLASSES)[number];
 
 export const WARRIOR_GENDERS = ["Male", "Female"] as const;
@@ -22,14 +29,14 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
 > = {
   ArcherMale: 9,
   ArcherFemale: 0,
-  // HorsemanMale: 9,
-  // HorsemanFemale: 0,
+  HorsemanMale: 9,
+  HorsemanFemale: 0,
   KnightFemale: 0,
   KnightMale: 4,
   MonkFemale: 6,
   MonkMale: 0,
-  // PaladinMale: 9,
-  // PaladinFemale: 0,
+  PaladinMale: 9,
+  PaladinFemale: 0,
   SorcererFemale: 0,
   SorcererMale: 10
 };
