@@ -3,6 +3,7 @@
 
 export const WARRIOR_CLASSES = [
   "Horseman",
+  "King",
   "Knight",
   "Marksman",
   "Moonblade",
@@ -33,6 +34,8 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
 > = {
   HorsemanMale: 9,
   HorsemanFemale: 0,
+  KingFemale: 0,
+  KingMale: 6,
   KnightFemale: 0,
   KnightMale: 4,
   MarksmanFemale: 0,

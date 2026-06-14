@@ -23,6 +23,7 @@ describe("getWarriorPictureCount", () => {
     assert.equal(getWarriorPictureCount("Sorcerer", "Male"), 10);
     assert.equal(getWarriorPictureCount("Necromancer", "Male"), 6);
     assert.equal(getWarriorPictureCount("Moonblade", "Male"), 5);
+    assert.equal(getWarriorPictureCount("King", "Male"), 6);
   });
 });
 
@@ -40,6 +41,7 @@ describe("hasWarriorPictures", () => {
     assert.equal(hasWarriorPictures("Paladin", "Male"), true);
     assert.equal(hasWarriorPictures("Necromancer", "Male"), true);
     assert.equal(hasWarriorPictures("Moonblade", "Male"), true);
+    assert.equal(hasWarriorPictures("King", "Male"), true);
   });
 });
 
@@ -55,5 +57,6 @@ describe("getAvailableWarriorGenders", () => {
     assert.deepEqual(getAvailableWarriorGenders("Raider"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Necromancer"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Moonblade"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("King"), ["Male"]);
   });
 });
