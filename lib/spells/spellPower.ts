@@ -6,10 +6,22 @@ export interface SpellScalingValues {
   type: string | null;
 }
 
+/** Skill fields used when calculating scaled combat power from caster stats. */
+export interface SkillScalingValues {
+  baseDamageTarget: number;
+  baseHealTarget: number;
+  scalingFactor: number;
+}
+
 /** Caster stats that can scale spell damage or healing via a spell's scalingFactor. */
 export interface SpellCasterCombatStats {
   faith: number;
   spellDamage: number;
+}
+
+/** Caster stats that can scale skill damage via a skill's scalingFactor. */
+export interface SkillCasterCombatStats {
+  strength: number;
 }
 
 export function toSpellCasterCombatStats(
@@ -51,6 +63,21 @@ export function calculateSpellDamageScalingBonus(
   return calculateStatScalingBonus(spellDamage, spell.scalingFactor);
 }
 
+export function toSkillCasterCombatStats(
+  warrior: Partial<SkillCasterCombatStats>
+): SkillCasterCombatStats {
+  return {
+    strength: warrior.strength ?? 0,
+  };
+}
+
+export function calculateSkillStrengthScalingBonus(
+  skill: Pick<SkillScalingValues, "scalingFactor">,
+  strength: number
+): number {
+  return calculateStatScalingBonus(strength, skill.scalingFactor);
+}
+
 /** Extra healing from caster stats (e.g. faith on holy spells). */
 export function calculateSpellHealBonus(
   spell: SpellScalingValues,
@@ -78,6 +105,18 @@ export function calculateSpellDamageBonus(
   );
 }
 
+/** Extra damage from caster strength. Skill healing intentionally does not scale. */
+export function calculateSkillDamageBonus(
+  skill: SkillScalingValues,
+  caster: SkillCasterCombatStats
+): number {
+  if (skill.baseDamageTarget <= 0) {
+    return 0;
+  }
+
+  return calculateSkillStrengthScalingBonus(skill, caster.strength);
+}
+
 export function calculateSpellHealAmount(
   spell: SpellScalingValues,
   caster: SpellCasterCombatStats,
@@ -101,6 +140,27 @@ export function calculateSpellHealAmount(
   const rawHeal = spell.baseHealTarget + healBonus;
 
   return Math.min(rawHeal, missingHealth);
+}
+
+export function calculateSkillHealAmount(
+  skill: SkillScalingValues,
+  targetCurrentHealth: number,
+  targetMaxHealth: number
+): number {
+  if (
+    skill.baseHealTarget <= 0 ||
+    targetCurrentHealth <= 0 ||
+    targetMaxHealth <= 0
+  ) {
+    return 0;
+  }
+
+  const missingHealth = targetMaxHealth - targetCurrentHealth;
+  if (missingHealth <= 0) {
+    return 0;
+  }
+
+  return Math.min(skill.baseHealTarget, missingHealth);
 }
 
 export function applyMagicResistance(

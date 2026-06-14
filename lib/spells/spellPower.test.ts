@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 import {
   applyMagicResistance,
   calculateHolyFaithScalingBonus,
+  calculateSkillDamageBonus,
+  calculateSkillHealAmount,
   calculateSpellDamageBonus,
   calculateSpellHealAmount,
   calculateSpellHealBonus,
@@ -79,6 +81,22 @@ describe("calculateSpellDamageBonus", () => {
   });
 });
 
+describe("calculateSkillDamageBonus", () => {
+  it("adds strength scaling to damaging skills", () => {
+    assert.equal(
+      calculateSkillDamageBonus(fireball, { strength: 6 }),
+      3
+    );
+  });
+
+  it("does not scale healing skills", () => {
+    assert.equal(
+      calculateSkillDamageBonus(healingPrayer, { strength: 6 }),
+      0
+    );
+  });
+});
+
 describe("calculateSpellHealAmount", () => {
   it("includes faith bonus and caps at missing health", () => {
     assert.equal(
@@ -100,6 +118,13 @@ describe("calculateSpellHealAmount", () => {
       calculateSpellHealAmount(healingPrayer, { faith: 5, spellDamage: 0 }, 20, 20),
       0
     );
+  });
+});
+
+describe("calculateSkillHealAmount", () => {
+  it("uses only base healing and caps at missing health", () => {
+    assert.equal(calculateSkillHealAmount(healingPrayer, 10, 20), 5);
+    assert.equal(calculateSkillHealAmount(healingPrayer, 18, 20), 2);
   });
 });
 
