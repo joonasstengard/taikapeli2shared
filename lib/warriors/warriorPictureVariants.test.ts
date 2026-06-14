@@ -50,6 +50,7 @@ describe("getAvailableWarriorGenders", () => {
     assert.deepEqual(getAvailableWarriorGenders("Paladin"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Ranger"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("Raider"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Necromancer"), ["Male"]);
   });
 });

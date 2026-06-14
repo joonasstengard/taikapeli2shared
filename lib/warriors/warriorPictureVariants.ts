@@ -8,6 +8,7 @@ export const WARRIOR_CLASSES = [
   "Monk",
   "Necromancer",
   "Paladin",
+  "Raider",
   "Ranger",
   "Sorcerer",
 ] as const;
@@ -41,6 +42,8 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   NecromancerMale: 6,
   PaladinMale: 9,
   PaladinFemale: 0,
+  RaiderMale: 5,
+  RaiderFemale: 0,
   RangerMale: 5,
   RangerFemale: 0,
   SorcererFemale: 0,
