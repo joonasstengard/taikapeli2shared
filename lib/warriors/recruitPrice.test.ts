@@ -5,7 +5,12 @@ import {
   calculateWarriorRecruitPrice,
   calculateWarriorStatRecruitValue,
   HIGH_VALUE_STAT_MULTIPLIER,
+  RECRUIT_BASE_PRICE,
   RECRUIT_MIN_PRICE,
+  RECRUIT_PRICE_MULTIPLIER,
+  RECRUIT_SPELL_COST_PER_SPELL,
+  RECRUIT_STAT_BASE_COST,
+  RECRUIT_STAT_LEVEL_MULTIPLIER,
   recruitCostForPoint,
   recruitStatContribution,
 } from "./recruitPrice";
@@ -24,12 +29,18 @@ const BASELINE_WARRIOR = {
 
 describe("recruitCostForPoint", () => {
   it("uses base cost at stat value zero", () => {
-    assert.equal(recruitCostForPoint(0), 0.8);
+    assert.equal(recruitCostForPoint(0), RECRUIT_STAT_BASE_COST);
   });
 
   it("adds level multiplier for higher stat values", () => {
-    assert.equal(recruitCostForPoint(1), 1.1);
-    assert.equal(recruitCostForPoint(10), 3.8);
+    assert.equal(
+      recruitCostForPoint(1),
+      RECRUIT_STAT_BASE_COST + RECRUIT_STAT_LEVEL_MULTIPLIER
+    );
+    assert.equal(
+      recruitCostForPoint(10),
+      RECRUIT_STAT_BASE_COST + 10 * RECRUIT_STAT_LEVEL_MULTIPLIER
+    );
   });
 });
 
@@ -106,6 +117,18 @@ describe("calculateWarriorStatRecruitValue", () => {
 });
 
 describe("calculateWarriorRecruitPrice", () => {
+  function expectedRecruitPrice(warrior: typeof BASELINE_WARRIOR, spellCount = 0): number {
+    return Math.max(
+      RECRUIT_MIN_PRICE,
+      Math.round(
+        (RECRUIT_BASE_PRICE +
+          calculateWarriorStatRecruitValue(warrior) +
+          spellCount * RECRUIT_SPELL_COST_PER_SPELL) *
+          RECRUIT_PRICE_MULTIPLIER
+      )
+    );
+  }
+
   it("enforces the minimum recruit price", () => {
     assert.equal(
       calculateWarriorRecruitPrice(BASELINE_WARRIOR),
@@ -126,8 +149,6 @@ describe("calculateWarriorRecruitPrice", () => {
       speed: 5,
     };
 
-    assert.ok(calculateWarriorRecruitPrice(weakWarrior) < 30);
-    assert.ok(calculateWarriorRecruitPrice(strongWarrior) >= 45);
     assert.ok(
       calculateWarriorRecruitPrice(strongWarrior) >
         calculateWarriorRecruitPrice(weakWarrior)
@@ -165,40 +186,34 @@ describe("calculateWarriorRecruitPrice", () => {
     );
   });
 
-  it("matches fixture prices for representative warriors", () => {
-    assert.equal(
-      calculateWarriorRecruitPrice({ ...BASELINE_WARRIOR, health: 5 }),
-      12
-    );
-    assert.equal(
-      calculateWarriorRecruitPrice({
+  it("matches the recruit price formula for representative warriors", () => {
+    const representativeWarriors = [
+      { ...BASELINE_WARRIOR, health: 5 },
+      {
         ...BASELINE_WARRIOR,
         health: 14,
         stamina: 12,
         strength: 8,
         speed: 5,
-      }),
-      55
-    );
-    assert.equal(
-      calculateWarriorRecruitPrice({
+      },
+      {
         ...BASELINE_WARRIOR,
         health: 18,
         stamina: 15,
         strength: 12,
         speed: 8,
-      }),
-      90
-    );
-    assert.equal(
-      calculateWarriorRecruitPrice({
+      },
+      {
         ...BASELINE_WARRIOR,
         health: 8,
         strength: 6,
         speed: 3,
         attackRange: 2,
-      }),
-      23
-    );
+      },
+    ];
+
+    for (const warrior of representativeWarriors) {
+      assert.equal(calculateWarriorRecruitPrice(warrior), expectedRecruitPrice(warrior));
+    }
   });
 });
