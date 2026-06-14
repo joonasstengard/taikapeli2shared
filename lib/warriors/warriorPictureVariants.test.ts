@@ -8,7 +8,6 @@ import {
 
 describe("getWarriorPictureCount", () => {
   it("returns 0 for combos explicitly set to no sprites", () => {
-    assert.equal(getWarriorPictureCount("Archer", "Female"), 0);
     assert.equal(getWarriorPictureCount("Knight", "Female"), 0);
     assert.equal(getWarriorPictureCount("Monk", "Male"), 0);
     assert.equal(getWarriorPictureCount("Sorcerer", "Female"), 0);
@@ -17,7 +16,6 @@ describe("getWarriorPictureCount", () => {
 
   it("returns override counts for specific combos", () => {
     assert.equal(getWarriorPictureCount("Knight", "Male"), 4);
-    assert.equal(getWarriorPictureCount("Archer", "Male"), 9);
     assert.equal(getWarriorPictureCount("Horseman", "Male"), 9);
     assert.equal(getWarriorPictureCount("Monk", "Female"), 6);
     assert.equal(getWarriorPictureCount("Paladin", "Male"), 9);
@@ -44,11 +42,11 @@ describe("hasWarriorPictures", () => {
 describe("getAvailableWarriorGenders", () => {
   it("excludes genders with no sprites", () => {
     assert.deepEqual(getAvailableWarriorGenders("Knight"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Archer"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Horseman"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Monk"), ["Female"]);
     assert.deepEqual(getAvailableWarriorGenders("Paladin"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("Ranger"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Necromancer"), ["Male"]);
   });
 });

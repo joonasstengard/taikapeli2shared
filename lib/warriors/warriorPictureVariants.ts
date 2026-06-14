@@ -2,12 +2,12 @@
 // Spritesheets are named class+gender+picture, e.g. KnightMale1.png.
 
 export const WARRIOR_CLASSES = [
-  "Archer",
   "Horseman",
   "Knight",
   "Monk",
   "Necromancer",
   "Paladin",
+  "Ranger",
   "Sorcerer",
 ] as const;
 export type WarriorClass = (typeof WARRIOR_CLASSES)[number];
@@ -28,8 +28,6 @@ export const DEFAULT_WARRIOR_PICTURE_COUNT = 0;
 export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   Record<WarriorClassGenderKey, number>
 > = {
-  ArcherMale: 9,
-  ArcherFemale: 0,
   HorsemanMale: 9,
   HorsemanFemale: 0,
   KnightFemale: 0,
@@ -40,6 +38,8 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   NecromancerMale: 6,
   PaladinMale: 9,
   PaladinFemale: 0,
+  RangerMale: 9,
+  RangerFemale: 0,
   SorcererFemale: 0,
   SorcererMale: 10
 };
