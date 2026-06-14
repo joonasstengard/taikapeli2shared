@@ -35,3 +35,8 @@ export const PALADIN_STARTING_SPELL_IDS = [
 export const NECROMANCER_STARTING_SPELL_IDS = [
   SPELL_ID.shadowBlink,
 ] as const;
+
+/** One of these is granted randomly when a Moonblade is created. */
+export const MOONBLADE_STARTING_SPELL_IDS = [
+  SPELL_ID.shadowBlink,
+] as const;
