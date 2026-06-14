@@ -1,0 +1,44 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import {
+  getAvailableWarriorGenders,
+  getWarriorPictureCount,
+  hasWarriorPictures,
+} from "./warriorPictureVariants";
+
+describe("getWarriorPictureCount", () => {
+  it("returns 0 for combos explicitly set to no sprites", () => {
+    assert.equal(getWarriorPictureCount("Archer", "Female"), 0);
+    assert.equal(getWarriorPictureCount("Knight", "Female"), 0);
+    assert.equal(getWarriorPictureCount("Monk", "Male"), 0);
+    assert.equal(getWarriorPictureCount("Sorcerer", "Female"), 0);
+  });
+
+  it("returns override counts for specific combos", () => {
+    assert.equal(getWarriorPictureCount("Knight", "Male"), 4);
+    assert.equal(getWarriorPictureCount("Archer", "Male"), 9);
+    assert.equal(getWarriorPictureCount("Monk", "Female"), 6);
+    assert.equal(getWarriorPictureCount("Sorcerer", "Male"), 10);
+  });
+});
+
+describe("hasWarriorPictures", () => {
+  it("returns false when picture count is 0", () => {
+    assert.equal(hasWarriorPictures("Knight", "Female"), false);
+    assert.equal(hasWarriorPictures("Monk", "Male"), false);
+  });
+
+  it("returns true when picture count is positive", () => {
+    assert.equal(hasWarriorPictures("Knight", "Male"), true);
+    assert.equal(hasWarriorPictures("Monk", "Female"), true);
+  });
+});
+
+describe("getAvailableWarriorGenders", () => {
+  it("excludes genders with no sprites", () => {
+    assert.deepEqual(getAvailableWarriorGenders("Knight"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("Archer"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("Monk"), ["Female"]);
+    assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
+  });
+});
