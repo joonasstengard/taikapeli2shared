@@ -31,7 +31,7 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapConfig> = {
   fantasyforest1: {
     width: 6,
     height: 6,
-    blockedTiles: ["A5", "B5", "E5", "F5", "A2", "B2", "E2", "F2"],
+    blockedTiles: ["A5", "E5", "F5", "A2", "E2", "F2"],
   },
   fantasyforest2: {
     width: 6,
