@@ -12,6 +12,7 @@ describe("getWarriorPictureCount", () => {
     assert.equal(getWarriorPictureCount("Knight", "Female"), 0);
     assert.equal(getWarriorPictureCount("Monk", "Male"), 0);
     assert.equal(getWarriorPictureCount("Sorcerer", "Female"), 0);
+    assert.equal(getWarriorPictureCount("Necromancer", "Female"), 0);
   });
 
   it("returns override counts for specific combos", () => {
@@ -21,6 +22,7 @@ describe("getWarriorPictureCount", () => {
     assert.equal(getWarriorPictureCount("Monk", "Female"), 6);
     assert.equal(getWarriorPictureCount("Paladin", "Male"), 9);
     assert.equal(getWarriorPictureCount("Sorcerer", "Male"), 10);
+    assert.equal(getWarriorPictureCount("Necromancer", "Male"), 6);
   });
 });
 
@@ -35,6 +37,7 @@ describe("hasWarriorPictures", () => {
     assert.equal(hasWarriorPictures("Horseman", "Male"), true);
     assert.equal(hasWarriorPictures("Monk", "Female"), true);
     assert.equal(hasWarriorPictures("Paladin", "Male"), true);
+    assert.equal(hasWarriorPictures("Necromancer", "Male"), true);
   });
 });
 
@@ -46,5 +49,6 @@ describe("getAvailableWarriorGenders", () => {
     assert.deepEqual(getAvailableWarriorGenders("Monk"), ["Female"]);
     assert.deepEqual(getAvailableWarriorGenders("Paladin"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
+    assert.deepEqual(getAvailableWarriorGenders("Necromancer"), ["Male"]);
   });
 });
