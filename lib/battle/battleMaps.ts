@@ -2,7 +2,9 @@ export const BATTLE_MAP_KEYS = ["stonegarden1",
   "stonegarden2",
   "stonegarden3",
   "fantasyforest1",
-  "fantasyforest2"] as const;
+  "fantasyforest2",
+  "fantasyGrasslands",
+] as const;
 
 export type BattleMapKey = (typeof BATTLE_MAP_KEYS)[number];
 
@@ -36,7 +38,12 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapConfig> = {
   fantasyforest2: {
     width: 6,
     height: 5,
-  },
+  },  
+  fantasyGrasslands: {
+    width: 6,
+    height: 6,
+    blockedTiles: ["C1", "D1"],
+  }
 };
 
 export function getBattleMapConfig(

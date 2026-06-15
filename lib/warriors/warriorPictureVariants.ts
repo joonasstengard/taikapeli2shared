@@ -37,7 +37,7 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   KingFemale: 0,
   KingMale: 6,
   KnightFemale: 0,
-  KnightMale: 4,
+  KnightMale: 7,
   MarksmanFemale: 0,
   MarksmanMale: 9,
   MonkFemale: 6,

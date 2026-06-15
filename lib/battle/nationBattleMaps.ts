@@ -14,8 +14,8 @@ export const NATION_BATTLE_MAP_KEY_OVERRIDES: Partial<
   Record<NationName, BattleMapKey>
 > = {
   Kalmalampi: "stonegarden1",
-  Hiidenlahti: "stonegarden2",
-  Vainola: "stonegarden3",
+  Hiidenlahti: "fantasyGrasslands",
+  Vainola: "fantasyGrasslands",
   Viranta: "stonegarden2",
   Tapiola: "fantasyforest2",
   Pohjamaa: "fantasyforest1",
