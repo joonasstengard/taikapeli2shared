@@ -1,17 +1,19 @@
 export const SKILL_ID = {
-  finalStrike: 1,
+  lastStand: 1,
   eviscerate: 2,
   decisiveStrike: 3,
   lunge: 4,
   frozenArrow: 5,
   criticalBolt: 6,
   longShot: 7,
+  cavalryCharge: 8,
+  stomp: 9,
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
 export const HORSEMAN_STARTING_SKILL_IDS = [
-  SKILL_ID.lunge,
-  SKILL_ID.decisiveStrike,
+  SKILL_ID.cavalryCharge,
+  SKILL_ID.stomp
 ] as const;
 
 /** One of these is granted randomly when a King is created. */
@@ -21,7 +23,8 @@ export const KING_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Knight is created. */
 export const KNIGHT_STARTING_SKILL_IDS = [
-  SKILL_ID.lunge
+  SKILL_ID.lunge,
+  SKILL_ID.lastStand
 ] as const;
 
 /** One of these is granted randomly when a Marksman is created. */
@@ -31,14 +34,11 @@ export const MARKSMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SKILL_IDS = [
-  SKILL_ID.eviscerate,
-  SKILL_ID.finalStrike,
 ] as const;
 
 /** One of these is granted randomly when a Raider is created. */
 export const RAIDER_STARTING_SKILL_IDS = [
-  SKILL_ID.eviscerate,
-  SKILL_ID.lunge,
+  SKILL_ID.eviscerate
 ] as const;
 
 /** One of these is granted randomly when a Ranger is created. */
