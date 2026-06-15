@@ -42,7 +42,7 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapConfig> = {
   fantasyGrasslands: {
     width: 6,
     height: 6,
-    blockedTiles: ["C1", "D1"],
+    blockedTiles: ["C3", "D3"],
   }
 };
 

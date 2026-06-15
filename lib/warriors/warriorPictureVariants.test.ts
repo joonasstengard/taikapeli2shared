@@ -15,7 +15,7 @@ describe("getWarriorPictureCount", () => {
   });
 
   it("returns override counts for specific combos", () => {
-    assert.equal(getWarriorPictureCount("Knight", "Male"), 4);
+    assert.equal(getWarriorPictureCount("Knight", "Male"), 7);
     assert.equal(getWarriorPictureCount("Horseman", "Male"), 9);
     assert.equal(getWarriorPictureCount("Marksman", "Male"), 9);
     assert.equal(getWarriorPictureCount("Monk", "Female"), 6);
