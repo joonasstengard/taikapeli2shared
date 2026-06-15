@@ -34,6 +34,7 @@ export const MARKSMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SKILL_IDS = [
+  SKILL_ID.decisiveStrike
 ] as const;
 
 /** One of these is granted randomly when a Raider is created. */
