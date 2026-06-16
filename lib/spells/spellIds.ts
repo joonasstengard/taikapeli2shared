@@ -9,6 +9,8 @@ export const SPELL_ID = {
   teleport: 8,
   freezingWhisper: 9,
   protect: 10,
+  rottingTouch: 11,
+  bloodCurse: 12,
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */
@@ -34,6 +36,8 @@ export const PALADIN_STARTING_SPELL_IDS = [
 /** One of these is granted randomly when a Necromancer is created. */
 export const NECROMANCER_STARTING_SPELL_IDS = [
   SPELL_ID.shadowBlink,
+  SPELL_ID.bloodCurse,
+  SPELL_ID.rottingTouch
 ] as const;
 
 /** One of these is granted randomly when a Moonblade is created. */
