@@ -8,6 +8,7 @@ export const SKILL_ID = {
   longShot: 7,
   cavalryCharge: 8,
   stomp: 9,
+  lifeSteal: 10
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
@@ -34,7 +35,8 @@ export const MARKSMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SKILL_IDS = [
-  SKILL_ID.decisiveStrike
+  SKILL_ID.decisiveStrike,
+  SKILL_ID.lifeSteal
 ] as const;
 
 /** One of these is granted randomly when a Raider is created. */

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   applyMagicResistance,
+  calculateDrainHealAmount,
   calculateHolyFaithScalingBonus,
   calculateSkillDamageBonus,
   calculateSkillHealAmount,
@@ -132,5 +133,17 @@ describe("applyMagicResistance", () => {
   it("reduces damage by magic resistance percentage", () => {
     assert.equal(applyMagicResistance(10, 0), 10);
     assert.equal(applyMagicResistance(10, 50), 5);
+  });
+});
+
+describe("calculateDrainHealAmount", () => {
+  it("heals up to damage dealt, capped by missing health", () => {
+    assert.equal(calculateDrainHealAmount(8, 10, 20), 8);
+    assert.equal(calculateDrainHealAmount(8, 17, 20), 3);
+  });
+
+  it("returns zero when no damage was dealt or caster is full", () => {
+    assert.equal(calculateDrainHealAmount(0, 10, 20), 0);
+    assert.equal(calculateDrainHealAmount(5, 20, 20), 0);
   });
 });

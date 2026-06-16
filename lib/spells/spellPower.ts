@@ -170,3 +170,25 @@ export function applyMagicResistance(
   const damageReduction = (magicResistance / 100) * rawDamage;
   return Math.max(0, Math.round(rawDamage - damageReduction));
 }
+
+/** Heal amount when a drain effect converts damage dealt into caster HP. */
+export function calculateDrainHealAmount(
+  damageDealt: number,
+  casterCurrentHealth: number,
+  casterMaxHealth: number
+): number {
+  if (
+    damageDealt <= 0 ||
+    casterCurrentHealth <= 0 ||
+    casterMaxHealth <= 0
+  ) {
+    return 0;
+  }
+
+  const missingHealth = casterMaxHealth - casterCurrentHealth;
+  if (missingHealth <= 0) {
+    return 0;
+  }
+
+  return Math.min(damageDealt, missingHealth);
+}
