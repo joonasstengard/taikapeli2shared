@@ -19,7 +19,7 @@ export interface BattleMapConfig {
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapConfig> = {
   stonegarden1: {
     width: 6,
-    height: 6,
+    height: 5,
     blockedTiles: ["A4", "D4"],
   },
   stonegarden2: {
@@ -41,7 +41,7 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapConfig> = {
   },  
   fantasyGrasslands: {
     width: 6,
-    height: 6,
+    height: 5,
     blockedTiles: ["C3", "D3"],
   }
 };
