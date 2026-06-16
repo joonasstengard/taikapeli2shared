@@ -11,6 +11,9 @@ export const SPELL_ID = {
   protect: 10,
   rottingTouch: 11,
   bloodCurse: 12,
+  thunder: 13,
+  icebolt: 14,
+  hellflame: 15
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */
