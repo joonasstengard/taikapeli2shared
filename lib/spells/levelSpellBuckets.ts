@@ -35,7 +35,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
       skipChancePercent: 25
     },
   },
-  Monk: {
+  Priestess: {
     3: {
       spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite],
       skipChancePercent: 75,

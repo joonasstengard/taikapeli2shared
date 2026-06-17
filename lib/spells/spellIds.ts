@@ -25,8 +25,8 @@ export const SORCERER_STARTING_SPELL_IDS = [
   SPELL_ID.thunderball,
 ] as const;
 
-/** One of these is granted randomly when a Monk is created. */
-export const MONK_STARTING_SPELL_IDS = [
+/** One of these is granted randomly when a Priestess is created. */
+export const PRIESTESS_STARTING_SPELL_IDS = [
   SPELL_ID.healingPrayer,
   SPELL_ID.holySmite,
 ] as const;

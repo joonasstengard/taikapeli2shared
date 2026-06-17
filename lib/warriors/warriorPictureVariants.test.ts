@@ -9,7 +9,7 @@ import {
 describe("getWarriorPictureCount", () => {
   it("returns 0 for combos explicitly set to no sprites", () => {
     assert.equal(getWarriorPictureCount("Knight", "Female"), 0);
-    assert.equal(getWarriorPictureCount("Monk", "Male"), 0);
+    assert.equal(getWarriorPictureCount("Priestess", "Male"), 0);
     assert.equal(getWarriorPictureCount("Sorcerer", "Female"), 0);
     assert.equal(getWarriorPictureCount("Necromancer", "Female"), 0);
   });
@@ -18,7 +18,7 @@ describe("getWarriorPictureCount", () => {
     assert.equal(getWarriorPictureCount("Knight", "Male"), 7);
     assert.equal(getWarriorPictureCount("Horseman", "Male"), 9);
     assert.equal(getWarriorPictureCount("Marksman", "Male"), 9);
-    assert.equal(getWarriorPictureCount("Monk", "Female"), 6);
+    assert.equal(getWarriorPictureCount("Priestess", "Female"), 6);
     assert.equal(getWarriorPictureCount("Paladin", "Male"), 9);
     assert.equal(getWarriorPictureCount("Sorcerer", "Male"), 10);
     assert.equal(getWarriorPictureCount("Necromancer", "Male"), 6);
@@ -30,14 +30,14 @@ describe("getWarriorPictureCount", () => {
 describe("hasWarriorPictures", () => {
   it("returns false when picture count is 0", () => {
     assert.equal(hasWarriorPictures("Knight", "Female"), false);
-    assert.equal(hasWarriorPictures("Monk", "Male"), false);
+    assert.equal(hasWarriorPictures("Priestess", "Male"), false);
   });
 
   it("returns true when picture count is positive", () => {
     assert.equal(hasWarriorPictures("Knight", "Male"), true);
     assert.equal(hasWarriorPictures("Horseman", "Male"), true);
     assert.equal(hasWarriorPictures("Marksman", "Male"), true);
-    assert.equal(hasWarriorPictures("Monk", "Female"), true);
+    assert.equal(hasWarriorPictures("Priestess", "Female"), true);
     assert.equal(hasWarriorPictures("Paladin", "Male"), true);
     assert.equal(hasWarriorPictures("Necromancer", "Male"), true);
     assert.equal(hasWarriorPictures("Moonblade", "Male"), true);
@@ -50,7 +50,7 @@ describe("getAvailableWarriorGenders", () => {
     assert.deepEqual(getAvailableWarriorGenders("Knight"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Horseman"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Marksman"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Monk"), ["Female"]);
+    assert.deepEqual(getAvailableWarriorGenders("Priestess"), ["Female"]);
     assert.deepEqual(getAvailableWarriorGenders("Paladin"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
     assert.deepEqual(getAvailableWarriorGenders("Ranger"), ["Male"]);
