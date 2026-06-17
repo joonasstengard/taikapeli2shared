@@ -21,39 +21,44 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Horseman: {
     4: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.cavalryCharge],
-      skipChancePercent: 50,
     }
   },
   Knight: {
     3: {
       skillIds: [SKILL_ID.decisiveStrike],
-      skipChancePercent: 50,
+      skipChancePercent: 25,
     },
     5: {
       skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge],
-      skipChancePercent: 50,
+      skipChancePercent: 25,
     },
   },
   King: {
     3: {
-      skillIds: [SKILL_ID.lastStand],
-      skipChancePercent: 75,
-    }
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.raiseMorale, SKILL_ID.rallyTroops]
+    },
+    5: {
+      skillIds: [SKILL_ID.rallyTroops, SKILL_ID.lastStand]
+    },
   },
   Marksman: {
     3: {
       skillIds: [SKILL_ID.longShot, SKILL_ID.frozenArrow],
-      skipChancePercent: 50,
+      skipChancePercent: 33,
     },
     5: {
       skillIds: [SKILL_ID.criticalBolt],
-      skipChancePercent: 50,
+      skipChancePercent: 33,
     },
   },
   Moonblade: {
     4: {
       skillIds: [SKILL_ID.lifeSteal, SKILL_ID.eviscerate],
-      skipChancePercent: 50,
+    }
+  },
+  Paladin: {
+    4: {
+      skillIds: [SKILL_ID.raiseMorale]
     }
   },
   Raider: {

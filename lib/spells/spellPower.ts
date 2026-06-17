@@ -10,6 +10,7 @@ export interface SpellScalingValues {
 export interface SkillScalingValues {
   baseDamageTarget: number;
   baseHealTarget: number;
+  baseStaminaRestore?: number;
   scalingFactor: number;
 }
 
@@ -161,6 +162,28 @@ export function calculateSkillHealAmount(
   }
 
   return Math.min(skill.baseHealTarget, missingHealth);
+}
+
+/** Stamina restored to a target, capped at missing stamina. */
+export function calculateStaminaRestoreAmount(
+  baseStaminaRestore: number,
+  targetCurrentStamina: number,
+  targetMaxStamina: number
+): number {
+  if (
+    baseStaminaRestore <= 0 ||
+    targetCurrentStamina <= 0 ||
+    targetMaxStamina <= 0
+  ) {
+    return 0;
+  }
+
+  const missingStamina = targetMaxStamina - targetCurrentStamina;
+  if (missingStamina <= 0) {
+    return 0;
+  }
+
+  return Math.min(baseStaminaRestore, missingStamina);
 }
 
 export function applyMagicResistance(

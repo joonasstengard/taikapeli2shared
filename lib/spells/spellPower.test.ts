@@ -9,6 +9,7 @@ import {
   calculateSpellDamageBonus,
   calculateSpellHealAmount,
   calculateSpellHealBonus,
+  calculateStaminaRestoreAmount,
   calculateStatScalingBonus,
 } from "./spellPower";
 
@@ -126,6 +127,14 @@ describe("calculateSkillHealAmount", () => {
   it("uses only base healing and caps at missing health", () => {
     assert.equal(calculateSkillHealAmount(healingPrayer, 10, 20), 5);
     assert.equal(calculateSkillHealAmount(healingPrayer, 18, 20), 2);
+  });
+});
+
+describe("calculateStaminaRestoreAmount", () => {
+  it("restores up to the base amount, capped by missing stamina", () => {
+    assert.equal(calculateStaminaRestoreAmount(3, 5, 12), 3);
+    assert.equal(calculateStaminaRestoreAmount(3, 11, 12), 1);
+    assert.equal(calculateStaminaRestoreAmount(3, 12, 12), 0);
   });
 });
 

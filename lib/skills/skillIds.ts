@@ -8,7 +8,9 @@ export const SKILL_ID = {
   longShot: 7,
   cavalryCharge: 8,
   stomp: 9,
-  lifeSteal: 10
+  lifeSteal: 10,
+  rallyTroops: 11,
+  raiseMorale: 12
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
@@ -19,7 +21,9 @@ export const HORSEMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a King is created. */
 export const KING_STARTING_SKILL_IDS = [
-  SKILL_ID.decisiveStrike
+  SKILL_ID.lastStand,
+  SKILL_ID.raiseMorale,
+  SKILL_ID.rallyTroops
 ] as const;
 
 /** One of these is granted randomly when a Knight is created. */

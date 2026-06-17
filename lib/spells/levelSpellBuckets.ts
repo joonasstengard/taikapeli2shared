@@ -26,39 +26,38 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
         SPELL_ID.thunderball,
         SPELL_ID.desperateRune
       ],
-      skipChancePercent: 25
+      skipChancePercent: 10
     },
     5: {
       spellIds: [SPELL_ID.teleport, SPELL_ID.icebolt,
       SPELL_ID.hellflame,
       SPELL_ID.freezingWhisper,],
-      skipChancePercent: 25
+      skipChancePercent: 10
     },
   },
   Priestess: {
     3: {
       spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite],
-      skipChancePercent: 75,
+      skipChancePercent: 20,
     },
     5: {
-      spellIds: [SPELL_ID.protect],
-      skipChancePercent: 75
+      spellIds: [SPELL_ID.protect, SPELL_ID.massHealing],
+      skipChancePercent: 25
     },
   },
   Paladin: {
     4: {
-      spellIds: [SPELL_ID.protect, SPELL_ID.holySmite, SPELL_ID.healingPrayer, SPELL_ID.desperateRune],
-      skipChancePercent: 50,
+      spellIds: [SPELL_ID.protect, SPELL_ID.holySmite, SPELL_ID.healingPrayer, SPELL_ID.beaconOfLight]
     }
   },
   Necromancer: {
     3: {
       spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
-      skipChancePercent: 25
+      skipChancePercent: 10
     },
     5: {
       spellIds: [SPELL_ID.lifeDevour],
-      skipChancePercent: 25
+      skipChancePercent: 10
     },
   },
   Moonblade: {

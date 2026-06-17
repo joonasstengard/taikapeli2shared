@@ -15,7 +15,9 @@ export const SPELL_ID = {
   icebolt: 14,
   hellflame: 15,
   lifeDrain: 16,
-  lifeDevour: 17
+  lifeDevour: 17,
+  massHealing: 18,
+  beaconOfLight: 19
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */
@@ -33,9 +35,8 @@ export const PRIESTESS_STARTING_SPELL_IDS = [
 
 /** One of these is granted randomly when a Paladin is created. */
 export const PALADIN_STARTING_SPELL_IDS = [
-  SPELL_ID.healingPrayer,
-  SPELL_ID.holySmite,
-  SPELL_ID.protect,
+  SPELL_ID.beaconOfLight,
+  SPELL_ID.holySmite
 ] as const;
 
 /** One of these is granted randomly when a Necromancer is created. */
