@@ -186,14 +186,6 @@ export function calculateStaminaRestoreAmount(
   return Math.min(baseStaminaRestore, missingStamina);
 }
 
-export function applyMagicResistance(
-  rawDamage: number,
-  magicResistance: number
-): number {
-  const damageReduction = (magicResistance / 100) * rawDamage;
-  return Math.max(0, Math.round(rawDamage - damageReduction));
-}
-
 /** Heal amount when a drain effect converts damage dealt into caster HP. */
 export function calculateDrainHealAmount(
   damageDealt: number,

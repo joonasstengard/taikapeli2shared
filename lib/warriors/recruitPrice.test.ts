@@ -23,7 +23,6 @@ const BASELINE_WARRIOR = {
   speed: 1,
   faith: 1,
   spellDamage: 1,
-  magicResistance: 1,
   attackRange: 1,
 };
 
@@ -106,14 +105,6 @@ describe("calculateWarriorStatRecruitValue", () => {
     );
   });
 
-  it("includes magicResistance in pricing", () => {
-    const withMagicResistance = calculateWarriorStatRecruitValue({
-      ...BASELINE_WARRIOR,
-      magicResistance: 15,
-    });
-
-    assert.equal(withMagicResistance, recruitStatContribution(15));
-  });
 });
 
 describe("calculateWarriorRecruitPrice", () => {

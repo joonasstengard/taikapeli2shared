@@ -40,7 +40,7 @@ describe("previewSpellDamage", () => {
     effect: null,
   };
 
-  it("adds faith and spell damage scaling without magic resistance", () => {
+  it("adds faith and spell damage scaling", () => {
     assert.equal(
       previewSpellDamage(holyBolt, {
         health: 10,

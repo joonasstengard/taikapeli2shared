@@ -12,7 +12,6 @@ export const TRAINABLE_STATS = [
   "speed",
   "faith",
   "spellDamage",
-  "magicResistance",
 ] as const;
 
 export type TrainableStat = (typeof TRAINABLE_STATS)[number];

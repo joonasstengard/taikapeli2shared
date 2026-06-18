@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  applyMagicResistance,
   calculateDrainHealAmount,
   calculateHolyFaithScalingBonus,
   calculateSkillDamageBonus,
@@ -135,13 +134,6 @@ describe("calculateStaminaRestoreAmount", () => {
     assert.equal(calculateStaminaRestoreAmount(3, 5, 12), 3);
     assert.equal(calculateStaminaRestoreAmount(3, 11, 12), 1);
     assert.equal(calculateStaminaRestoreAmount(3, 12, 12), 0);
-  });
-});
-
-describe("applyMagicResistance", () => {
-  it("reduces damage by magic resistance percentage", () => {
-    assert.equal(applyMagicResistance(10, 0), 10);
-    assert.equal(applyMagicResistance(10, 50), 5);
   });
 });
 
