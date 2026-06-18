@@ -19,14 +19,15 @@ export const HIGH_VALUE_STATS = ["attackRange"] as const;
 export type HighValueStat = (typeof HIGH_VALUE_STATS)[number];
 
 /** Multiplier applied to a high-value stat's full contribution. */
+// (attack range)
 export const HIGH_VALUE_STAT_MULTIPLIER = 14;
 
 /** Per-point cost shape — same idea as training, with separate tuning knobs. */
-export const RECRUIT_STAT_BASE_COST = 0.3;
-export const RECRUIT_STAT_LEVEL_MULTIPLIER = 0.2;
+export const RECRUIT_STAT_BASE_COST = 0.4;
+export const RECRUIT_STAT_LEVEL_MULTIPLIER = 0.25;
 
 /** Flat add-on so even a weak warrior is not free. */
-export const RECRUIT_BASE_PRICE = 1;
+export const RECRUIT_BASE_PRICE = 4;
 
 /** Global scaler for recruit prices. */
 export const RECRUIT_PRICE_MULTIPLIER = 0.5;
@@ -35,7 +36,7 @@ export const RECRUIT_PRICE_MULTIPLIER = 0.5;
 export const RECRUIT_SPELL_COST_PER_SPELL = 2;
 
 /** Minimum recruit price after rounding. */
-export const RECRUIT_MIN_PRICE = 1;
+export const RECRUIT_MIN_PRICE = 4;
 
 export type WarriorRecruitStats = Record<RecruitPriceStat, number>;
 
@@ -100,4 +101,12 @@ export function calculateWarriorRecruitPrice(
     (RECRUIT_BASE_PRICE + statValue + spellValue) * RECRUIT_PRICE_MULTIPLIER;
 
   return Math.max(RECRUIT_MIN_PRICE, Math.round(rawPrice));
+}
+
+/** Gold granted when releasing a warrior (half the recruit/market price). */
+export function calculateWarriorReleaseGold(
+  warrior: WarriorRecruitStats,
+  spellCount = 0
+): number {
+  return Math.round(calculateWarriorRecruitPrice(warrior, spellCount) / 2);
 }

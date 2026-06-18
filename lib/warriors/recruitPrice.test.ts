@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   calculateRecruitStatCost,
   calculateWarriorRecruitPrice,
+  calculateWarriorReleaseGold,
   calculateWarriorStatRecruitValue,
   HIGH_VALUE_STAT_MULTIPLIER,
   RECRUIT_BASE_PRICE,
@@ -206,5 +207,22 @@ describe("calculateWarriorRecruitPrice", () => {
     for (const warrior of representativeWarriors) {
       assert.equal(calculateWarriorRecruitPrice(warrior), expectedRecruitPrice(warrior));
     }
+  });
+});
+
+describe("calculateWarriorReleaseGold", () => {
+  it("grants half the recruit price rounded to the nearest integer", () => {
+    const warrior = {
+      ...BASELINE_WARRIOR,
+      health: 14,
+      stamina: 12,
+      strength: 8,
+      speed: 5,
+    };
+
+    assert.equal(
+      calculateWarriorReleaseGold(warrior),
+      Math.round(calculateWarriorRecruitPrice(warrior) / 2)
+    );
   });
 });
