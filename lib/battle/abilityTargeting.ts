@@ -43,9 +43,7 @@ export function calculateTileDistance(
   return Math.max(Math.abs(toCol - fromCol), Math.abs(toRow - fromRow));
 }
 
-function isWarriorAlive(warrior: AbilityTargetWarrior): boolean {
-  return warrior.currentHealth > 0 && Boolean(warrior.battleTileCurrent);
-}
+import { isWarriorAliveOnBattleMap } from "./tileOccupancy";
 
 function isWithinRange(
   casterTile: string,
@@ -76,7 +74,7 @@ export function getAreaAbilityTargets<T extends AbilityTargetWarrior>(
       return false;
     }
 
-    if (!isWarriorAlive(warrior) || !warrior.battleTileCurrent) {
+    if (!isWarriorAliveOnBattleMap(warrior) || !warrior.battleTileCurrent) {
       return false;
     }
 

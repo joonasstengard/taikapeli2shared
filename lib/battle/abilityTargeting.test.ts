@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  ABILITY_GLOBAL_RANGE,
   getAreaAbilityTargets,
   isAreaTargeting,
   isInstantCastTargeting,
@@ -95,7 +94,7 @@ describe("abilityTargeting", () => {
     const targets = getAreaAbilityTargets(
       warriors,
       caster,
-      ABILITY_GLOBAL_RANGE,
+      1,
       "allEnemies",
       8
     );
