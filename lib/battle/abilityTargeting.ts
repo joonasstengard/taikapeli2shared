@@ -2,9 +2,32 @@
 
 export type AbilityTargetingType =
   | "self"
-  | "warrior"
+  | "ally"
+  | "enemy"
   | "allAllies"
   | "allEnemies";
+
+export function isSingleTargetTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "ally" | "enemy" {
+  return targetingType === "ally" || targetingType === "enemy";
+}
+
+export function isValidAbilityTarget(
+  targetingType: AbilityTargetingType,
+  casterArmyId: number,
+  targetArmyId: number
+): boolean {
+  if (targetingType === "ally") {
+    return casterArmyId === targetArmyId;
+  }
+
+  if (targetingType === "enemy") {
+    return casterArmyId !== targetArmyId;
+  }
+
+  return true;
+}
 
 export function isAreaTargeting(
   targetingType: AbilityTargetingType
@@ -17,6 +40,17 @@ export function isInstantCastTargeting(
   targetingType: AbilityTargetingType
 ): boolean {
   return targetingType === "self" || isAreaTargeting(targetingType);
+}
+
+/** Targeting types that can apply supportive effects to allies (including self). */
+export function isAllySupportTargeting(
+  targetingType: AbilityTargetingType
+): boolean {
+  return (
+    targetingType === "self" ||
+    targetingType === "ally" ||
+    targetingType === "allAllies"
+  );
 }
 
 export interface AbilityTargetWarrior {

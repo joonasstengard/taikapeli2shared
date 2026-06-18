@@ -135,6 +135,16 @@ describe("calculateStaminaRestoreAmount", () => {
     assert.equal(calculateStaminaRestoreAmount(3, 11, 12), 1);
     assert.equal(calculateStaminaRestoreAmount(3, 12, 12), 0);
   });
+
+  it("restores stamina from zero current stamina", () => {
+    assert.equal(calculateStaminaRestoreAmount(6, 0, 12), 6);
+    assert.equal(calculateStaminaRestoreAmount(8, 0, 5), 5);
+  });
+
+  it("returns zero when there is nothing to restore", () => {
+    assert.equal(calculateStaminaRestoreAmount(0, 0, 12), 0);
+    assert.equal(calculateStaminaRestoreAmount(3, 5, 0), 0);
+  });
 });
 
 describe("calculateDrainHealAmount", () => {

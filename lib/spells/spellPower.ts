@@ -164,21 +164,27 @@ export function calculateSkillHealAmount(
   return Math.min(skill.baseHealTarget, missingHealth);
 }
 
+export interface StaminaRestoreValues {
+  baseStaminaRestore?: number;
+}
+
+export function hasStaminaRestoreEffect(
+  ability: StaminaRestoreValues
+): boolean {
+  return (ability.baseStaminaRestore ?? 0) > 0;
+}
+
 /** Stamina restored to a target, capped at missing stamina. */
 export function calculateStaminaRestoreAmount(
   baseStaminaRestore: number,
   targetCurrentStamina: number,
   targetMaxStamina: number
 ): number {
-  if (
-    baseStaminaRestore <= 0 ||
-    targetCurrentStamina <= 0 ||
-    targetMaxStamina <= 0
-  ) {
+  if (baseStaminaRestore <= 0 || targetMaxStamina <= 0) {
     return 0;
   }
 
-  const missingStamina = targetMaxStamina - targetCurrentStamina;
+  const missingStamina = targetMaxStamina - Math.max(targetCurrentStamina, 0);
   if (missingStamina <= 0) {
     return 0;
   }

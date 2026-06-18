@@ -2,21 +2,46 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   getAreaAbilityTargets,
+  isAllySupportTargeting,
   isAreaTargeting,
   isInstantCastTargeting,
+  isSingleTargetTargeting,
+  isValidAbilityTarget,
 } from "./abilityTargeting";
 
 describe("abilityTargeting", () => {
   it("treats allAllies and allEnemies as area targeting", () => {
     assert.equal(isAreaTargeting("allAllies"), true);
     assert.equal(isAreaTargeting("allEnemies"), true);
-    assert.equal(isAreaTargeting("warrior"), false);
+    assert.equal(isAreaTargeting("ally"), false);
+    assert.equal(isAreaTargeting("enemy"), false);
+  });
+
+  it("treats ally and enemy as single-target targeting", () => {
+    assert.equal(isSingleTargetTargeting("ally"), true);
+    assert.equal(isSingleTargetTargeting("enemy"), true);
+    assert.equal(isSingleTargetTargeting("self"), false);
+  });
+
+  it("treats self, ally, and allAllies as ally support targeting", () => {
+    assert.equal(isAllySupportTargeting("self"), true);
+    assert.equal(isAllySupportTargeting("ally"), true);
+    assert.equal(isAllySupportTargeting("allAllies"), true);
+    assert.equal(isAllySupportTargeting("enemy"), false);
+  });
+
+  it("validates ally and enemy targets by army", () => {
+    assert.equal(isValidAbilityTarget("ally", 10, 10), true);
+    assert.equal(isValidAbilityTarget("ally", 10, 20), false);
+    assert.equal(isValidAbilityTarget("enemy", 10, 20), true);
+    assert.equal(isValidAbilityTarget("enemy", 10, 10), false);
   });
 
   it("treats self and area targeting as instant cast", () => {
     assert.equal(isInstantCastTargeting("self"), true);
     assert.equal(isInstantCastTargeting("allAllies"), true);
-    assert.equal(isInstantCastTargeting("warrior"), false);
+    assert.equal(isInstantCastTargeting("ally"), false);
+    assert.equal(isInstantCastTargeting("enemy"), false);
   });
 
   it("returns allies in range and excludes caster and dead warriors", () => {
