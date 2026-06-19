@@ -31,12 +31,12 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
     blockedTiles: ["A4", "D4"],
   },
   stonegarden2: {},
-  stonegarden3: {},
-  stonegarden4: {blockedTiles: ["B1"]},
+  stonegarden3: {blockedTiles: ["C5"]},
+  stonegarden4: {blockedTiles: ["A2"]},
   fantasyforest1: {
     blockedTiles: ["A4", "E4", "A2", "E2"],
   },
-  fantasyforest2: {},
+  fantasyforest2: {blockedTiles: ["A1", "E5"]},
   fantasyGrasslands: {
     blockedTiles: ["C3", "D3"],
   },
