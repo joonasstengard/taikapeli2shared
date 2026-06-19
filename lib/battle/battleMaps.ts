@@ -7,6 +7,7 @@ export const BATTLE_MAP_KEYS = [
   "stonegarden1",
   "stonegarden2",
   "stonegarden3",
+  "stonegarden4",
   "fantasyforest1",
   "fantasyforest2",
   "fantasyGrasslands",
@@ -31,6 +32,7 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   },
   stonegarden2: {},
   stonegarden3: {},
+  stonegarden4: {blockedTiles: ["B1"]},
   fantasyforest1: {
     blockedTiles: ["A4", "E4", "A2", "E2"],
   },
