@@ -11,6 +11,8 @@ export const BATTLE_MAP_KEYS = [
   "fantasyforest1",
   "fantasyforest2",
   "fantasyGrasslands",
+  "snowLand1",
+  "snowLand2"
 ] as const;
 
 export type BattleMapKey = (typeof BATTLE_MAP_KEYS)[number];
@@ -40,6 +42,12 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   fantasyGrasslands: {
     blockedTiles: ["C3", "D3"],
   },
+  snowLand1: {
+    blockedTiles: ["A3", "D4"],
+  },
+  snowLand2: {
+    blockedTiles: ["C4"],
+  }
 };
 
 export interface BattleMapSelection {
