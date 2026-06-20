@@ -12,7 +12,8 @@ export const BATTLE_MAP_KEYS = [
   "snowLand1",
   "snowLand2",
   "snowValley",
-  "decayedTundra"
+  "decayedTundra",
+  "deadCanyon"
 ] as const;
 
 export type BattleMapKey = (typeof BATTLE_MAP_KEYS)[number];
@@ -49,6 +50,9 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   },
   decayedTundra: {
     blockedTiles: ["A2", "E3", "C2", "A5"],
+  },
+  deadCanyon: {
+    blockedTiles: ["A2", "E3"],
   }
 };
 
