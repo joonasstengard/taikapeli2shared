@@ -4,20 +4,20 @@ import {
 } from "./battleMapSizing";
 
 export const BATTLE_MAP_KEYS = [
-  "stonegarden1",
-  "stonegarden2",
-  "stonegarden3",
-  "stonegarden4",
-  "fantasyforest1",
-  "fantasyforest2",
+  "stoneGarden",
+  "duskWoods",
+  "fantasyForest1",
+  "fantasyForest2",
   "fantasyGrasslands",
   "snowLand1",
-  "snowLand2"
+  "snowLand2",
+  "snowValley",
+  "decayedTundra"
 ] as const;
 
 export type BattleMapKey = (typeof BATTLE_MAP_KEYS)[number];
 
-export const DEFAULT_BATTLE_MAP_KEY: BattleMapKey = "fantasyforest1";
+export const DEFAULT_BATTLE_MAP_KEY: BattleMapKey = "fantasyForest1";
 
 export interface BattleMapTemplate {
   blockedTiles?: string[];
@@ -29,24 +29,26 @@ export interface BattleMapConfig extends BattleMapTemplate {
 }
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
-  stonegarden1: {
-    blockedTiles: ["A4", "D4"],
+  stoneGarden: {},
+  duskWoods: {blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"]},
+  fantasyForest1: {
+    blockedTiles: ["E4", "A2", "E2", "A3", "E3"],
   },
-  stonegarden2: {},
-  stonegarden3: {blockedTiles: ["C5"]},
-  stonegarden4: {blockedTiles: ["A2"]},
-  fantasyforest1: {
-    blockedTiles: ["A4", "E4", "A2", "E2"],
-  },
-  fantasyforest2: {blockedTiles: ["A1", "E5"]},
+  fantasyForest2: {blockedTiles: ["A1", "E2", "E5"]},
   fantasyGrasslands: {
-    blockedTiles: ["C3", "D3"],
+    blockedTiles: ["A2", "E1", "D3", "E3"],
   },
   snowLand1: {
-    blockedTiles: ["A3", "D4"],
+    blockedTiles: ["A4", "A3", "E1", "E2"],
   },
   snowLand2: {
-    blockedTiles: ["C4"],
+    blockedTiles: ["A1", "E2", "A3", "E4", "A5"],
+  },
+  snowValley: {
+    blockedTiles: ["B3", "E1", "D3"],
+  },
+  decayedTundra: {
+    blockedTiles: ["A2", "E3", "C2", "A5"],
   }
 };
 
