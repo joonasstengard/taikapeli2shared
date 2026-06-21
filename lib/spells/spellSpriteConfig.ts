@@ -16,7 +16,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.fireball]: { fileName: "664.png", row: 1, frames: 16 },
   [SPELL_ID.hellflame]: { fileName: "528.png", row: 1, frames: 13 },
   [SPELL_ID.healingPrayer]: { fileName: "24.png", row: 5, frames: 14 },
-  [SPELL_ID.frostball]: { fileName: "06.png", row: 3, frames: 15 },
+  [SPELL_ID.frostball]: { fileName: "336.png", row: 3, frames: 8 },
   [SPELL_ID.icebolt]: { fileName: "77.png", row: 3, frames: 12 },
   [SPELL_ID.thunderball]: { fileName: "506.png", row: 6, frames: 11 },
   [SPELL_ID.thunder]: { fileName: "241.png", row: 6, frames: 8 },
