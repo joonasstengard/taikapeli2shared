@@ -2,6 +2,7 @@ export type AbilityEffect =
   | { effectType: "lastStand" }
   | { effectType: "leap" }
   | { effectType: "drain" }
+  | { effectType: "sacrifice" }
   | {
       effectType: "applyStatus";
       statusKey: string;

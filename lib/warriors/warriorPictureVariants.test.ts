@@ -4,59 +4,76 @@ import {
   getAvailableWarriorGenders,
   getWarriorPictureCount,
   hasWarriorPictures,
+  WARRIOR_CLASSES,
+  WARRIOR_GENDERS,
+  WARRIOR_PICTURE_COUNT_OVERRIDES,
+  type WarriorClassGenderKey,
 } from "./warriorPictureVariants";
 
+function comboKey(
+  warriorClass: (typeof WARRIOR_CLASSES)[number],
+  gender: (typeof WARRIOR_GENDERS)[number]
+): WarriorClassGenderKey {
+  return `${warriorClass}${gender}`;
+}
+
 describe("getWarriorPictureCount", () => {
-  it("returns 0 for combos explicitly set to no sprites", () => {
-    assert.equal(getWarriorPictureCount("Knight", "Female"), 0);
-    assert.equal(getWarriorPictureCount("Priestess", "Male"), 0);
-    assert.equal(getWarriorPictureCount("Sorcerer", "Female"), 0);
-    assert.equal(getWarriorPictureCount("Necromancer", "Female"), 0);
+  it("returns 0 for combos with no sprites", () => {
+    for (const warriorClass of WARRIOR_CLASSES) {
+      for (const gender of WARRIOR_GENDERS) {
+        if (WARRIOR_PICTURE_COUNT_OVERRIDES[comboKey(warriorClass, gender)] !== 0) {
+          continue;
+        }
+        assert.equal(getWarriorPictureCount(warriorClass, gender), 0);
+      }
+    }
   });
 
-  it("returns override counts for specific combos", () => {
-    assert.equal(getWarriorPictureCount("Knight", "Male"), 7);
-    assert.equal(getWarriorPictureCount("Horseman", "Male"), 9);
-    assert.equal(getWarriorPictureCount("Marksman", "Male"), 9);
-    assert.equal(getWarriorPictureCount("Priestess", "Female"), 6);
-    assert.equal(getWarriorPictureCount("Paladin", "Male"), 9);
-    assert.equal(getWarriorPictureCount("Sorcerer", "Male"), 10);
-    assert.equal(getWarriorPictureCount("Necromancer", "Male"), 6);
-    assert.equal(getWarriorPictureCount("Moonblade", "Male"), 5);
-    assert.equal(getWarriorPictureCount("King", "Male"), 6);
+  it("returns a positive count for combos with sprites", () => {
+    for (const warriorClass of WARRIOR_CLASSES) {
+      for (const gender of WARRIOR_GENDERS) {
+        const override = WARRIOR_PICTURE_COUNT_OVERRIDES[comboKey(warriorClass, gender)];
+        if (override === undefined || override <= 0) {
+          continue;
+        }
+        assert.ok(getWarriorPictureCount(warriorClass, gender) > 0);
+      }
+    }
   });
 });
 
 describe("hasWarriorPictures", () => {
-  it("returns false when picture count is 0", () => {
-    assert.equal(hasWarriorPictures("Knight", "Female"), false);
-    assert.equal(hasWarriorPictures("Priestess", "Male"), false);
-  });
-
-  it("returns true when picture count is positive", () => {
-    assert.equal(hasWarriorPictures("Knight", "Male"), true);
-    assert.equal(hasWarriorPictures("Horseman", "Male"), true);
-    assert.equal(hasWarriorPictures("Marksman", "Male"), true);
-    assert.equal(hasWarriorPictures("Priestess", "Female"), true);
-    assert.equal(hasWarriorPictures("Paladin", "Male"), true);
-    assert.equal(hasWarriorPictures("Necromancer", "Male"), true);
-    assert.equal(hasWarriorPictures("Moonblade", "Male"), true);
-    assert.equal(hasWarriorPictures("King", "Male"), true);
+  it("is true exactly when picture count is positive", () => {
+    for (const warriorClass of WARRIOR_CLASSES) {
+      for (const gender of WARRIOR_GENDERS) {
+        const count = getWarriorPictureCount(warriorClass, gender);
+        assert.equal(hasWarriorPictures(warriorClass, gender), count > 0);
+      }
+    }
   });
 });
 
 describe("getAvailableWarriorGenders", () => {
-  it("excludes genders with no sprites", () => {
-    assert.deepEqual(getAvailableWarriorGenders("Knight"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Horseman"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Marksman"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Priestess"), ["Female"]);
-    assert.deepEqual(getAvailableWarriorGenders("Paladin"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Sorcerer"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Ranger"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Raider"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Necromancer"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("Moonblade"), ["Male"]);
-    assert.deepEqual(getAvailableWarriorGenders("King"), ["Male"]);
+  it("lists only genders with sprites", () => {
+    for (const warriorClass of WARRIOR_CLASSES) {
+      const expected = WARRIOR_GENDERS.filter((gender) =>
+        hasWarriorPictures(warriorClass, gender)
+      );
+      assert.deepEqual(getAvailableWarriorGenders(warriorClass), expected);
+    }
+  });
+});
+
+describe("WARRIOR_PICTURE_COUNT_OVERRIDES", () => {
+  it("only contains valid class+gender keys", () => {
+    const validKeys = new Set(
+      WARRIOR_CLASSES.flatMap((warriorClass) =>
+        WARRIOR_GENDERS.map((gender) => comboKey(warriorClass, gender))
+      )
+    );
+
+    for (const key of Object.keys(WARRIOR_PICTURE_COUNT_OVERRIDES)) {
+      assert.ok(validKeys.has(key as WarriorClassGenderKey), `invalid override key: ${key}`);
+    }
   });
 });

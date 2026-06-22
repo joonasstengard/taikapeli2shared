@@ -19,44 +19,47 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   Record<WarriorClass, LevelSpellBucketsByLevel>
 > = {
   Sorcerer: {
-    3: {
+    2: {
       spellIds: [
-        SPELL_ID.fireball,
-        SPELL_ID.frostball,
-        SPELL_ID.thunderball,
-        SPELL_ID.desperateRune
+        SPELL_ID.desperateRune,
+        SPELL_ID.freezingWhisper,
+        SPELL_ID.teleport
       ],
       skipChancePercent: 10
     },
-    5: {
+    4: {
       spellIds: [SPELL_ID.teleport, SPELL_ID.icebolt,
       SPELL_ID.hellflame,
-      SPELL_ID.freezingWhisper,],
+      SPELL_ID.thunder,],
       skipChancePercent: 10
     },
   },
   Priestess: {
-    3: {
+    2: {
       spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite],
-      skipChancePercent: 20,
+      skipChancePercent: 10,
     },
-    5: {
-      spellIds: [SPELL_ID.protect, SPELL_ID.massHealing],
-      skipChancePercent: 25
+    4: {
+      spellIds: [SPELL_ID.protect, SPELL_ID.massHealing, SPELL_ID.penance],
+      skipChancePercent: 10
     },
   },
   Paladin: {
+    2: {
+      spellIds: [SPELL_ID.protect, SPELL_ID.holySmite, SPELL_ID.consecrate]
+    },
     4: {
-      spellIds: [SPELL_ID.protect, SPELL_ID.holySmite, SPELL_ID.healingPrayer, SPELL_ID.beaconOfLight]
-    }
+      spellIds: [SPELL_ID.penance, SPELL_ID.consecrate],
+      skipChancePercent: 50
+    },
   },
   Necromancer: {
-    3: {
+    2: {
       spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
       skipChancePercent: 10
     },
-    5: {
-      spellIds: [SPELL_ID.lifeDevour],
+    4: {
+      spellIds: [SPELL_ID.lifeDevour, SPELL_ID.deathRitual],
       skipChancePercent: 10
     },
   },

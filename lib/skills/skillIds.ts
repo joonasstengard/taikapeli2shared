@@ -10,7 +10,8 @@ export const SKILL_ID = {
   stomp: 9,
   lifeSteal: 10,
   rallyTroops: 11,
-  raiseMorale: 12
+  raiseMorale: 12,
+  martyrdom: 13,
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */

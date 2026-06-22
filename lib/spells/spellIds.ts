@@ -17,7 +17,10 @@ export const SPELL_ID = {
   lifeDrain: 16,
   lifeDevour: 17,
   massHealing: 18,
-  beaconOfLight: 19
+  beaconOfLight: 19,
+  deathRitual: 20,
+  consecrate: 21,
+  penance: 22,
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */

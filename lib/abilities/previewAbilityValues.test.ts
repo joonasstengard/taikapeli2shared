@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { calculateLastStandDamage } from "./calculateLastStandDamage";
+import { estimateSacrificeSelfCostPenalty } from "./calculateSacrificePower";
 import {
   previewSkillCombatValues,
   previewSkillDamage,
@@ -26,6 +27,15 @@ describe("calculateLastStandDamage", () => {
   it("scales linearly at half missing health", () => {
     assert.equal(
       calculateLastStandDamage({ health: 10, currentHealth: 5 }, 4),
+      6
+    );
+  });
+});
+
+describe("estimateSacrificeSelfCostPenalty", () => {
+  it("uses current health as AI self-cost penalty", () => {
+    assert.equal(
+      estimateSacrificeSelfCostPenalty({ health: 10, currentHealth: 6 }),
       6
     );
   });
@@ -63,6 +73,22 @@ describe("previewSpellDamage", () => {
           strength: 0,
           faith: 0,
           spellDamage: 0,
+        }
+      ),
+      10
+    );
+  });
+
+  it("does not change damage scaling for sacrifice", () => {
+    assert.equal(
+      previewSpellDamage(
+        { ...holyBolt, effect: { effectType: "sacrifice" } },
+        {
+          health: 10,
+          currentHealth: 7,
+          strength: 0,
+          faith: 4,
+          spellDamage: 6,
         }
       ),
       10
@@ -117,6 +143,7 @@ describe("previewSpellCombatValues", () => {
         heal: null,
         staminaRestore: null,
         hasLastStandEffect: false,
+        hasSacrificeEffect: false,
       }
     );
   });
@@ -147,6 +174,7 @@ describe("previewSkillCombatValues", () => {
         heal: null,
         staminaRestore: 3,
         hasLastStandEffect: false,
+        hasSacrificeEffect: false,
       }
     );
   });

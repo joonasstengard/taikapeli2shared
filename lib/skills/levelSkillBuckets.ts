@@ -19,62 +19,58 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Record<WarriorClass, LevelSkillBucketsByLevel>
 > = {
   Horseman: {
-    4: {
+    3: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.cavalryCharge],
     }
   },
   Knight: {
-    3: {
-      skillIds: [SKILL_ID.decisiveStrike],
-      skipChancePercent: 25,
+    2: {
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom],
+      skipChancePercent: 10,
     },
-    5: {
+    4: {
       skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge],
-      skipChancePercent: 25,
+      skipChancePercent: 10,
     },
   },
   King: {
-    3: {
+    2: {
       skillIds: [SKILL_ID.lastStand, SKILL_ID.raiseMorale, SKILL_ID.rallyTroops]
     },
-    5: {
+    4: {
       skillIds: [SKILL_ID.rallyTroops, SKILL_ID.lastStand]
     },
   },
   Marksman: {
     3: {
-      skillIds: [SKILL_ID.longShot, SKILL_ID.frozenArrow],
-      skipChancePercent: 33,
-    },
-    5: {
       skillIds: [SKILL_ID.criticalBolt],
       skipChancePercent: 33,
     },
   },
   Moonblade: {
-    4: {
+    2: {
       skillIds: [SKILL_ID.lifeSteal, SKILL_ID.eviscerate],
     }
   },
   Paladin: {
-    4: {
+    3: {
       skillIds: [SKILL_ID.raiseMorale]
-    }
+    },
   },
   Raider: {
-    4: {
+    3: {
       skillIds: [SKILL_ID.decisiveStrike],
       skipChancePercent: 75,
     }
   },
   Ranger: {
-    3: {
+    2: {
       skillIds: [SKILL_ID.frozenArrow],
-      skipChancePercent: 75,
+      skipChancePercent: 10,
     },
-    5: {
+    4: {
       skillIds: [SKILL_ID.longShot, SKILL_ID.frozenArrow],
-      skipChancePercent: 75,
+      skipChancePercent: 10,
     },
   },
 };

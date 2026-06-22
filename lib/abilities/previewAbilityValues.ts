@@ -1,5 +1,6 @@
 import type { AbilityEffect } from "./abilityEffects";
 import { applyEffectToBaseDamage } from "./applyEffectToBaseDamage";
+import { hasSacrificeEffect } from "./calculateSacrificePower";
 import {
   calculateSkillDamageBonus,
   calculateSpellDamageBonus,
@@ -24,6 +25,7 @@ export interface AbilityPreviewValues {
   heal: number | null;
   staminaRestore: number | null;
   hasLastStandEffect: boolean;
+  hasSacrificeEffect: boolean;
 }
 
 interface AbilityPreviewInput extends SpellScalingValues {
@@ -105,6 +107,7 @@ export function previewSpellCombatValues(
     heal: spell.baseHealTarget > 0 ? previewSpellHeal(spell, caster) : null,
     staminaRestore: null,
     hasLastStandEffect: spell.effect?.effectType === "lastStand",
+    hasSacrificeEffect: hasSacrificeEffect(spell.effect),
   };
 }
 
@@ -119,5 +122,6 @@ export function previewSkillCombatValues(
     heal: skill.baseHealTarget > 0 ? previewSkillHeal(skill) : null,
     staminaRestore: staminaRestore > 0 ? staminaRestore : null,
     hasLastStandEffect: skill.effect?.effectType === "lastStand",
+    hasSacrificeEffect: hasSacrificeEffect(skill.effect),
   };
 }
