@@ -29,7 +29,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skipChancePercent: 10,
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge],
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge, SKILL_ID.martyrdom],
       skipChancePercent: 10,
     },
   },
@@ -44,12 +44,13 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Marksman: {
     3: {
       skillIds: [SKILL_ID.criticalBolt],
-      skipChancePercent: 33,
+      skipChancePercent: 33
     },
   },
   Moonblade: {
-    2: {
-      skillIds: [SKILL_ID.lifeSteal, SKILL_ID.eviscerate],
+    3: {
+      skillIds: [SKILL_ID.moonHarvest],
+      skipChancePercent: 33
     }
   },
   Paladin: {
@@ -58,10 +59,12 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Raider: {
-    3: {
-      skillIds: [SKILL_ID.decisiveStrike],
-      skipChancePercent: 75,
-    }
+    2: {
+      skillIds: [SKILL_ID.lunge],
+    },
+    4: {
+      skillIds: [SKILL_ID.cutthroat],
+    },
   },
   Ranger: {
     2: {

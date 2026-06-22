@@ -6,6 +6,7 @@ export type SpellEffect =
   | { effectType: "leap" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
+  | { effectType: "requiresBleeding" }
   | {
       effectType: "applyStatus";
       statusKey: StatusEffectKey;

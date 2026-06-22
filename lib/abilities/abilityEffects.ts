@@ -3,6 +3,7 @@ export type AbilityEffect =
   | { effectType: "leap" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
+  | { effectType: "requiresBleeding" }
   | {
       effectType: "applyStatus";
       statusKey: string;

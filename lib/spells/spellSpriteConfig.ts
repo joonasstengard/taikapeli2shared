@@ -35,6 +35,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.deathRitual]: { fileName: "615.png", row: 8, frames: 14 },
   [SPELL_ID.consecrate]: { fileName: "663.png", row: 5, frames: 16 },
   [SPELL_ID.penance]: { fileName: "316.png", row: 5, frames: 8 },
+  [SPELL_ID.moonBlast]: { fileName: "388.png", row: 6, frames: 9 },
 };
 
 export function getSpellSpriteSheetPath(fileName: string): string {

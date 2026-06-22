@@ -64,9 +64,8 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Moonblade: {
-    4: {
-      spellIds: [SPELL_ID.shadowBlink, SPELL_ID.teleport],
-      skipChancePercent: 66
+    3: {
+      spellIds: [SPELL_ID.shadowBlink, SPELL_ID.teleport, SPELL_ID.moonBlast],
     },
   },
 };

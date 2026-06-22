@@ -12,6 +12,8 @@ export const SKILL_ID = {
   rallyTroops: 11,
   raiseMorale: 12,
   martyrdom: 13,
+  cutthroat: 14,
+  moonHarvest: 15,
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
@@ -29,8 +31,8 @@ export const KING_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Knight is created. */
 export const KNIGHT_STARTING_SKILL_IDS = [
-  SKILL_ID.lunge,
-  SKILL_ID.lastStand
+  SKILL_ID.lastStand,
+  SKILL_ID.decisiveStrike,
 ] as const;
 
 /** One of these is granted randomly when a Marksman is created. */
@@ -40,7 +42,6 @@ export const MARKSMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SKILL_IDS = [
-  SKILL_ID.decisiveStrike,
   SKILL_ID.lifeSteal
 ] as const;
 
