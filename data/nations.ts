@@ -1,14 +1,14 @@
 export const NATION_NAMES = [
-  "Korpivaara",
-  "Tuomela",
-  "Hiidenlahti",
-  "Vainola",
-  "Viranta",
-  "Tapiola",
-  "Pohjamaa",
-  "Aarnimetsä",
-  "Hopeavesi",
-  "Kalmalampi",
+  "Thornwall",
+  "Ashenwood",
+  "Bleakwater",
+  "Cindervale",
+  "Umbraven",
+  "Grimhold",
+  "Valdris",
+  "Duskreach",
+  "Aurenth",
+  "Ironmoor",
 ] as const;
 
 export type NationName = (typeof NATION_NAMES)[number];
