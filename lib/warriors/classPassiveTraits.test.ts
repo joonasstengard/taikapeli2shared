@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   applyBasicAttackBleedingToWarrior,
+  applyHumbleOriginsExperienceBonus,
+  applyHumbleOriginsLevelUpBonus,
   applyKingsCommandStaminaRestoreToAlly,
   applySpellCastManaMasteryRestoreToWarrior,
   applyTakedownTraitRestoreToWarrior,
@@ -89,8 +91,16 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     );
   });
 
+  it("assigns Humble Origins to Peasant", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Peasant, "humbleOrigins");
+    assert.equal(
+      getClassPassiveTraitForClass("Peasant")?.name,
+      "Humble Origins"
+    );
+  });
+
   it("returns null for classes without a trait", () => {
-    assert.equal(getClassPassiveTraitForClass("Peasant"), null);
+    assert.equal(getClassPassiveTraitForClass("UnknownClass"), null);
   });
 });
 
@@ -451,5 +461,82 @@ describe("applyBasicAttackBleedingToWarrior", () => {
       },
     ]);
     assert.equal(result[0]?.turnsRemaining, 2);
+  });
+});
+
+describe("applyHumbleOriginsExperienceBonus", () => {
+  it("increases XP by 10% for Peasants", () => {
+    assert.equal(applyHumbleOriginsExperienceBonus("Peasant", 20), 22);
+    assert.equal(applyHumbleOriginsExperienceBonus("Peasant", 7), 8);
+  });
+
+  it("does not modify XP for other classes", () => {
+    assert.equal(applyHumbleOriginsExperienceBonus("Knight", 20), 20);
+  });
+
+  it("ignores non-positive amounts", () => {
+    assert.equal(applyHumbleOriginsExperienceBonus("Peasant", 0), 0);
+  });
+});
+
+describe("applyHumbleOriginsLevelUpBonus", () => {
+  it("adds +1 to the selected permanent stat", () => {
+    const stats = {
+      health: 10,
+      mana: 1,
+      strength: 4,
+      stamina: 3,
+      speed: 2,
+      faith: 1,
+      spellDamage: 1,
+      currentHealth: 8,
+      currentMana: 1,
+      currentStamina: 3,
+    };
+
+    const result = applyHumbleOriginsLevelUpBonus(stats, 2);
+
+    assert.equal(result.strength, 5);
+    assert.equal(result.health, stats.health);
+  });
+
+  it("also increases matching current pool stats when alive", () => {
+    const stats = {
+      health: 10,
+      mana: 1,
+      strength: 4,
+      stamina: 3,
+      speed: 2,
+      faith: 1,
+      spellDamage: 1,
+      currentHealth: 8,
+      currentMana: 1,
+      currentStamina: 3,
+    };
+
+    const result = applyHumbleOriginsLevelUpBonus(stats, 0);
+
+    assert.equal(result.health, 11);
+    assert.equal(result.currentHealth, 9);
+  });
+
+  it("does not restore current health for defeated warriors", () => {
+    const stats = {
+      health: 10,
+      mana: 1,
+      strength: 4,
+      stamina: 3,
+      speed: 2,
+      faith: 1,
+      spellDamage: 1,
+      currentHealth: 0,
+      currentMana: 0,
+      currentStamina: 0,
+    };
+
+    const result = applyHumbleOriginsLevelUpBonus(stats, 0);
+
+    assert.equal(result.health, 11);
+    assert.equal(result.currentHealth, 0);
   });
 });

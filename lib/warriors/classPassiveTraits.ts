@@ -18,6 +18,7 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   braced: "braced",
   huntersMark: "huntersMark",
   kingsCommand: "kingsCommand",
+  humbleOrigins: "humbleOrigins",
 } as const;
 
 export type ClassPassiveTraitKey =
@@ -93,6 +94,12 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     description:
       "Restore 1 stamina to all other alive allies after using a skill or casting a spell.",
   },
+  [CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
+    name: "Humble Origins",
+    description:
+      "Gain 10% more experience from all sources. Level ups grant +1 extra stat permanently to a random stat.",
+  },
 };
 
 /** Passive trait granted to each warrior class. Omit classes with no trait yet. */
@@ -110,6 +117,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Marksman: CLASS_PASSIVE_TRAIT_KEYS.braced,
   Ranger: CLASS_PASSIVE_TRAIT_KEYS.huntersMark,
   King: CLASS_PASSIVE_TRAIT_KEYS.kingsCommand,
+  Peasant: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
 };
 
 export function getClassPassiveTraitForClass(
@@ -121,6 +129,79 @@ export function getClassPassiveTraitForClass(
   }
 
   return CLASS_PASSIVE_TRAIT_DEFINITIONS[traitKey];
+}
+
+export const HUMBLE_ORIGINS_EXPERIENCE_BONUS_PERCENT = 10;
+
+export const HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS = [
+  "health",
+  "mana",
+  "strength",
+  "stamina",
+  "speed",
+  "faith",
+  "spellDamage",
+] as const;
+
+export type HumbleOriginsLevelUpStatKey =
+  (typeof HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS)[number];
+
+export interface HumbleOriginsLevelUpStats extends Record<
+  HumbleOriginsLevelUpStatKey,
+  number
+> {
+  currentHealth: number;
+  currentMana: number;
+  currentStamina: number;
+}
+
+export function grantsHumbleOriginsTrait(warriorClass: string): boolean {
+  const trait = getClassPassiveTraitForClass(warriorClass);
+  return trait?.key === CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins;
+}
+
+/** Applies Humble Origins +10% XP bonus when the warrior has the trait. */
+export function applyHumbleOriginsExperienceBonus(
+  warriorClass: string,
+  amount: number
+): number {
+  if (amount <= 0 || !grantsHumbleOriginsTrait(warriorClass)) {
+    return amount;
+  }
+
+  return Math.round(
+    amount * (1 + HUMBLE_ORIGINS_EXPERIENCE_BONUS_PERCENT / 100)
+  );
+}
+
+/** Applies +1 to one random permanent stat after a level up. */
+export function applyHumbleOriginsLevelUpBonus<T extends HumbleOriginsLevelUpStats>(
+  stats: T,
+  randomStatIndex: number
+): T {
+  const statKey =
+    HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS[
+      randomStatIndex % HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.length
+    ];
+  const wasDefeated = stats.currentHealth <= 0;
+  const updated = { ...stats, [statKey]: stats[statKey] + 1 };
+
+  if (statKey === "health" && !wasDefeated) {
+    updated.currentHealth = Math.min(updated.currentHealth + 1, updated.health);
+  }
+
+  if (statKey === "mana" && !wasDefeated) {
+    updated.currentMana = Math.min(updated.currentMana + 1, updated.mana);
+  }
+
+  if (statKey === "stamina" && !wasDefeated) {
+    updated.currentStamina = Math.min(
+      updated.currentStamina + 1,
+      updated.stamina
+    );
+  }
+
+  return updated;
 }
 
 export const BASIC_ATTACK_BLEEDING_DURATION = 1;
