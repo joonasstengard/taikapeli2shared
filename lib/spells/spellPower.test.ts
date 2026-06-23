@@ -120,6 +120,29 @@ describe("calculateSpellHealAmount", () => {
       0
     );
   });
+
+  it("adds Devotion bonus for Priestess healing spells", () => {
+    assert.equal(
+      calculateSpellHealAmount(
+        healingPrayer,
+        { faith: 5, spellDamage: 0 },
+        10,
+        20,
+        "Priestess"
+      ),
+      8
+    );
+    assert.equal(
+      calculateSpellHealAmount(
+        healingPrayer,
+        { faith: 5, spellDamage: 0 },
+        10,
+        20,
+        "Paladin"
+      ),
+      7
+    );
+  });
 });
 
 describe("calculateSkillHealAmount", () => {

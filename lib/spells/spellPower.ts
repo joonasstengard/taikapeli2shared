@@ -1,3 +1,5 @@
+import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
+
 /** Spell fields used when calculating scaled combat power from caster stats. */
 export interface SpellScalingValues {
   baseDamageTarget: number;
@@ -122,7 +124,8 @@ export function calculateSpellHealAmount(
   spell: SpellScalingValues,
   caster: SpellCasterCombatStats,
   targetCurrentHealth: number,
-  targetMaxHealth: number
+  targetMaxHealth: number,
+  casterClass?: string
 ): number {
   if (
     spell.baseHealTarget <= 0 ||
@@ -138,7 +141,8 @@ export function calculateSpellHealAmount(
   }
 
   const healBonus = calculateSpellHealBonus(spell, caster);
-  const rawHeal = spell.baseHealTarget + healBonus;
+  const traitHealBonus = getDevotionSpellHealBonus(casterClass);
+  const rawHeal = spell.baseHealTarget + healBonus + traitHealBonus;
 
   return Math.min(rawHeal, missingHealth);
 }

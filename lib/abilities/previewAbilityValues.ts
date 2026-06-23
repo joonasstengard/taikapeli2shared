@@ -11,8 +11,10 @@ import {
   toSkillCasterCombatStats,
   toSpellCasterCombatStats,
 } from "../spells/spellPower";
+import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
 
 export interface AbilityPreviewCaster {
+  class?: string;
   health: number;
   currentHealth: number;
   strength: number;
@@ -89,7 +91,11 @@ export function previewSpellHeal(
     return 0;
   }
 
-  return spell.baseHealTarget + calculateSpellHealBonus(spell, toPreviewCasterStats(caster));
+  return (
+    spell.baseHealTarget +
+    calculateSpellHealBonus(spell, toPreviewCasterStats(caster)) +
+    getDevotionSpellHealBonus(caster.class)
+  );
 }
 
 export function previewSkillHeal(
