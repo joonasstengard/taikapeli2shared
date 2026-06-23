@@ -8,6 +8,7 @@ export type SpellEffect =
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }
+  | { effectType: "commandAttack" }
   | {
       effectType: "applyStatus";
       statusKey: StatusEffectKey;

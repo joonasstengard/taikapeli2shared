@@ -16,6 +16,7 @@ export const SKILL_ID = {
   moonHarvest: 15,
   arrowVolley: 16,
   fadeArrow: 17,
+  commandAttack: 18,
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
@@ -26,9 +27,8 @@ export const HORSEMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a King is created. */
 export const KING_STARTING_SKILL_IDS = [
-  SKILL_ID.lastStand,
-  SKILL_ID.raiseMorale,
-  SKILL_ID.rallyTroops
+  SKILL_ID.rallyTroops,
+  SKILL_ID.commandAttack
 ] as const;
 
 /** One of these is granted randomly when a Knight is created. */

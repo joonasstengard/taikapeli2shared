@@ -5,6 +5,7 @@ export type AbilityEffect =
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }
+  | { effectType: "commandAttack" }
   | {
       effectType: "applyStatus";
       statusKey: string;
