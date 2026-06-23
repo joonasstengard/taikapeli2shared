@@ -4,13 +4,29 @@ export type AbilityTargetingType =
   | "self"
   | "ally"
   | "enemy"
+  | "enemyAoE"
   | "allAllies"
   | "allEnemies";
 
+/** Tile distance from the primary target for enemyAoE splash hits. */
+export const ENEMY_AOE_SPLASH_RANGE = 1;
+
+export function isEnemyTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "enemy" | "enemyAoE" {
+  return targetingType === "enemy" || targetingType === "enemyAoE";
+}
+
+export function isEnemyAoETargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "enemyAoE" {
+  return targetingType === "enemyAoE";
+}
+
 export function isSingleTargetTargeting(
   targetingType: AbilityTargetingType
-): targetingType is "ally" | "enemy" {
-  return targetingType === "ally" || targetingType === "enemy";
+): targetingType is "ally" | "enemy" | "enemyAoE" {
+  return targetingType === "ally" || isEnemyTargeting(targetingType);
 }
 
 export function isValidAbilityTarget(
@@ -22,7 +38,7 @@ export function isValidAbilityTarget(
     return casterArmyId === targetArmyId;
   }
 
-  if (targetingType === "enemy") {
+  if (isEnemyTargeting(targetingType)) {
     return casterArmyId !== targetArmyId;
   }
 
@@ -128,5 +144,39 @@ export function getAreaAbilityTargets<T extends AbilityTargetWarrior>(
     }
 
     return warrior.armyId !== caster.armyId;
+  }) as T[];
+}
+
+/**
+ * Returns living enemy warriors within splash range of the primary target tile.
+ * Never includes the primary target warrior.
+ */
+export function getEnemyAoESplashTargets<T extends AbilityTargetWarrior>(
+  allWarriors: readonly T[],
+  primaryTargetTile: string,
+  casterArmyId: number,
+  primaryTargetWarriorId: number,
+  battleMapWidth: number,
+  splashRange: number = ENEMY_AOE_SPLASH_RANGE
+): T[] {
+  return allWarriors.filter((warrior) => {
+    if (warrior.id === primaryTargetWarriorId) {
+      return false;
+    }
+
+    if (!isWarriorAliveOnBattleMap(warrior) || !warrior.battleTileCurrent) {
+      return false;
+    }
+
+    if (!isValidAbilityTarget("enemy", casterArmyId, warrior.armyId)) {
+      return false;
+    }
+
+    return isWithinRange(
+      primaryTargetTile,
+      warrior.battleTileCurrent,
+      splashRange,
+      battleMapWidth
+    );
   }) as T[];
 }

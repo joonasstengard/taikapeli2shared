@@ -17,7 +17,7 @@ describe("isSpellUnlocked", () => {
 describe("filterUnlockedSpells", () => {
   it("keeps only spells the warrior can use", () => {
     const spells = [
-      { id: SPELL_ID.fireball, requiredLevel: 1 },
+      { id: SPELL_ID.flamewheel, requiredLevel: 1 },
       { id: SPELL_ID.icebolt, requiredLevel: 3 },
     ];
 

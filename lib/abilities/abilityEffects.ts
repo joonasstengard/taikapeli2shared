@@ -1,6 +1,7 @@
 export type AbilityEffect =
   | { effectType: "lastStand" }
   | { effectType: "leap" }
+  | { effectType: "retreat" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }

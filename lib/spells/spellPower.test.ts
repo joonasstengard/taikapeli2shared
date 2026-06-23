@@ -19,7 +19,7 @@ const healingPrayer = {
   type: "Holy",
 };
 
-const fireball = {
+const flamewheel = {
   baseDamageTarget: 5,
   baseHealTarget: 0,
   scalingFactor: 0.5,
@@ -41,7 +41,7 @@ describe("calculateStatScalingBonus", () => {
 describe("calculateHolyFaithScalingBonus", () => {
   it("applies only to holy spells", () => {
     assert.equal(calculateHolyFaithScalingBonus(healingPrayer, 5), 2);
-    assert.equal(calculateHolyFaithScalingBonus(fireball, 5), 0);
+    assert.equal(calculateHolyFaithScalingBonus(flamewheel, 5), 0);
   });
 });
 
@@ -51,7 +51,7 @@ describe("calculateSpellHealBonus", () => {
       calculateSpellHealBonus(healingPrayer, { faith: 5, spellDamage: 0 }),
       2
     );
-    assert.equal(calculateSpellHealBonus(fireball, { faith: 5, spellDamage: 10 }), 0);
+    assert.equal(calculateSpellHealBonus(flamewheel, { faith: 5, spellDamage: 10 }), 0);
   });
 });
 
@@ -72,11 +72,11 @@ describe("calculateSpellDamageBonus", () => {
 
   it("adds spellDamage scaling to all damage spells", () => {
     assert.equal(
-      calculateSpellDamageBonus(fireball, { faith: 0, spellDamage: 6 }),
+      calculateSpellDamageBonus(flamewheel, { faith: 0, spellDamage: 6 }),
       3
     );
     assert.equal(
-      calculateSpellDamageBonus(fireball, { faith: 10, spellDamage: 6 }),
+      calculateSpellDamageBonus(flamewheel, { faith: 10, spellDamage: 6 }),
       3
     );
   });
@@ -85,7 +85,7 @@ describe("calculateSpellDamageBonus", () => {
 describe("calculateSkillDamageBonus", () => {
   it("adds strength scaling to damaging skills", () => {
     assert.equal(
-      calculateSkillDamageBonus(fireball, { strength: 6 }),
+      calculateSkillDamageBonus(flamewheel, { strength: 6 }),
       3
     );
   });

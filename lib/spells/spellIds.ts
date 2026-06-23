@@ -1,5 +1,5 @@
 export const SPELL_ID = {
-  fireball: 1,
+  flamewheel: 1,
   healingPrayer: 2,
   frostball: 3,
   thunderball: 4,
@@ -26,7 +26,7 @@ export const SPELL_ID = {
 
 /** One of these is granted randomly when a Sorcerer is created. */
 export const SORCERER_STARTING_SPELL_IDS = [
-  SPELL_ID.fireball,
+  SPELL_ID.flamewheel,
   SPELL_ID.frostball,
   SPELL_ID.thunderball,
 ] as const;

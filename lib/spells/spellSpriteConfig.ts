@@ -13,7 +13,7 @@ export const SPELL_SPRITE_FRAME_SIZE = 64;
 export const SPELL_SPRITE_SHEET_BASE_PATH = "/effects/spells/SpriteSheets";
 
 export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
-  [SPELL_ID.fireball]: { fileName: "664.png", row: 1, frames: 16 },
+  [SPELL_ID.flamewheel]: { fileName: "664.png", row: 1, frames: 16 },
   [SPELL_ID.hellflame]: { fileName: "528.png", row: 1, frames: 13 },
   [SPELL_ID.healingPrayer]: { fileName: "24.png", row: 5, frames: 14 },
   [SPELL_ID.frostball]: { fileName: "336.png", row: 3, frames: 8 },

@@ -43,8 +43,8 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Marksman: {
     3: {
-      skillIds: [SKILL_ID.criticalBolt],
-      skipChancePercent: 33
+      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot],
+      skipChancePercent: 10
     },
   },
   Moonblade: {
@@ -68,11 +68,19 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Ranger: {
     2: {
-      skillIds: [SKILL_ID.frozenArrow],
+      skillIds: [
+        SKILL_ID.frozenArrow,
+        SKILL_ID.arrowVolley,
+        SKILL_ID.fadeArrow,
+      ],
       skipChancePercent: 10,
     },
     4: {
-      skillIds: [SKILL_ID.longShot, SKILL_ID.frozenArrow],
+      skillIds: [
+        SKILL_ID.frozenArrow,
+        SKILL_ID.arrowVolley,
+        SKILL_ID.fadeArrow,
+      ],
       skipChancePercent: 10,
     },
   },

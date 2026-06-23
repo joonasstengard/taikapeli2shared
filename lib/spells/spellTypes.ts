@@ -4,6 +4,7 @@ import type { StatusEffectKey } from "../statusEffects/statusEffectTypes";
 export type SpellEffect =
   | { effectType: "lastStand" }
   | { effectType: "leap" }
+  | { effectType: "retreat" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }

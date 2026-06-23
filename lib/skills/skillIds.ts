@@ -14,6 +14,8 @@ export const SKILL_ID = {
   martyrdom: 13,
   cutthroat: 14,
   moonHarvest: 15,
+  arrowVolley: 16,
+  fadeArrow: 17,
 } as const;
 
 /** One of these is granted randomly when a Horseman is created. */
@@ -37,7 +39,8 @@ export const KNIGHT_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Marksman is created. */
 export const MARKSMAN_STARTING_SKILL_IDS = [
-  SKILL_ID.criticalBolt
+  SKILL_ID.criticalBolt,
+  SKILL_ID.longShot
 ] as const;
 
 /** One of these is granted randomly when a Moonblade is created. */
@@ -53,6 +56,7 @@ export const RAIDER_STARTING_SKILL_IDS = [
 /** One of these is granted randomly when a Ranger is created. */
 export const RANGER_STARTING_SKILL_IDS = [
   SKILL_ID.frozenArrow,
-  SKILL_ID.longShot
+  SKILL_ID.arrowVolley,
+  SKILL_ID.fadeArrow,
 ] as const;
 

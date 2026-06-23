@@ -2,8 +2,11 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   getAreaAbilityTargets,
+  getEnemyAoESplashTargets,
   isAllySupportTargeting,
   isAreaTargeting,
+  isEnemyAoETargeting,
+  isEnemyTargeting,
   isInstantCastTargeting,
   isSingleTargetTargeting,
   isValidAbilityTarget,
@@ -17,10 +20,19 @@ describe("abilityTargeting", () => {
     assert.equal(isAreaTargeting("enemy"), false);
   });
 
-  it("treats ally and enemy as single-target targeting", () => {
+  it("treats ally, enemy, and enemyAoE as single-target targeting", () => {
     assert.equal(isSingleTargetTargeting("ally"), true);
     assert.equal(isSingleTargetTargeting("enemy"), true);
+    assert.equal(isSingleTargetTargeting("enemyAoE"), true);
     assert.equal(isSingleTargetTargeting("self"), false);
+  });
+
+  it("identifies enemy and enemyAoE as enemy targeting", () => {
+    assert.equal(isEnemyTargeting("enemy"), true);
+    assert.equal(isEnemyTargeting("enemyAoE"), true);
+    assert.equal(isEnemyAoETargeting("enemyAoE"), true);
+    assert.equal(isEnemyAoETargeting("enemy"), false);
+    assert.equal(isAreaTargeting("enemyAoE"), false);
   });
 
   it("treats self, ally, and allAllies as ally support targeting", () => {
@@ -35,6 +47,8 @@ describe("abilityTargeting", () => {
     assert.equal(isValidAbilityTarget("ally", 10, 20), false);
     assert.equal(isValidAbilityTarget("enemy", 10, 20), true);
     assert.equal(isValidAbilityTarget("enemy", 10, 10), false);
+    assert.equal(isValidAbilityTarget("enemyAoE", 10, 20), true);
+    assert.equal(isValidAbilityTarget("enemyAoE", 10, 10), false);
   });
 
   it("treats self and area targeting as instant cast", () => {
@@ -127,6 +141,54 @@ describe("abilityTargeting", () => {
     assert.deepEqual(
       targets.map((warrior) => warrior.id).sort(),
       [2, 3]
+    );
+  });
+
+  it("returns nearby enemies for enemyAoE splash around the primary target", () => {
+    const warriors = [
+      {
+        id: 1,
+        armyId: 10,
+        currentHealth: 20,
+        battleTileCurrent: "A1",
+      },
+      {
+        id: 2,
+        armyId: 20,
+        currentHealth: 15,
+        battleTileCurrent: "B2",
+      },
+      {
+        id: 3,
+        armyId: 20,
+        currentHealth: 12,
+        battleTileCurrent: "C2",
+      },
+      {
+        id: 4,
+        armyId: 20,
+        currentHealth: 10,
+        battleTileCurrent: "E5",
+      },
+      {
+        id: 5,
+        armyId: 10,
+        currentHealth: 12,
+        battleTileCurrent: "B3",
+      },
+    ];
+
+    const splashTargets = getEnemyAoESplashTargets(
+      warriors,
+      "B2",
+      10,
+      2,
+      8
+    );
+
+    assert.deepEqual(
+      splashTargets.map((warrior) => warrior.id).sort(),
+      [3]
     );
   });
 });
