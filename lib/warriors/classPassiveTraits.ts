@@ -261,11 +261,11 @@ export function grantsSpellCastManaMasteryRestore(
 }
 
 export function applySpellCastManaMasteryRestoreToWarrior(warrior: {
-  class: string;
+  warriorClass: string;
   currentMana: number;
   mana: number;
 }): Pick<TakedownTraitWarriorResources, "currentMana"> {
-  if (!grantsSpellCastManaMasteryRestore(warrior.class)) {
+  if (!grantsSpellCastManaMasteryRestore(warrior.warriorClass)) {
     return { currentMana: warrior.currentMana };
   }
 
@@ -293,10 +293,10 @@ export interface KingsCommandAllyWarrior {
 
 export function applyKingsCommandStaminaRestoreToAlly(
   ally: KingsCommandAllyWarrior,
-  caster: { id: number; class: string; armyId: number }
+  caster: { id: number; warriorClass: string; armyId: number }
 ): Pick<KingsCommandAllyWarrior, "currentStamina"> {
   if (
-    !grantsKingsCommandAllyStaminaRestore(caster.class) ||
+    !grantsKingsCommandAllyStaminaRestore(caster.warriorClass) ||
     ally.id === caster.id ||
     ally.armyId !== caster.armyId ||
     ally.currentHealth <= 0
@@ -313,7 +313,7 @@ export function applyKingsCommandStaminaRestoreToAlly(
 }
 
 export interface TakedownTraitWarriorResources {
-  class: string;
+  warriorClass: string;
   currentMana: number;
   mana: number;
   currentStamina: number;
@@ -324,7 +324,7 @@ export interface TakedownTraitWarriorResources {
 export function applyTakedownTraitRestoreToWarrior(
   warrior: TakedownTraitWarriorResources
 ): Pick<TakedownTraitWarriorResources, "currentMana" | "currentStamina"> {
-  const trait = getClassPassiveTraitForClass(warrior.class);
+  const trait = getClassPassiveTraitForClass(warrior.warriorClass);
 
   switch (trait?.key) {
     case CLASS_PASSIVE_TRAIT_KEYS.soulHarvest:

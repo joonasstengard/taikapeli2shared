@@ -236,7 +236,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
   it("restores 1 mana for Necromancer takedowns", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        class: "Necromancer",
+        warriorClass: "Necromancer",
         ...baseResources,
       }),
       { currentMana: 4, currentStamina: 4 }
@@ -246,7 +246,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
   it("restores 1 stamina for Horseman takedowns", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        class: "Horseman",
+        warriorClass: "Horseman",
         ...baseResources,
       }),
       { currentMana: 3, currentStamina: 5 }
@@ -256,7 +256,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
   it("caps restored resources at max values", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        class: "Necromancer",
+        warriorClass: "Necromancer",
         currentMana: 10,
         mana: 10,
         currentStamina: 4,
@@ -267,7 +267,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
 
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        class: "Horseman",
+        warriorClass: "Horseman",
         currentMana: 3,
         mana: 10,
         currentStamina: 12,
@@ -280,7 +280,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
   it("does not restore resources for classes without takedown traits", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        class: "Knight",
+        warriorClass: "Knight",
         ...baseResources,
       }),
       { currentMana: 3, currentStamina: 4 }
@@ -325,7 +325,7 @@ describe("applySpellCastManaMasteryRestoreToWarrior", () => {
   it("restores 1 mana for Sorcerer spell casts", () => {
     assert.deepEqual(
       applySpellCastManaMasteryRestoreToWarrior({
-        class: "Sorcerer",
+        warriorClass: "Sorcerer",
         currentMana: 4,
         mana: 12,
       }),
@@ -336,7 +336,7 @@ describe("applySpellCastManaMasteryRestoreToWarrior", () => {
   it("caps restored mana at max", () => {
     assert.deepEqual(
       applySpellCastManaMasteryRestoreToWarrior({
-        class: "Sorcerer",
+        warriorClass: "Sorcerer",
         currentMana: 12,
         mana: 12,
       }),
@@ -347,7 +347,7 @@ describe("applySpellCastManaMasteryRestoreToWarrior", () => {
   it("does not restore mana for other classes", () => {
     assert.deepEqual(
       applySpellCastManaMasteryRestoreToWarrior({
-        class: "Priestess",
+        warriorClass: "Priestess",
         currentMana: 4,
         mana: 12,
       }),
@@ -368,7 +368,7 @@ describe("grantsKingsCommandAllyStaminaRestore", () => {
 });
 
 describe("applyKingsCommandStaminaRestoreToAlly", () => {
-  const kingCaster = { id: 1, class: "King", armyId: 10 };
+  const kingCaster = { id: 1, warriorClass: "King", armyId: 10 };
   const ally = {
     id: 2,
     armyId: 10,
@@ -425,7 +425,7 @@ describe("applyKingsCommandStaminaRestoreToAlly", () => {
     assert.deepEqual(
       applyKingsCommandStaminaRestoreToAlly(ally, {
         ...kingCaster,
-        class: "Paladin",
+        warriorClass: "Paladin",
       }),
       { currentStamina: 3 }
     );

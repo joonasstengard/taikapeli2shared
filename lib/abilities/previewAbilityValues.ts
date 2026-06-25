@@ -14,7 +14,7 @@ import {
 import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
 
 export interface AbilityPreviewCaster {
-  class?: string;
+  warriorClass?: string;
   health: number;
   currentHealth: number;
   strength: number;
@@ -94,7 +94,7 @@ export function previewSpellHeal(
   return (
     spell.baseHealTarget +
     calculateSpellHealBonus(spell, toPreviewCasterStats(caster)) +
-    getDevotionSpellHealBonus(caster.class)
+    getDevotionSpellHealBonus(caster.warriorClass)
   );
 }
 
