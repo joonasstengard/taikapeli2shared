@@ -38,10 +38,10 @@ export const WARRIOR_PICTURE_RACE_RANGES: Partial<
   ],
   MarksmanMale: [{ race: "Human", from: 1, to: 9 }, { race: "Dwarf", from: 10, to: 15 }],
   MoonbladeMale: [{ race: "Elf", from: 1, to: 5 }],
-  NecromancerMale: [{ race: "Human", from: 1, to: 6 }, { race: "Orc", from: 7, to: 10 }],
   PeasantMale: [{ race: "Human", from: 1, to: 20 }, { race: "Dwarf", from: 21, to: 26 }],
   BerserkerMale: [{ race: "Orc", from: 1, to: 4 }, { race: "Human", from: 5, to: 8 }],
   RangerMale: [{ race: "Elf", from: 1, to: 5 }],
+  ShamanMale: [{ race: "Human", from: 1, to: 4 }, { race: "Orc", from: 5, to: 8 }],
 };
 
 export function getWarriorRaceDisplayName(race: WarriorRace): string {

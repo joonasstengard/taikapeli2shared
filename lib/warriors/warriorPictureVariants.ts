@@ -13,6 +13,7 @@ export const WARRIOR_CLASSES = [
   "Priestess",
   "Berserker",
   "Ranger",
+  "Shaman",
   "Sorcerer",
 ] as const;
 export type WarriorClass = (typeof WARRIOR_CLASSES)[number];
@@ -44,7 +45,7 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   MoonbladeFemale: 0,
   MoonbladeMale: 5,
   NecromancerFemale: 0,
-  NecromancerMale: 10,
+  NecromancerMale: 6,
   PaladinMale: 9,
   PaladinFemale: 0,
   PeasantFemale: 0,
@@ -55,6 +56,8 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   BerserkerFemale: 0,
   RangerMale: 5,
   RangerFemale: 0,
+  ShamanMale: 8,
+  ShamanFemale: 0,
   SorcererFemale: 0,
   SorcererMale: 10
 };

@@ -46,6 +46,13 @@ describe("getWarriorRace", () => {
     assert.equal(getWarriorRace("Berserker", "Male", 4), "Orc");
   });
 
+  it("maps ShamanMale picture ranges to Human and Orc", () => {
+    assert.equal(getWarriorRace("Shaman", "Male", 1), "Human");
+    assert.equal(getWarriorRace("Shaman", "Male", 4), "Human");
+    assert.equal(getWarriorRace("Shaman", "Male", 5), "Orc");
+    assert.equal(getWarriorRace("Shaman", "Male", 8), "Orc");
+  });
+
   it("falls back to Human for out-of-range pictures on configured combos", () => {
     assert.equal(getWarriorRace("Charger", "Male", 0), DEFAULT_WARRIOR_RACE);
     assert.equal(getWarriorRace("Charger", "Male", 99), DEFAULT_WARRIOR_RACE);
@@ -56,7 +63,7 @@ describe("formatWarriorClassLabel", () => {
   it("uses full race + class labels", () => {
     assert.equal(formatWarriorClassLabel("Knight", "Male", 1), "Human Knight");
     assert.equal(formatWarriorClassLabel("Charger", "Male", 10), "Orc Charger");
-    assert.equal(formatWarriorClassLabel("Moonblade", "Male", 2), "Elven Moonblade");
+    assert.equal(formatWarriorClassLabel("Moonblade", "Male", 2), "Elf Moonblade");
   });
 
   it("formats from a warrior object", () => {
