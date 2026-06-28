@@ -7,6 +7,8 @@ import {
   applyKingsCommandStaminaRestoreToAlly,
   applySpellCastManaMasteryRestoreToWarrior,
   applyTakedownTraitRestoreToWarrior,
+  applyWildChannelPrimalSkillManaRestoreToWarrior,
+  applyWildChannelPrimalSpellStaminaRestoreToWarrior,
   calculateBasicAttackDamage,
   CLASS_PASSIVE_TRAITS,
   getClassPassiveTraitForClass,
@@ -17,6 +19,8 @@ import {
   grantsHuntersMarkBasicAttackBonus,
   grantsKingsCommandAllyStaminaRestore,
   grantsSpellCastManaMasteryRestore,
+  grantsWildChannelPrimalSkillManaRestore,
+  grantsWildChannelPrimalSpellStaminaRestore,
   getDevotionSpellHealBonus,
 } from "./classPassiveTraits";
 
@@ -96,6 +100,14 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     assert.equal(
       getClassPassiveTraitForClass("Peasant")?.name,
       "Humble Origins"
+    );
+  });
+
+  it("assigns Wild Channel to Shaman", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Shaman, "wildChannel");
+    assert.equal(
+      getClassPassiveTraitForClass("Shaman")?.name,
+      "Wild Channel"
     );
   });
 
@@ -351,6 +363,166 @@ describe("applySpellCastManaMasteryRestoreToWarrior", () => {
         currentMana: 4,
         mana: 12,
       }),
+      { currentMana: 4 }
+    );
+  });
+});
+
+describe("grantsWildChannelPrimalSpellStaminaRestore", () => {
+  it("applies to Shaman Primal spell casts", () => {
+    assert.equal(
+      grantsWildChannelPrimalSpellStaminaRestore("Shaman", "Primal"),
+      true
+    );
+  });
+
+  it("does not apply to non-Primal spells", () => {
+    assert.equal(
+      grantsWildChannelPrimalSpellStaminaRestore("Shaman", "Holy"),
+      false
+    );
+    assert.equal(
+      grantsWildChannelPrimalSpellStaminaRestore("Shaman", null),
+      false
+    );
+  });
+
+  it("does not apply to other classes", () => {
+    assert.equal(
+      grantsWildChannelPrimalSpellStaminaRestore("Sorcerer", "Primal"),
+      false
+    );
+  });
+});
+
+describe("grantsWildChannelPrimalSkillManaRestore", () => {
+  it("applies to Shaman Primal skill use", () => {
+    assert.equal(
+      grantsWildChannelPrimalSkillManaRestore("Shaman", "Primal"),
+      true
+    );
+  });
+
+  it("does not apply to non-Primal skills", () => {
+    assert.equal(
+      grantsWildChannelPrimalSkillManaRestore("Shaman", null),
+      false
+    );
+  });
+
+  it("does not apply to other classes", () => {
+    assert.equal(
+      grantsWildChannelPrimalSkillManaRestore("Moonblade", "Primal"),
+      false
+    );
+  });
+});
+
+describe("applyWildChannelPrimalSpellStaminaRestoreToWarrior", () => {
+  it("restores 1 stamina for Shaman Primal spell casts", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSpellStaminaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentStamina: 4,
+          stamina: 10,
+        },
+        "Primal"
+      ),
+      { currentStamina: 5 }
+    );
+  });
+
+  it("caps restored stamina at max", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSpellStaminaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentStamina: 10,
+          stamina: 10,
+        },
+        "Primal"
+      ),
+      { currentStamina: 10 }
+    );
+  });
+
+  it("does not restore stamina for non-Primal spells or other classes", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSpellStaminaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentStamina: 4,
+          stamina: 10,
+        },
+        null
+      ),
+      { currentStamina: 4 }
+    );
+    assert.deepEqual(
+      applyWildChannelPrimalSpellStaminaRestoreToWarrior(
+        {
+          warriorClass: "Sorcerer",
+          currentStamina: 4,
+          stamina: 10,
+        },
+        "Primal"
+      ),
+      { currentStamina: 4 }
+    );
+  });
+});
+
+describe("applyWildChannelPrimalSkillManaRestoreToWarrior", () => {
+  it("restores 1 mana for Shaman Primal skill use", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSkillManaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentMana: 4,
+          mana: 12,
+        },
+        "Primal"
+      ),
+      { currentMana: 5 }
+    );
+  });
+
+  it("caps restored mana at max", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSkillManaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentMana: 12,
+          mana: 12,
+        },
+        "Primal"
+      ),
+      { currentMana: 12 }
+    );
+  });
+
+  it("does not restore mana for non-Primal skills or other classes", () => {
+    assert.deepEqual(
+      applyWildChannelPrimalSkillManaRestoreToWarrior(
+        {
+          warriorClass: "Shaman",
+          currentMana: 4,
+          mana: 12,
+        },
+        null
+      ),
+      { currentMana: 4 }
+    );
+    assert.deepEqual(
+      applyWildChannelPrimalSkillManaRestoreToWarrior(
+        {
+          warriorClass: "Sorcerer",
+          currentMana: 4,
+          mana: 12,
+        },
+        "Primal"
+      ),
       { currentMana: 4 }
     );
   });

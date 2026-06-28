@@ -1,6 +1,7 @@
 import type { AbilityEffect } from "./abilityEffects";
 import { applyEffectToBaseDamage } from "./applyEffectToBaseDamage";
 import { hasSacrificeEffect } from "./calculateSacrificePower";
+import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
 import {
   calculateSkillDamageBonus,
   calculateSpellDamageBonus,
@@ -11,6 +12,10 @@ import {
   toSkillCasterCombatStats,
   toSpellCasterCombatStats,
 } from "../spells/spellPower";
+import {
+  toEffectiveSkillCasterCombatStats,
+  toEffectiveSpellCasterCombatStats,
+} from "../statusEffects/resolveCombatStats";
 import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
 
 export interface AbilityPreviewCaster {
@@ -18,8 +23,10 @@ export interface AbilityPreviewCaster {
   health: number;
   currentHealth: number;
   strength: number;
+  speed?: number;
   faith: number;
   spellDamage: number;
+  statusEffects?: Pick<WarriorStatusEffect, "effectKey" | "turnsRemaining">[];
 }
 
 export interface AbilityPreviewValues {
@@ -41,7 +48,21 @@ export interface SkillPreviewInput extends AbilityPreviewInput {
 function toPreviewCasterStats(
   caster: AbilityPreviewCaster
 ): SpellCasterCombatStats {
+  if (caster.statusEffects) {
+    return toEffectiveSpellCasterCombatStats(caster, caster.statusEffects);
+  }
+
   return toSpellCasterCombatStats(caster);
+}
+
+function toPreviewSkillCasterStats(
+  caster: AbilityPreviewCaster
+) {
+  if (caster.statusEffects) {
+    return toEffectiveSkillCasterCombatStats(caster, caster.statusEffects);
+  }
+
+  return toSkillCasterCombatStats(caster);
 }
 
 export function previewSpellDamage(
@@ -79,7 +100,7 @@ export function previewSkillDamage(
   );
 
   return (
-    adjustedBase + calculateSkillDamageBonus(skill, toSkillCasterCombatStats(caster))
+    adjustedBase + calculateSkillDamageBonus(skill, toPreviewSkillCasterStats(caster))
   );
 }
 

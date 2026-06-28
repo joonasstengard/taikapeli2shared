@@ -17,6 +17,10 @@ export const SKILL_ID = {
   arrowVolley: 16,
   fadeArrow: 17,
   commandAttack: 18,
+  spiritWalk: 19,
+  primalSlam: 20,
+  bogPotion: 21,
+  transformWolf: 22,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -58,5 +62,12 @@ export const RANGER_STARTING_SKILL_IDS = [
   SKILL_ID.frozenArrow,
   SKILL_ID.arrowVolley,
   SKILL_ID.fadeArrow,
+] as const;
+
+/** One of these is granted randomly when a Shaman is created. */
+export const SHAMAN_STARTING_SKILL_IDS = [
+  SKILL_ID.spiritWalk,
+  SKILL_ID.bogPotion,
+  SKILL_ID.transformWolf,
 ] as const;
 

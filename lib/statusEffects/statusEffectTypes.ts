@@ -2,6 +2,7 @@ export const STATUS_EFFECT_KEY = {
   frozen: "frozen",
   invulnerable: "invulnerable",
   bleeding: "bleeding",
+  transformWolf: "transformWolf",
 } as const;
 
 export type StatusEffectKey =
@@ -10,7 +11,10 @@ export type StatusEffectKey =
 export type StatusEffectTag =
   | "blocks_movement"
   | "blocks_actions"
-  | "blocks_damage";
+  | "blocks_damage"
+  | "transform";
+
+export type CombatStat = "strength" | "speed" | "faith" | "spellDamage";
 
 /** Static status effect definition (game data, not a DB row). */
 export interface StatusEffectDefinition {
@@ -19,4 +23,8 @@ export interface StatusEffectDefinition {
   tags: StatusEffectTag[];
   /** Damage dealt at the end of the affected warrior's turn, before duration ticks down. */
   turnEndDamage?: number;
+  /** Temporary combat stat bonuses while the effect is active. */
+  statModifiers?: Partial<Record<CombatStat, number>>;
+  /** When true, no status badge is shown in battle UI. */
+  hideBadge?: true;
 }

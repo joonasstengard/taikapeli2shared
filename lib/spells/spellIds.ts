@@ -22,6 +22,8 @@ export const SPELL_ID = {
   consecrate: 21,
   penance: 22,
   moonBlast: 23,
+  spiritClaw: 24,
+  spiritRend: 25,
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */
@@ -54,4 +56,9 @@ export const NECROMANCER_STARTING_SPELL_IDS = [
 export const MOONBLADE_STARTING_SPELL_IDS = [
   SPELL_ID.shadowBlink,
   SPELL_ID.moonBlast
+] as const;
+
+/** One of these is granted randomly when a Shaman is created. */
+export const SHAMAN_STARTING_SPELL_IDS = [
+  SPELL_ID.spiritClaw
 ] as const;

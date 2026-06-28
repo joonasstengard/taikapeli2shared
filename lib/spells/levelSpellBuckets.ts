@@ -68,4 +68,14 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
       spellIds: [SPELL_ID.shadowBlink, SPELL_ID.teleport, SPELL_ID.moonBlast],
     },
   },
+  Shaman: {
+    2: {
+      spellIds: [SPELL_ID.spiritClaw],
+      skipChancePercent: 5
+    },
+    4: {
+      spellIds: [SPELL_ID.spiritRend],
+      skipChancePercent: 5
+    },
+  },
 };

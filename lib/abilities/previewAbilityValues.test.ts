@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { STATUS_EFFECT_KEY } from "../statusEffects/statusEffectTypes";
 import { calculateLastStandDamage } from "./calculateLastStandDamage";
 import { estimateSacrificeSelfCostPenalty } from "./calculateSacrificePower";
 import {
@@ -115,6 +116,28 @@ describe("previewSkillDamage", () => {
         spellDamage: 0,
       }),
       7
+    );
+  });
+
+  it("uses effective strength from active status effects", () => {
+    assert.equal(
+      previewSkillDamage(
+        strike,
+        {
+          health: 10,
+          currentHealth: 10,
+          strength: 4,
+          faith: 0,
+          spellDamage: 0,
+          statusEffects: [
+            {
+              effectKey: "transformWolf",
+              turnsRemaining: 3,
+            },
+          ],
+        }
+      ),
+      12
     );
   });
 });

@@ -19,6 +19,7 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   huntersMark: "huntersMark",
   kingsCommand: "kingsCommand",
   humbleOrigins: "humbleOrigins",
+  wildChannel: "wildChannel",
 } as const;
 
 export type ClassPassiveTraitKey =
@@ -43,7 +44,7 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
   [CLASS_PASSIVE_TRAIT_KEYS.sanctified]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.sanctified,
     name: "Sanctified",
-    description: "All Holy spells heal the caster for 1.",
+    description: "Casting Holy spells heals for 1.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.soulHarvest]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.soulHarvest,
@@ -100,6 +101,12 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     description:
       "Gain 10% more experience from all sources. Level ups grant +1 extra stat permanently to a random stat.",
   },
+  [CLASS_PASSIVE_TRAIT_KEYS.wildChannel]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.wildChannel,
+    name: "Wild Channel",
+    description:
+      "Restore 1 stamina after casting a Primal spell, and restore 1 mana after using a Primal skill.",
+  },
 };
 
 /** Passive trait granted to each warrior class. Omit classes with no trait yet. */
@@ -118,6 +125,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Ranger: CLASS_PASSIVE_TRAIT_KEYS.huntersMark,
   King: CLASS_PASSIVE_TRAIT_KEYS.kingsCommand,
   Peasant: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
+  Shaman: CLASS_PASSIVE_TRAIT_KEYS.wildChannel,
 };
 
 export function getClassPassiveTraitForClass(
@@ -271,6 +279,76 @@ export function applySpellCastManaMasteryRestoreToWarrior(warrior: {
 
   return {
     currentMana: Math.min(warrior.currentMana + 1, warrior.mana),
+  };
+}
+
+export const WILD_CHANNEL_PRIMAL_SPELL_STAMINA_RESTORE = 1;
+export const WILD_CHANNEL_PRIMAL_SKILL_MANA_RESTORE = 1;
+
+export function grantsWildChannelPrimalSpellStaminaRestore(
+  casterClass: string,
+  spellType: string | null
+): boolean {
+  const trait = getClassPassiveTraitForClass(casterClass);
+  return (
+    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.wildChannel && spellType === "Primal"
+  );
+}
+
+export function grantsWildChannelPrimalSkillManaRestore(
+  casterClass: string,
+  skillType: string | null
+): boolean {
+  const trait = getClassPassiveTraitForClass(casterClass);
+  return (
+    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.wildChannel && skillType === "Primal"
+  );
+}
+
+export function applyWildChannelPrimalSpellStaminaRestoreToWarrior(
+  warrior: {
+    warriorClass: string;
+    currentStamina: number;
+    stamina: number;
+  },
+  spellType: string | null
+): Pick<TakedownTraitWarriorResources, "currentStamina"> {
+  if (
+    !grantsWildChannelPrimalSpellStaminaRestore(
+      warrior.warriorClass,
+      spellType
+    )
+  ) {
+    return { currentStamina: warrior.currentStamina };
+  }
+
+  return {
+    currentStamina: Math.min(
+      warrior.currentStamina + WILD_CHANNEL_PRIMAL_SPELL_STAMINA_RESTORE,
+      warrior.stamina
+    ),
+  };
+}
+
+export function applyWildChannelPrimalSkillManaRestoreToWarrior(
+  warrior: {
+    warriorClass: string;
+    currentMana: number;
+    mana: number;
+  },
+  skillType: string | null
+): Pick<TakedownTraitWarriorResources, "currentMana"> {
+  if (
+    !grantsWildChannelPrimalSkillManaRestore(warrior.warriorClass, skillType)
+  ) {
+    return { currentMana: warrior.currentMana };
+  }
+
+  return {
+    currentMana: Math.min(
+      warrior.currentMana + WILD_CHANNEL_PRIMAL_SKILL_MANA_RESTORE,
+      warrior.mana
+    ),
   };
 }
 
