@@ -3,6 +3,8 @@ import {
   isTransformStatusEffectKey,
 } from "./statusEffectDefinitions";
 import type { CombatStat } from "./statusEffectTypes";
+import type { WarriorStatBuffInstance } from "../statBuffs/statBuffTypes";
+import { sumStatBuffBonuses } from "../statBuffs/sumStatBuffBonuses";
 import type { WarriorStatusEffect } from "./warriorStatusEffect";
 import type {
   SkillCasterCombatStats,
@@ -72,10 +74,21 @@ export function sumStatusEffectStatBonuses(
 
 export function resolveCombatStats(
   warrior: WarriorCombatStatSource,
-  statusEffects?: ActiveStatusEffect[]
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): ResolvedCombatStats {
   const base = readBaseCombatStats(warrior);
-  const bonuses = sumStatusEffectStatBonuses(statusEffects);
+  const statusBonuses = sumStatusEffectStatBonuses(statusEffects);
+  const buffBonuses = sumStatBuffBonuses(statBuffs);
+  const bonuses: Partial<Record<CombatStat, number>> = {};
+
+  for (const stat of COMBAT_STATS) {
+    const total = (statusBonuses[stat] ?? 0) + (buffBonuses[stat] ?? 0);
+    if (total !== 0) {
+      bonuses[stat] = total;
+    }
+  }
+
   const effective = { ...base };
 
   for (const stat of COMBAT_STATS) {
@@ -87,32 +100,37 @@ export function resolveCombatStats(
 
 export function getEffectiveStrength(
   warrior: WarriorCombatStatSource,
-  statusEffects?: ActiveStatusEffect[]
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): number {
-  return resolveCombatStats(warrior, statusEffects).effective.strength;
+  return resolveCombatStats(warrior, statusEffects, statBuffs).effective
+    .strength;
 }
 
 export function getEffectiveSpeed(
   warrior: WarriorCombatStatSource,
-  statusEffects?: ActiveStatusEffect[]
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): number {
-  return resolveCombatStats(warrior, statusEffects).effective.speed;
+  return resolveCombatStats(warrior, statusEffects, statBuffs).effective.speed;
 }
 
 export function toEffectiveSkillCasterCombatStats(
   warrior: WarriorCombatStatSource,
-  statusEffects?: ActiveStatusEffect[]
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): SkillCasterCombatStats {
   return {
-    strength: getEffectiveStrength(warrior, statusEffects),
+    strength: getEffectiveStrength(warrior, statusEffects, statBuffs),
   };
 }
 
 export function toEffectiveSpellCasterCombatStats(
   warrior: WarriorCombatStatSource,
-  statusEffects?: ActiveStatusEffect[]
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): SpellCasterCombatStats {
-  const { effective } = resolveCombatStats(warrior, statusEffects);
+  const { effective } = resolveCombatStats(warrior, statusEffects, statBuffs);
   return {
     faith: effective.faith,
     spellDamage: effective.spellDamage,

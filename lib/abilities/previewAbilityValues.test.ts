@@ -119,7 +119,7 @@ describe("previewSkillDamage", () => {
     );
   });
 
-  it("uses effective strength from active status effects", () => {
+  it("uses effective strength from active stat buffs", () => {
     assert.equal(
       previewSkillDamage(
         strike,
@@ -129,12 +129,7 @@ describe("previewSkillDamage", () => {
           strength: 4,
           faith: 0,
           spellDamage: 0,
-          statusEffects: [
-            {
-              effectKey: "transformWolf",
-              turnsRemaining: 3,
-            },
-          ],
+          statBuffs: [{ turnsRemaining: 3, statModifiers: { strength: 5 } }],
         }
       ),
       12

@@ -39,7 +39,6 @@ export const STATUS_EFFECTS: StatusEffect[] = [
     name: "Wolf Form",
     tags: ["transform"],
     hideBadge: true,
-    statModifiers: { strength: 5, speed: 5 },
   },
 ];
 
@@ -69,4 +68,14 @@ export function hasStatusTag(
 
 export function isTransformStatusEffectKey(effectKey: string): boolean {
   return hasStatusTag(effectKey, "transform");
+}
+
+export function hasActiveTransformStatus(
+  statusEffects: { effectKey: string; turnsRemaining: number }[] | undefined
+): boolean {
+  return (statusEffects ?? []).some(
+    (effect) =>
+      effect.turnsRemaining > 0 &&
+      isTransformStatusEffectKey(effect.effectKey)
+  );
 }

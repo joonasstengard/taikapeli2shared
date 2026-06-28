@@ -23,12 +23,9 @@ describe("resolveCombatStats", () => {
     assert.deepEqual(result.bonuses, {});
   });
 
-  it("applies wolf form stat bonuses", () => {
-    const result = resolveCombatStats(baseWarrior, [
-      {
-        effectKey: STATUS_EFFECT_KEY.transformWolf,
-        turnsRemaining: 3,
-      },
+  it("applies stat buff bonuses from instances", () => {
+    const result = resolveCombatStats(baseWarrior, [], [
+      { turnsRemaining: 3, statModifiers: { strength: 5, speed: 5 } },
     ]);
 
     assert.equal(result.effective.strength, 12);
@@ -37,13 +34,10 @@ describe("resolveCombatStats", () => {
     assert.equal(result.bonuses.speed, 5);
   });
 
-  it("ignores expired effects", () => {
+  it("ignores expired stat buff instances", () => {
     assert.equal(
-      getEffectiveStrength(baseWarrior, [
-        {
-          effectKey: STATUS_EFFECT_KEY.transformWolf,
-          turnsRemaining: 0,
-        },
+      getEffectiveStrength(baseWarrior, [], [
+        { turnsRemaining: 0, statModifiers: { strength: 5 } },
       ]),
       7
     );
@@ -51,13 +45,21 @@ describe("resolveCombatStats", () => {
 
   it("uses effective speed for turn order helpers", () => {
     assert.equal(
-      getEffectiveSpeed(baseWarrior, [
-        {
-          effectKey: STATUS_EFFECT_KEY.transformWolf,
-          turnsRemaining: 2,
-        },
+      getEffectiveSpeed(baseWarrior, [], [
+        { turnsRemaining: 2, statModifiers: { speed: 5 } },
       ]),
       9
     );
+  });
+
+  it("does not apply transform stats from status effect alone", () => {
+    const result = resolveCombatStats(baseWarrior, [
+      {
+        effectKey: STATUS_EFFECT_KEY.transformWolf,
+        turnsRemaining: 3,
+      },
+    ]);
+
+    assert.deepEqual(result.effective, baseWarrior);
   });
 });

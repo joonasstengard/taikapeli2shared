@@ -24,6 +24,7 @@ export const SPELL_ID = {
   moonBlast: 23,
   spiritClaw: 24,
   spiritRend: 25,
+  sacredInvocation: 26,
 } as const;
 
 /** One of these is granted randomly when a Sorcerer is created. */

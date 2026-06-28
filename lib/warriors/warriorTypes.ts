@@ -1,5 +1,6 @@
 import type { OwnedSkill } from "../skills/skillTypes";
 import type { OwnedSpell } from "../spells/spellTypes";
+import type { WarriorStatBuff } from "@taikapeli2/shared/lib/statBuffs/statBuffTypes";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
 
 /** Warrior columns shared between DB rows and API responses. */
@@ -35,6 +36,7 @@ export interface Warrior extends WarriorBase {
   spells: OwnedSpell[];
   skills: OwnedSkill[];
   statusEffects?: WarriorStatusEffect[];
+  statBuffs?: WarriorStatBuff[];
   /** Recruitment cost; only present for market free agents */
   price?: number;
 }

@@ -35,10 +35,20 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   King: {
     2: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.raiseMorale, SKILL_ID.rallyTroops, SKILL_ID.commandAttack]
+      skillIds: [
+        SKILL_ID.lastStand,
+        SKILL_ID.raiseMorale,
+        SKILL_ID.rallyTroops,
+        SKILL_ID.commandAttack,
+        SKILL_ID.battleCry,
+      ],
     },
     4: {
-      skillIds: [SKILL_ID.rallyTroops, SKILL_ID.lastStand, SKILL_ID.commandAttack]
+      skillIds: [
+        SKILL_ID.lastStand,
+        SKILL_ID.commandAttack,
+        SKILL_ID.warDecree,
+      ],
     },
   },
   Marksman: {

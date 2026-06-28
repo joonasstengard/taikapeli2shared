@@ -6,7 +6,7 @@ export const BATTLE_MAP_SMALL_MAX_WARRIORS = 3;
 export const BATTLE_MAP_SMALL_WIDTH = 4;
 export const BATTLE_MAP_SMALL_HEIGHT = 3;
 
-export const BATTLE_MAP_MEDIUM_MAX_WARRIORS = 5;
+export const BATTLE_MAP_MEDIUM_MAX_WARRIORS = 8;
 export const BATTLE_MAP_MEDIUM_WIDTH = 5;
 export const BATTLE_MAP_MEDIUM_HEIGHT = 4;
 

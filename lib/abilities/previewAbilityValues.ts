@@ -1,6 +1,7 @@
 import type { AbilityEffect } from "./abilityEffects";
 import { applyEffectToBaseDamage } from "./applyEffectToBaseDamage";
 import { hasSacrificeEffect } from "./calculateSacrificePower";
+import type { WarriorStatBuffInstance } from "../statBuffs/statBuffTypes";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
 import {
   calculateSkillDamageBonus,
@@ -27,6 +28,7 @@ export interface AbilityPreviewCaster {
   faith: number;
   spellDamage: number;
   statusEffects?: Pick<WarriorStatusEffect, "effectKey" | "turnsRemaining">[];
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[];
 }
 
 export interface AbilityPreviewValues {
@@ -48,8 +50,12 @@ export interface SkillPreviewInput extends AbilityPreviewInput {
 function toPreviewCasterStats(
   caster: AbilityPreviewCaster
 ): SpellCasterCombatStats {
-  if (caster.statusEffects) {
-    return toEffectiveSpellCasterCombatStats(caster, caster.statusEffects);
+  if (caster.statusEffects || caster.statBuffs) {
+    return toEffectiveSpellCasterCombatStats(
+      caster,
+      caster.statusEffects,
+      caster.statBuffs
+    );
   }
 
   return toSpellCasterCombatStats(caster);
@@ -58,8 +64,12 @@ function toPreviewCasterStats(
 function toPreviewSkillCasterStats(
   caster: AbilityPreviewCaster
 ) {
-  if (caster.statusEffects) {
-    return toEffectiveSkillCasterCombatStats(caster, caster.statusEffects);
+  if (caster.statusEffects || caster.statBuffs) {
+    return toEffectiveSkillCasterCombatStats(
+      caster,
+      caster.statusEffects,
+      caster.statBuffs
+    );
   }
 
   return toSkillCasterCombatStats(caster);

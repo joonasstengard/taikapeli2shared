@@ -1,19 +1,7 @@
 import type { AbilityTargetingType } from "../battle/abilityTargeting";
-import type { StatusEffectKey } from "../statusEffects/statusEffectTypes";
+import type { AbilityEffect } from "../abilities/abilityEffects";
 
-export type SpellEffect =
-  | { effectType: "lastStand" }
-  | { effectType: "leap" }
-  | { effectType: "retreat" }
-  | { effectType: "drain" }
-  | { effectType: "sacrifice" }
-  | { effectType: "requiresBleeding" }
-  | { effectType: "commandAttack" }
-  | {
-      effectType: "applyStatus";
-      statusKey: StatusEffectKey;
-      duration: number;
-    };
+export type SpellEffect = AbilityEffect;
 
 export type SpellTargetingType = AbilityTargetingType;
 

@@ -21,6 +21,8 @@ export const SKILL_ID = {
   primalSlam: 20,
   bogPotion: 21,
   transformWolf: 22,
+  battleCry: 23,
+  warDecree: 24,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -31,8 +33,8 @@ export const CHARGER_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a King is created. */
 export const KING_STARTING_SKILL_IDS = [
-  SKILL_ID.rallyTroops,
-  SKILL_ID.commandAttack
+  SKILL_ID.commandAttack,
+  SKILL_ID.battleCry
 ] as const;
 
 /** One of these is granted randomly when a Knight is created. */

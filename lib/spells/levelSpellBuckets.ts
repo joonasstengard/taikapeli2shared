@@ -24,11 +24,15 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
         SPELL_ID.desperateRune,
         SPELL_ID.freezingWhisper,
         SPELL_ID.teleport
-      ],
-      skipChancePercent: 10
+      ]
     },
     4: {
-      spellIds: [SPELL_ID.teleport, SPELL_ID.icebolt,
+      spellIds: [SPELL_ID.desperateRune, SPELL_ID.icebolt,
+      SPELL_ID.hellflame,
+      SPELL_ID.thunder,]
+    },
+    5: {
+      spellIds: [SPELL_ID.icebolt,
       SPELL_ID.hellflame,
       SPELL_ID.thunder,],
       skipChancePercent: 10
@@ -36,12 +40,17 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   },
   Priestess: {
     2: {
-      spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite],
-      skipChancePercent: 10,
+      spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite]
     },
     4: {
-      spellIds: [SPELL_ID.protect, SPELL_ID.massHealing, SPELL_ID.penance],
-      skipChancePercent: 10
+      spellIds: [
+        SPELL_ID.protect,
+        SPELL_ID.penance,
+        SPELL_ID.sacredInvocation,
+      ]
+    },
+    5: {
+      spellIds: [SPELL_ID.massHealing,]
     },
   },
   Paladin: {
@@ -50,21 +59,19 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     },
     4: {
       spellIds: [SPELL_ID.penance, SPELL_ID.consecrate],
-      skipChancePercent: 50
+      skipChancePercent: 10
     },
   },
   Warlock: {
     2: {
-      spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
-      skipChancePercent: 10
+      spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain]
     },
     4: {
-      spellIds: [SPELL_ID.lifeDevour, SPELL_ID.deathRitual],
-      skipChancePercent: 10
+      spellIds: [SPELL_ID.lifeDevour, SPELL_ID.deathRitual]
     },
   },
   Moonblade: {
-    3: {
+    2: {
       spellIds: [SPELL_ID.shadowBlink, SPELL_ID.teleport, SPELL_ID.moonBlast],
     },
   },
