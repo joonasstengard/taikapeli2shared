@@ -39,10 +39,10 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     );
   });
 
-  it("assigns Relentless Pursuit to Horseman", () => {
-    assert.equal(CLASS_PASSIVE_TRAITS.Horseman, "relentlessPursuit");
+  it("assigns Relentless Pursuit to Charger", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Charger, "relentlessPursuit");
     assert.equal(
-      getClassPassiveTraitForClass("Horseman")?.name,
+      getClassPassiveTraitForClass("Charger")?.name,
       "Relentless Pursuit"
     );
   });
@@ -243,10 +243,10 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
     );
   });
 
-  it("restores 1 stamina for Horseman takedowns", () => {
+  it("restores 1 stamina for Charger takedowns", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        warriorClass: "Horseman",
+        warriorClass: "Charger",
         ...baseResources,
       }),
       { currentMana: 3, currentStamina: 5 }
@@ -267,7 +267,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
 
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        warriorClass: "Horseman",
+        warriorClass: "Charger",
         currentMana: 3,
         mana: 10,
         currentStamina: 12,
@@ -295,7 +295,7 @@ describe("grantsBasicAttackBleeding", () => {
 
   it("does not apply to other classes", () => {
     assert.equal(grantsBasicAttackBleeding("Knight"), false);
-    assert.equal(grantsBasicAttackBleeding("Horseman"), false);
+    assert.equal(grantsBasicAttackBleeding("Charger"), false);
   });
 });
 
@@ -363,7 +363,7 @@ describe("grantsKingsCommandAllyStaminaRestore", () => {
 
   it("does not apply to other classes", () => {
     assert.equal(grantsKingsCommandAllyStaminaRestore("Paladin"), false);
-    assert.equal(grantsKingsCommandAllyStaminaRestore("Horseman"), false);
+    assert.equal(grantsKingsCommandAllyStaminaRestore("Charger"), false);
   });
 });
 

@@ -109,7 +109,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Knight: CLASS_PASSIVE_TRAIT_KEYS.plateBearing,
   Paladin: CLASS_PASSIVE_TRAIT_KEYS.sanctified,
   Necromancer: CLASS_PASSIVE_TRAIT_KEYS.soulHarvest,
-  Horseman: CLASS_PASSIVE_TRAIT_KEYS.relentlessPursuit,
+  Charger: CLASS_PASSIVE_TRAIT_KEYS.relentlessPursuit,
   Raider: CLASS_PASSIVE_TRAIT_KEYS.rend,
   Priestess: CLASS_PASSIVE_TRAIT_KEYS.devotion,
   Sorcerer: CLASS_PASSIVE_TRAIT_KEYS.manaMastery,

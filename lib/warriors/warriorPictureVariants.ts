@@ -2,7 +2,7 @@
 // Spritesheets are named class+gender+picture, e.g. KnightMale1.png.
 
 export const WARRIOR_CLASSES = [
-  "Horseman",
+  "Charger",
   "King",
   "Knight",
   "Marksman",
@@ -33,8 +33,8 @@ export const DEFAULT_WARRIOR_PICTURE_COUNT = 0;
 export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   Record<WarriorClassGenderKey, number>
 > = {
-  HorsemanMale: 9,
-  HorsemanFemale: 0,
+  ChargerMale: 9,
+  ChargerFemale: 0,
   KingFemale: 0,
   KingMale: 8,
   KnightFemale: 0,

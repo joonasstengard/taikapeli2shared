@@ -19,8 +19,8 @@ export const SKILL_ID = {
   commandAttack: 18,
 } as const;
 
-/** One of these is granted randomly when a Horseman is created. */
-export const HORSEMAN_STARTING_SKILL_IDS = [
+/** One of these is granted randomly when a Charger is created. */
+export const CHARGER_STARTING_SKILL_IDS = [
   SKILL_ID.cavalryCharge,
   SKILL_ID.stomp
 ] as const;

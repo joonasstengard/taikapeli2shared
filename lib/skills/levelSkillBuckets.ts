@@ -18,7 +18,7 @@ export type LevelSkillBucketsByLevel = Partial<
 export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Record<WarriorClass, LevelSkillBucketsByLevel>
 > = {
-  Horseman: {
+  Charger: {
     3: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.cavalryCharge],
     }
