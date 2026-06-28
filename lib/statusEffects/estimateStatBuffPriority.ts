@@ -12,8 +12,8 @@ type ActiveStatusEffect = Pick<
 
 /** AI priority weight per stat point, per turn of buff duration. */
 export const STAT_BUFF_PRIORITY_WEIGHT: Record<CombatStat, number> = {
-  strength: 1.0,
-  speed: 1.0,
+  strength: 1.5,
+  speed: 1.2,
   faith: 1.0,
   spellDamage: 1.0,
 };
