@@ -45,8 +45,8 @@ export const PALADIN_STARTING_SPELL_IDS = [
   SPELL_ID.holySmite
 ] as const;
 
-/** One of these is granted randomly when a Necromancer is created. */
-export const NECROMANCER_STARTING_SPELL_IDS = [
+/** One of these is granted randomly when a Warlock is created. */
+export const WARLOCK_STARTING_SPELL_IDS = [
   SPELL_ID.bloodCurse,
   SPELL_ID.rottingTouch,
   SPELL_ID.lifeDrain

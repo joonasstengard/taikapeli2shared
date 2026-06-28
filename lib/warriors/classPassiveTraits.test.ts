@@ -35,10 +35,10 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     assert.equal(getClassPassiveTraitForClass("Paladin")?.name, "Sanctified");
   });
 
-  it("assigns Soul Harvest to Necromancer", () => {
-    assert.equal(CLASS_PASSIVE_TRAITS.Necromancer, "soulHarvest");
+  it("assigns Soul Harvest to Warlock", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Warlock, "soulHarvest");
     assert.equal(
-      getClassPassiveTraitForClass("Necromancer")?.name,
+      getClassPassiveTraitForClass("Warlock")?.name,
       "Soul Harvest"
     );
   });
@@ -245,10 +245,10 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
     stamina: 12,
   };
 
-  it("restores 1 mana for Necromancer takedowns", () => {
+  it("restores 1 mana for Warlock takedowns", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        warriorClass: "Necromancer",
+        warriorClass: "Warlock",
         ...baseResources,
       }),
       { currentMana: 4, currentStamina: 4 }
@@ -268,7 +268,7 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
   it("caps restored resources at max values", () => {
     assert.deepEqual(
       applyTakedownTraitRestoreToWarrior({
-        warriorClass: "Necromancer",
+        warriorClass: "Warlock",
         currentMana: 10,
         mana: 10,
         currentStamina: 4,
@@ -328,7 +328,7 @@ describe("grantsSpellCastManaMasteryRestore", () => {
   });
 
   it("does not apply to other classes", () => {
-    assert.equal(grantsSpellCastManaMasteryRestore("Necromancer"), false);
+    assert.equal(grantsSpellCastManaMasteryRestore("Warlock"), false);
     assert.equal(grantsSpellCastManaMasteryRestore("Priestess"), false);
   });
 });

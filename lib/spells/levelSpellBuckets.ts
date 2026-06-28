@@ -53,7 +53,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
       skipChancePercent: 50
     },
   },
-  Necromancer: {
+  Warlock: {
     2: {
       spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
       skipChancePercent: 10
