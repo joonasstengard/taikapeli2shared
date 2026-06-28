@@ -110,7 +110,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Paladin: CLASS_PASSIVE_TRAIT_KEYS.sanctified,
   Necromancer: CLASS_PASSIVE_TRAIT_KEYS.soulHarvest,
   Charger: CLASS_PASSIVE_TRAIT_KEYS.relentlessPursuit,
-  Raider: CLASS_PASSIVE_TRAIT_KEYS.rend,
+  Berserker: CLASS_PASSIVE_TRAIT_KEYS.rend,
   Priestess: CLASS_PASSIVE_TRAIT_KEYS.devotion,
   Sorcerer: CLASS_PASSIVE_TRAIT_KEYS.manaMastery,
   Moonblade: CLASS_PASSIVE_TRAIT_KEYS.cleave,

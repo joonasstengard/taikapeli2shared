@@ -48,8 +48,8 @@ export const MOONBLADE_STARTING_SKILL_IDS = [
   SKILL_ID.lifeSteal
 ] as const;
 
-/** One of these is granted randomly when a Raider is created. */
-export const RAIDER_STARTING_SKILL_IDS = [
+/** One of these is granted randomly when a Berserker is created. */
+export const BERSERKER_STARTING_SKILL_IDS = [
   SKILL_ID.eviscerate
 ] as const;
 

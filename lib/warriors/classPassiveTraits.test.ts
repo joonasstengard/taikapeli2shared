@@ -47,9 +47,9 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     );
   });
 
-  it("assigns Rend to Raider", () => {
-    assert.equal(CLASS_PASSIVE_TRAITS.Raider, "rend");
-    assert.equal(getClassPassiveTraitForClass("Raider")?.name, "Rend");
+  it("assigns Rend to Berserker", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Berserker, "rend");
+    assert.equal(getClassPassiveTraitForClass("Berserker")?.name, "Rend");
   });
 
   it("assigns Devotion to Priestess", () => {
@@ -112,18 +112,18 @@ describe("calculateBasicAttackDamage", () => {
   });
 
   it("does not modify damage against defenders without traits", () => {
-    assert.equal(calculateBasicAttackDamage(5, "Raider"), 5);
-    assert.equal(calculateBasicAttackDamage(1, "Raider"), 1);
+    assert.equal(calculateBasicAttackDamage(5, "Berserker"), 5);
+    assert.equal(calculateBasicAttackDamage(1, "Berserker"), 1);
   });
 
   it("clamps negative attack power to zero before traits", () => {
-    assert.equal(calculateBasicAttackDamage(-3, "Raider"), 0);
+    assert.equal(calculateBasicAttackDamage(-3, "Berserker"), 0);
     assert.equal(calculateBasicAttackDamage(-3, "Knight"), 1);
   });
 
   it("adds Braced bonus for stationary Marksman attackers", () => {
     assert.equal(
-      calculateBasicAttackDamage(5, "Raider", {
+      calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Marksman",
         attackerHasMovedThisTurn: 0,
       }),
@@ -133,7 +133,7 @@ describe("calculateBasicAttackDamage", () => {
 
   it("does not add Braced bonus after Marksman has moved", () => {
     assert.equal(
-      calculateBasicAttackDamage(5, "Raider", {
+      calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Marksman",
         attackerHasMovedThisTurn: 1,
       }),
@@ -143,7 +143,7 @@ describe("calculateBasicAttackDamage", () => {
 
   it("adds Hunter's Mark bonus against Frozen defenders", () => {
     assert.equal(
-      calculateBasicAttackDamage(4, "Raider", {
+      calculateBasicAttackDamage(4, "Berserker", {
         attackerClass: "Ranger",
         defenderStatusEffects: [
           { effectKey: "frozen", turnsRemaining: 1 },
@@ -155,7 +155,7 @@ describe("calculateBasicAttackDamage", () => {
 
   it("does not add Hunter's Mark bonus against non-Frozen defenders", () => {
     assert.equal(
-      calculateBasicAttackDamage(4, "Raider", {
+      calculateBasicAttackDamage(4, "Berserker", {
         attackerClass: "Ranger",
         defenderStatusEffects: [
           { effectKey: "frozen", turnsRemaining: 0 },
@@ -289,8 +289,8 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
 });
 
 describe("grantsBasicAttackBleeding", () => {
-  it("applies to Raider basic attacks", () => {
-    assert.equal(grantsBasicAttackBleeding("Raider"), true);
+  it("applies to Berserker basic attacks", () => {
+    assert.equal(grantsBasicAttackBleeding("Berserker"), true);
   });
 
   it("does not apply to other classes", () => {
@@ -305,7 +305,7 @@ describe("grantsBasicAttackCleave", () => {
   });
 
   it("does not apply to other classes", () => {
-    assert.equal(grantsBasicAttackCleave("Raider"), false);
+    assert.equal(grantsBasicAttackCleave("Berserker"), false);
     assert.equal(grantsBasicAttackCleave("Knight"), false);
   });
 });

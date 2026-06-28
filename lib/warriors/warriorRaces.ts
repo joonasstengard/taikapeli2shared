@@ -40,7 +40,7 @@ export const WARRIOR_PICTURE_RACE_RANGES: Partial<
   MoonbladeMale: [{ race: "Elf", from: 1, to: 5 }],
   NecromancerMale: [{ race: "Human", from: 1, to: 6 }, { race: "Orc", from: 7, to: 10 }],
   PeasantMale: [{ race: "Human", from: 1, to: 20 }, { race: "Dwarf", from: 21, to: 26 }],
-  RaiderMale: [{ race: "Orc", from: 1, to: 4 }],
+  BerserkerMale: [{ race: "Orc", from: 1, to: 4 }, { race: "Human", from: 5, to: 8 }],
   RangerMale: [{ race: "Elf", from: 1, to: 5 }],
 };
 

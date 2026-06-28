@@ -38,8 +38,12 @@ describe("getWarriorRace", () => {
 
   it("maps Elven classes to Elf", () => {
     assert.equal(getWarriorRace("Moonblade", "Male", 3), "Elf");
-    assert.equal(getWarriorRace("Raider", "Male", 1), "Elf");
     assert.equal(getWarriorRace("Ranger", "Male", 5), "Elf");
+  });
+
+  it("maps BerserkerMale picture ranges to Orc", () => {
+    assert.equal(getWarriorRace("Berserker", "Male", 1), "Orc");
+    assert.equal(getWarriorRace("Berserker", "Male", 4), "Orc");
   });
 
   it("falls back to Human for out-of-range pictures on configured combos", () => {

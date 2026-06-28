@@ -58,7 +58,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.raiseMorale]
     },
   },
-  Raider: {
+  Berserker: {
     2: {
       skillIds: [SKILL_ID.lunge],
     },
