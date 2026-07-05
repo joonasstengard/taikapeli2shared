@@ -13,7 +13,7 @@ export const SKILL_ID = {
   raiseMorale: 12,
   martyrdom: 13,
   cutthroat: 14,
-  moonHarvest: 15,
+  eclipseHarvest: 15,
   arrowVolley: 16,
   fadeArrow: 17,
   commandAttack: 18,
@@ -29,6 +29,11 @@ export const SKILL_ID = {
   panicStrike: 28,
   overrun: 29,
   protect: 30,
+  takeAim: 31,
+  berserk: 32,
+  crescentSlash: 33,
+  moonlitVeil: 34,
+  fullMoonHarvest: 35,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */

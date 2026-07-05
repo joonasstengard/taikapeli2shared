@@ -53,15 +53,19 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Marksman: {
-    3: {
-      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot],
-      skipChancePercent: 10
+    2: {
+      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
     },
+    4: {
+      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
+    }
   },
   Moonblade: {
-    3: {
-      skillIds: [SKILL_ID.moonHarvest],
-      skipChancePercent: 33
+    2: {
+      skillIds: [SKILL_ID.eclipseHarvest, SKILL_ID.crescentSlash]
+    },
+    4: {
+      skillIds: [SKILL_ID.moonlitVeil, SKILL_ID.fullMoonHarvest]
     }
   },
   Paladin: {
@@ -74,7 +78,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.lunge],
     },
     4: {
-      skillIds: [SKILL_ID.cutthroat],
+      skillIds: [SKILL_ID.cutthroat, SKILL_ID.berserk],
     },
   },
   Ranger: {
