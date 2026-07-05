@@ -23,6 +23,10 @@ export const SKILL_ID = {
   transformWolf: 22,
   battleCry: 23,
   warDecree: 24,
+  jab: 25,
+  desperateSwing: 26,
+  scrounge: 27,
+  panicStrike: 28,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */

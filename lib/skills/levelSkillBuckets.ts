@@ -109,4 +109,12 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skipChancePercent: 1,
     },
   },
+  Peasant: {
+    2: {
+      skillIds: [SKILL_ID.jab, SKILL_ID.desperateSwing, SKILL_ID.scrounge, SKILL_ID.panicStrike],
+    },
+    4: {
+      skillIds: [SKILL_ID.jab, SKILL_ID.desperateSwing, SKILL_ID.panicStrike],
+    },
+  },
 };
