@@ -2,19 +2,19 @@
 // Spritesheets are named class+gender+picture, e.g. KnightMale1.png.
 
 export const WARRIOR_CLASSES = [
+  "Berserker",
   "Charger",
   "King",
   "Knight",
   "Marksman",
   "Moonblade",
-  "Warlock",
   "Paladin",
   "Peasant",
   "Priestess",
-  "Berserker",
   "Ranger",
   "Shaman",
   "Sorcerer",
+  "Warlock",
 ] as const;
 export type WarriorClass = (typeof WARRIOR_CLASSES)[number];
 
