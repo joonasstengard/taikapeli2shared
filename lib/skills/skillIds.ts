@@ -27,12 +27,13 @@ export const SKILL_ID = {
   desperateSwing: 26,
   scrounge: 27,
   panicStrike: 28,
+  overrun: 29,
+  protect: 30,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
 export const CHARGER_STARTING_SKILL_IDS = [
-  SKILL_ID.cavalryCharge,
-  SKILL_ID.stomp
+  SKILL_ID.cavalryCharge
 ] as const;
 
 /** One of these is granted randomly when a King is created. */
@@ -43,8 +44,8 @@ export const KING_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Knight is created. */
 export const KNIGHT_STARTING_SKILL_IDS = [
-  SKILL_ID.lastStand,
   SKILL_ID.decisiveStrike,
+  SKILL_ID.protect
 ] as const;
 
 /** One of these is granted randomly when a Marksman is created. */

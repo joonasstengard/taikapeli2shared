@@ -19,18 +19,19 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Record<WarriorClass, LevelSkillBucketsByLevel>
 > = {
   Charger: {
+    2: {
+      skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
+    },
     3: {
-      skillIds: [SKILL_ID.stomp, SKILL_ID.cavalryCharge],
+      skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
     }
   },
   Knight: {
     2: {
-      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom],
-      skipChancePercent: 10,
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.lunge]
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge, SKILL_ID.martyrdom],
-      skipChancePercent: 10,
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge, SKILL_ID.martyrdom]
     },
   },
   King: {
