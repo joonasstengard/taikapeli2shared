@@ -21,7 +21,7 @@ export const SKILL_ID = {
   primalSlam: 20,
   bogPotion: 21,
   transformWolf: 22,
-  battleCry: 23,
+  battleDecree: 23,
   warDecree: 24,
   jab: 25,
   desperateSwing: 26,
@@ -34,6 +34,8 @@ export const SKILL_ID = {
   crescentSlash: 33,
   moonlitVeil: 34,
   fullMoonHarvest: 35,
+  crusade: 36,
+  blessHammer: 37,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -44,7 +46,7 @@ export const CHARGER_STARTING_SKILL_IDS = [
 /** One of these is granted randomly when a King is created. */
 export const KING_STARTING_SKILL_IDS = [
   SKILL_ID.commandAttack,
-  SKILL_ID.battleCry
+  SKILL_ID.battleDecree
 ] as const;
 
 /** One of these is granted randomly when a Knight is created. */
@@ -81,5 +83,10 @@ export const SHAMAN_STARTING_SKILL_IDS = [
   SKILL_ID.spiritWalk,
   SKILL_ID.bogPotion,
   SKILL_ID.transformWolf,
+] as const;
+
+/** One of these is granted randomly when a Paladin is created. */
+export const PALADIN_STARTING_SKILL_IDS = [
+  SKILL_ID.blessHammer,
 ] as const;
 

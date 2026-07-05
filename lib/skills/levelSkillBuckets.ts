@@ -41,7 +41,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
         SKILL_ID.raiseMorale,
         SKILL_ID.rallyTroops,
         SKILL_ID.commandAttack,
-        SKILL_ID.battleCry,
+        SKILL_ID.battleDecree,
       ],
     },
     4: {
@@ -70,7 +70,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Paladin: {
     3: {
-      skillIds: [SKILL_ID.raiseMorale]
+      skillIds: [SKILL_ID.raiseMorale, SKILL_ID.crusade]
     },
   },
   Berserker: {
