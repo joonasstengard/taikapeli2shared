@@ -1,6 +1,6 @@
 // Warrior stat training gold costs. Kept here for easy tweaking (shared by frontend + backend).
 
-export const TRAINING_BASE_COST = 5;
+export const TRAINING_BASE_COST = 2;
 export const TRAINING_LEVEL_MULTIPLIER = 1;
 export const TRAINING_STAT_MAX = 50;
 

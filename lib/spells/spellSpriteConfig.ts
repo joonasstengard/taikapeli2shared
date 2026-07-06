@@ -37,7 +37,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.penance]: { fileName: "316.png", row: 5, frames: 8 },
   [SPELL_ID.moonBlast]: { fileName: "388.png", row: 6, frames: 9 },
   [SPELL_ID.spiritClaw]: { fileName: "447.png", row: 4, frames: 9 },
-  [SPELL_ID.spiritRend]: { fileName: "509.png", row: 4, frames: 12 },
+  [SPELL_ID.spiritRend]: { fileName: "509.png", row: 4, frames: 13 },
   [SPELL_ID.sacredInvocation]: { fileName: "136.png", row: 5, frames: 12 },
 };
 
