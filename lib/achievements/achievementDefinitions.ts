@@ -5,6 +5,12 @@ import {
 } from "./campaignChallengeKeys";
 import { STAT_KEY, type StatKey } from "./statKeys";
 
+/** Starting nation health; undefeated runs must finish with this amount. */
+export const UNDEFEATED_CAMPAIGN_LEAGUE_POINTS = 100;
+
+/** Minimum unspent treasury gold required for the gold hoarder achievement. */
+export const GOLD_HOARDER_MIN_TREASURY = 100;
+
 export type AchievementTrigger = "campaign_won";
 
 export type AchievementCategory = "starter" | "challenge" | "exploration";
@@ -19,6 +25,8 @@ export interface AchievementDefinition {
   counterStatKey?: StatKey;
   targetCount?: number;
   campaignChallengeKey?: CampaignChallengeKey;
+  requiredLeaguePoints?: number;
+  minTreasuryGold?: number;
 }
 
 export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
@@ -65,7 +73,7 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
   {
     id: ACHIEVEMENT_ID.maxThreeWarriorsCampaignWin,
     title: "Small company",
-    description: "Win a campaign with three warriors or less.",
+    description: "Win a campaign using three warriors or less.",
     category: "challenge",
     isSecret: false,
     trigger: "campaign_won",
@@ -74,7 +82,7 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
   {
     id: ACHIEVEMENT_ID.maxTwoWarriorsCampaignWin,
     title: "Tight unit",
-    description: "Win a campaign with two warriors or less.",
+    description: "Win a campaign using two warriors or less.",
     category: "challenge",
     isSecret: false,
     trigger: "campaign_won",
@@ -83,7 +91,7 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
   {
     id: ACHIEVEMENT_ID.maxOneWarriorCampaignWin,
     title: "Lone champion",
-    description: "Win a campaign with only one warrior.",
+    description: "Win a campaign using only one warrior.",
     category: "challenge",
     isSecret: false,
     trigger: "campaign_won",
@@ -97,6 +105,24 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     isSecret: false,
     trigger: "campaign_won",
     campaignChallengeKey: CAMPAIGN_CHALLENGE_KEY.peasantsOnlyRecruitment,
+  },
+  {
+    id: ACHIEVEMENT_ID.undefeatedCampaignWin,
+    title: "Undefeated",
+    description: "Win a campaign without losing a single battle.",
+    category: "challenge",
+    isSecret: false,
+    trigger: "campaign_won",
+    requiredLeaguePoints: UNDEFEATED_CAMPAIGN_LEAGUE_POINTS,
+  },
+  {
+    id: ACHIEVEMENT_ID.goldHoarderCampaignWin,
+    title: "Gold hoarder",
+    description: "Win a campaign with 100+ unspent gold.",
+    category: "challenge",
+    isSecret: false,
+    trigger: "campaign_won",
+    minTreasuryGold: GOLD_HOARDER_MIN_TREASURY,
   },
 ];
 

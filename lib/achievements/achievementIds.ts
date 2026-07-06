@@ -7,6 +7,8 @@ export const ACHIEVEMENT_ID = {
   maxTwoWarriorsCampaignWin: 6,
   maxOneWarriorCampaignWin: 7,
   peasantsOnlyCampaignWin: 8,
+  undefeatedCampaignWin: 9,
+  goldHoarderCampaignWin: 10,
 } as const;
 
 export type AchievementId =
