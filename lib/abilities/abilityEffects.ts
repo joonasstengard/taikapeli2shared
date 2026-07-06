@@ -6,6 +6,7 @@ export type AbilityEffect =
   | { effectType: "lastStand" }
   | { effectType: "leap" }
   | { effectType: "retreat" }
+  | { effectType: "knockback" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }

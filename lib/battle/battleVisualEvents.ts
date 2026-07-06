@@ -78,17 +78,26 @@ export function waitEvent(warriorId: number): BattleVisualEvent {
   return { type: "wait", warriorId };
 }
 
+export function prependMoveEventIfNeeded(
+  events: BattleVisualEvent[],
+  warriorId: number,
+  fromTile: string,
+  toTile: string | null | undefined
+): BattleVisualEvent[] {
+  if (toTile && toTile.toLowerCase() !== fromTile.toLowerCase()) {
+    return [moveEvent(warriorId, fromTile, toTile), ...events];
+  }
+
+  return events;
+}
+
 export function appendLeapMoveEvent(
   events: BattleVisualEvent[],
   warriorId: number,
   casterTile: string,
   leapDestination: string | null | undefined
 ): BattleVisualEvent[] {
-  if (leapDestination && leapDestination.toLowerCase() !== casterTile.toLowerCase()) {
-    return [moveEvent(warriorId, casterTile, leapDestination), ...events];
-  }
-
-  return events;
+  return prependMoveEventIfNeeded(events, warriorId, casterTile, leapDestination);
 }
 
 export function uniqueTiles(tiles: (string | null | undefined)[]): string[] {

@@ -36,6 +36,8 @@ export const SKILL_ID = {
   fullMoonHarvest: 35,
   crusade: 36,
   blessHammer: 37,
+  repellingBlow: 38,
+  repellingSlam: 39,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -52,7 +54,8 @@ export const KING_STARTING_SKILL_IDS = [
 /** One of these is granted randomly when a Knight is created. */
 export const KNIGHT_STARTING_SKILL_IDS = [
   SKILL_ID.decisiveStrike,
-  SKILL_ID.protect
+  SKILL_ID.protect,
+  SKILL_ID.repellingBlow
 ] as const;
 
 /** One of these is granted randomly when a Marksman is created. */

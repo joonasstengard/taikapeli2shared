@@ -28,10 +28,10 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Knight: {
     2: {
-      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.lunge]
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.repellingBlow]
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.lunge, SKILL_ID.martyrdom]
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.martyrdom, SKILL_ID.repellingSlam]
     },
   },
   King: {
