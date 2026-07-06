@@ -104,14 +104,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [
         SKILL_ID.primalSlam,
         SKILL_ID.bogPotion,
-        SKILL_ID.spiritWalk,
         SKILL_ID.transformWolf,
-      ],
-      skipChancePercent: 1,
+      ]
     },
     4: {
-      skillIds: [SKILL_ID.primalSlam, SKILL_ID.spiritWalk, SKILL_ID.transformWolf],
-      skipChancePercent: 1,
+      skillIds: [SKILL_ID.primalSlam, SKILL_ID.transformWolf]
     },
   },
   Peasant: {

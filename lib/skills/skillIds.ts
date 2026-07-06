@@ -83,7 +83,6 @@ export const RANGER_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Shaman is created. */
 export const SHAMAN_STARTING_SKILL_IDS = [
-  SKILL_ID.spiritWalk,
   SKILL_ID.bogPotion,
   SKILL_ID.transformWolf,
 ] as const;
