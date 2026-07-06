@@ -24,7 +24,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.holySmite]: { fileName: "577.png", row: 5, frames: 14 },
   [SPELL_ID.shadowBlink]: { fileName: "722.png", row: 2, frames: 23 },
   [SPELL_ID.teleport]: { fileName: "713.png", row: 2, frames: 23 },
-  [SPELL_ID.freezingWhisper]: { fileName: "654.png", row: 3, frames: 18 },
+  [SPELL_ID.freezingWhisper]: { fileName: "654.png", row: 3, frames: 17 },
   [SPELL_ID.divineAegis]: { fileName: "655.png", row: 5, frames: 15 },
   [SPELL_ID.rottingTouch]: { fileName: "633.png", row: 8, frames: 15 },
   [SPELL_ID.bloodCurse]: { fileName: "508.png", row: 8, frames: 13 },
