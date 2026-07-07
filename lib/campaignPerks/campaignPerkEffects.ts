@@ -1,4 +1,5 @@
 import type { CampaignPerkId } from "./campaignPerkIds";
+import { isCampaignPerkId } from "./campaignPerkIds";
 import { MIN_NATION_HEALTH_LOSS_AFTER_PERK } from "./campaignPerkConstants";
 import { CAMPAIGN_PERK_DEFINITIONS_BY_ID } from "./campaignPerkDefinitions";
 
@@ -53,6 +54,40 @@ export function applyCampaignPerkToStartingGold(
   }
 
   return baseGold + effect.bonus;
+}
+
+export function getCampaignPerkWeeklyGoldBonus(
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (!perkId) {
+    return 0;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "weekly_gold") {
+    return 0;
+  }
+
+  return effect.bonus;
+}
+
+export function buildCampaignPerkWeeklyGoldDeltas(
+  armies: Array<{
+    id: number;
+    isEliminated?: boolean | null;
+    campaignPerkId: string | null;
+  }>
+): Array<{ armyId: number; goldDelta: number }> {
+  return armies
+    .filter((army) => !army.isEliminated)
+    .flatMap((army) => {
+      const perkId =
+        army.campaignPerkId && isCampaignPerkId(army.campaignPerkId)
+          ? army.campaignPerkId
+          : null;
+      const bonus = getCampaignPerkWeeklyGoldBonus(perkId);
+      return bonus > 0 ? [{ armyId: army.id, goldDelta: bonus }] : [];
+    });
 }
 
 export function applyCampaignPerkToExperienceGain(

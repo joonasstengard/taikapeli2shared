@@ -4,6 +4,7 @@ import {
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
+  HEREGELD_WEEKLY_GOLD_BONUS,
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
 
@@ -11,6 +12,7 @@ export type RecruitStatBonusStat = "faith" | "speed";
 
 export type CampaignPerkEffect =
   | { type: "starting_gold"; bonus: number }
+  | { type: "weekly_gold"; bonus: number }
   | { type: "warrior_xp_multiplier"; multiplier: number }
   | { type: "nation_health_loss_reduction"; reduction: number }
   | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number };
@@ -54,7 +56,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.lightInTheDarkness,
     name: "Light In The Darkness",
-    description: "Recruited warriors gain +2 Faith permanently.",
+    description: "Warriors gain +2 Faith when recruited.",
     iconFileName: "light_in_the_darkness.png",
     effect: {
       type: "recruit_stat_bonus",
@@ -65,13 +67,20 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.umbralGrace,
     name: "Umbral Grace",
-    description: "Recruited warriors gain +2 Speed permanently.",
+    description: "Warriors gain +2 Speed when recruited.",
     iconFileName: "umbral_grace.png",
     effect: {
       type: "recruit_stat_bonus",
       stat: "speed",
       bonus: UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
     },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.heregeld,
+    name: "Heregeld",
+    description: "Earn 5 extra gold every week.",
+    iconFileName: "heregeld.png",
+    effect: { type: "weekly_gold", bonus: HEREGELD_WEEKLY_GOLD_BONUS },
   },
 ];
 

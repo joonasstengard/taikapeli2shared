@@ -16,7 +16,7 @@ describe("rollCampaignPerkOptions", () => {
   });
 
   it("returns every perk when the pool is smaller than the requested count", () => {
-    const perkIds = rollCampaignPerkOptions(5, () => 0.5);
+    const perkIds = rollCampaignPerkOptions(ALL_CAMPAIGN_PERK_IDS.length + 1, () => 0.5);
 
     assert.deepEqual(
       [...perkIds].sort(),

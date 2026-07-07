@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
@@ -11,6 +12,8 @@ import {
   applyCampaignPerkToNationHealthLoss,
   applyCampaignPerkToStartingGold,
   applyRecruitStatBonuses,
+  buildCampaignPerkWeeklyGoldDeltas,
+  getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
 } from "./campaignPerkEffects";
 
@@ -27,10 +30,57 @@ describe("applyCampaignPerkToStartingGold", () => {
       applyCampaignPerkToStartingGold(50, CAMPAIGN_PERK_ID.runicWisdom),
       50
     );
+    assert.equal(
+      applyCampaignPerkToStartingGold(50, CAMPAIGN_PERK_ID.heregeld),
+      50
+    );
   });
 
   it("returns the base amount when no perk is set", () => {
     assert.equal(applyCampaignPerkToStartingGold(50, null), 50);
+  });
+});
+
+describe("getCampaignPerkWeeklyGoldBonus", () => {
+  it("returns the Heregeld bonus", () => {
+    assert.equal(
+      getCampaignPerkWeeklyGoldBonus(CAMPAIGN_PERK_ID.heregeld),
+      HEREGELD_WEEKLY_GOLD_BONUS
+    );
+  });
+
+  it("ignores unrelated perks", () => {
+    assert.equal(getCampaignPerkWeeklyGoldBonus(CAMPAIGN_PERK_ID.warChest), 0);
+  });
+
+  it("returns zero when no perk is set", () => {
+    assert.equal(getCampaignPerkWeeklyGoldBonus(null), 0);
+    assert.equal(getCampaignPerkWeeklyGoldBonus(undefined), 0);
+  });
+});
+
+describe("buildCampaignPerkWeeklyGoldDeltas", () => {
+  it("grants weekly gold only to active armies with Heregeld", () => {
+    assert.deepEqual(
+      buildCampaignPerkWeeklyGoldDeltas([
+        {
+          id: 1,
+          isEliminated: false,
+          campaignPerkId: CAMPAIGN_PERK_ID.heregeld,
+        },
+        {
+          id: 2,
+          isEliminated: true,
+          campaignPerkId: CAMPAIGN_PERK_ID.heregeld,
+        },
+        {
+          id: 3,
+          isEliminated: false,
+          campaignPerkId: CAMPAIGN_PERK_ID.warChest,
+        },
+      ]),
+      [{ armyId: 1, goldDelta: HEREGELD_WEEKLY_GOLD_BONUS }]
+    );
   });
 });
 

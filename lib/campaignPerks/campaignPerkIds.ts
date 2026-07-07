@@ -4,6 +4,7 @@ export const CAMPAIGN_PERK_ID = {
   resilientNation: "resilient_nation",
   lightInTheDarkness: "light_in_the_darkness",
   umbralGrace: "umbral_grace",
+  heregeld: "heregeld",
 } as const;
 
 export type CampaignPerkId =
