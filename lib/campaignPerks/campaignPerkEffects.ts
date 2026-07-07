@@ -1,0 +1,91 @@
+import type { CampaignPerkId } from "./campaignPerkIds";
+import { MIN_NATION_HEALTH_LOSS_AFTER_PERK } from "./campaignPerkConstants";
+import { CAMPAIGN_PERK_DEFINITIONS_BY_ID } from "./campaignPerkDefinitions";
+
+export interface RecruitStatBonuses {
+  faith: number;
+  speed: number;
+}
+
+const NO_RECRUIT_STAT_BONUSES: RecruitStatBonuses = { faith: 0, speed: 0 };
+
+export function getRecruitStatBonuses(
+  perkId: CampaignPerkId | null | undefined
+): RecruitStatBonuses {
+  if (!perkId) {
+    return NO_RECRUIT_STAT_BONUSES;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "recruit_stat_bonus") {
+    return NO_RECRUIT_STAT_BONUSES;
+  }
+
+  if (effect.stat === "faith") {
+    return { faith: effect.bonus, speed: 0 };
+  }
+
+  return { faith: 0, speed: effect.bonus };
+}
+
+export function applyRecruitStatBonuses<T extends RecruitStatBonuses>(
+  stats: T,
+  bonuses: RecruitStatBonuses
+): T {
+  return {
+    ...stats,
+    faith: stats.faith + bonuses.faith,
+    speed: stats.speed + bonuses.speed,
+  };
+}
+
+export function applyCampaignPerkToStartingGold(
+  baseGold: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (!perkId) {
+    return baseGold;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "starting_gold") {
+    return baseGold;
+  }
+
+  return baseGold + effect.bonus;
+}
+
+export function applyCampaignPerkToExperienceGain(
+  baseXp: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (baseXp <= 0 || !perkId) {
+    return baseXp;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "warrior_xp_multiplier") {
+    return baseXp;
+  }
+
+  return Math.round(baseXp * effect.multiplier);
+}
+
+export function applyCampaignPerkToNationHealthLoss(
+  baseLoss: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (!perkId) {
+    return baseLoss;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "nation_health_loss_reduction") {
+    return baseLoss;
+  }
+
+  return Math.max(
+    MIN_NATION_HEALTH_LOSS_AFTER_PERK,
+    baseLoss - effect.reduction
+  );
+}

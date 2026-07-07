@@ -1,0 +1,97 @@
+import { CAMPAIGN_PERK_ID, type CampaignPerkId } from "./campaignPerkIds";
+import {
+  LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
+  RUNIC_WISDOM_XP_MULTIPLIER,
+  UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
+  WAR_CHEST_STARTING_GOLD_BONUS,
+} from "./campaignPerkConstants";
+
+export type RecruitStatBonusStat = "faith" | "speed";
+
+export type CampaignPerkEffect =
+  | { type: "starting_gold"; bonus: number }
+  | { type: "warrior_xp_multiplier"; multiplier: number }
+  | { type: "nation_health_loss_reduction"; reduction: number }
+  | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number };
+
+export interface CampaignPerkDefinition {
+  id: CampaignPerkId;
+  name: string;
+  description: string;
+  iconFileName: string;
+  effect: CampaignPerkEffect;
+}
+
+export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
+  {
+    id: CAMPAIGN_PERK_ID.warChest,
+    name: "War Chest",
+    description: "Start the campaign with 15 extra gold.",
+    iconFileName: "war_chest.png",
+    effect: { type: "starting_gold", bonus: WAR_CHEST_STARTING_GOLD_BONUS },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.runicWisdom,
+    name: "Runic Wisdom",
+    description: "Warriors earn 10% more experience.",
+    iconFileName: "runic_wisdom.png",
+    effect: {
+      type: "warrior_xp_multiplier",
+      multiplier: RUNIC_WISDOM_XP_MULTIPLIER,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.resilientNation,
+    name: "Resilient Nation",
+    description: "Defeats cost 5 less nation health.",
+    iconFileName: "resilient_nation.png",
+    effect: {
+      type: "nation_health_loss_reduction",
+      reduction: RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.lightInTheDarkness,
+    name: "Light In The Darkness",
+    description: "Recruited warriors gain +2 Faith permanently.",
+    iconFileName: "light_in_the_darkness.png",
+    effect: {
+      type: "recruit_stat_bonus",
+      stat: "faith",
+      bonus: LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.umbralGrace,
+    name: "Umbral Grace",
+    description: "Recruited warriors gain +2 Speed permanently.",
+    iconFileName: "umbral_grace.png",
+    effect: {
+      type: "recruit_stat_bonus",
+      stat: "speed",
+      bonus: UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
+    },
+  },
+];
+
+export const CAMPAIGN_PERK_DEFINITIONS_BY_ID: Record<
+  CampaignPerkId,
+  CampaignPerkDefinition
+> = CAMPAIGN_PERK_DEFINITIONS.reduce(
+  (map, definition) => {
+    map[definition.id] = definition;
+    return map;
+  },
+  {} as Record<CampaignPerkId, CampaignPerkDefinition>
+);
+
+export function getCampaignPerkDefinition(
+  perkId: CampaignPerkId
+): CampaignPerkDefinition {
+  const definition = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId];
+  if (!definition) {
+    throw new Error(`Unknown campaign perk: ${perkId}`);
+  }
+  return definition;
+}
