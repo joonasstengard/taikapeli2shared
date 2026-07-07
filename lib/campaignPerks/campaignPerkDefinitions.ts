@@ -1,5 +1,6 @@
 import { CAMPAIGN_PERK_ID, type CampaignPerkId } from "./campaignPerkIds";
 import {
+  EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
@@ -13,6 +14,7 @@ export type RecruitStatBonusStat = "faith" | "speed";
 export type CampaignPerkEffect =
   | { type: "starting_gold"; bonus: number }
   | { type: "weekly_gold"; bonus: number }
+  | { type: "market_spell_options"; count: number }
   | { type: "warrior_xp_multiplier"; multiplier: number }
   | { type: "nation_health_loss_reduction"; reduction: number }
   | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number };
@@ -81,6 +83,16 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
     description: "Earn 5 extra gold every week.",
     iconFileName: "heregeld.png",
     effect: { type: "weekly_gold", bonus: HEREGELD_WEEKLY_GOLD_BONUS },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.expandedGrimoire,
+    name: "Expanded Grimoire",
+    description: "The weekly spell market offers 8 spells instead of 4.",
+    iconFileName: "expanded_grimoire.png",
+    effect: {
+      type: "market_spell_options",
+      count: EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
+    },
   },
 ];
 

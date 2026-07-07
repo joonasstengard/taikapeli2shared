@@ -4,6 +4,9 @@ export const WAR_CHEST_STARTING_GOLD_BONUS = 15;
 /** Extra gold granted each week by the Heregeld perk. */
 export const HEREGELD_WEEKLY_GOLD_BONUS = 5;
 
+/** Weekly market spell options granted by the Expanded Grimoire perk. */
+export const EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK = 8;
+
 /** Experience multiplier for the Runic Wisdom perk (1.1 = +10%). */
 export const RUNIC_WISDOM_XP_MULTIPLIER = 1.1;
 

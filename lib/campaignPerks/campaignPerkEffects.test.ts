@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
   RUNIC_WISDOM_XP_MULTIPLIER,
@@ -13,6 +14,7 @@ import {
   applyCampaignPerkToStartingGold,
   applyRecruitStatBonuses,
   buildCampaignPerkWeeklyGoldDeltas,
+  getCampaignPerkMarketSpellCount,
   getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
 } from "./campaignPerkEffects";
@@ -81,6 +83,21 @@ describe("buildCampaignPerkWeeklyGoldDeltas", () => {
       ]),
       [{ armyId: 1, goldDelta: HEREGELD_WEEKLY_GOLD_BONUS }]
     );
+  });
+});
+
+describe("getCampaignPerkMarketSpellCount", () => {
+  it("uses the Expanded Grimoire market size", () => {
+    assert.equal(
+      getCampaignPerkMarketSpellCount(4, CAMPAIGN_PERK_ID.expandedGrimoire),
+      EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK
+    );
+  });
+
+  it("returns the base market size for unrelated or missing perks", () => {
+    assert.equal(getCampaignPerkMarketSpellCount(4, CAMPAIGN_PERK_ID.warChest), 4);
+    assert.equal(getCampaignPerkMarketSpellCount(4, null), 4);
+    assert.equal(getCampaignPerkMarketSpellCount(4, undefined), 4);
   });
 });
 
