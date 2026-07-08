@@ -33,7 +33,10 @@ export const RECRUIT_BASE_PRICE = 4;
 export const RECRUIT_PRICE_MULTIPLIER = 0.5;
 
 /** Gold premium per spell the warrior already knows. */
-export const RECRUIT_SPELL_COST_PER_SPELL = 2;
+export const RECRUIT_SPELL_COST_PER_SPELL = 1;
+
+/** Gold premium per skill the warrior already knows. */
+export const RECRUIT_SKILL_COST_PER_SKILL = 1;
 
 /** Minimum recruit price after rounding. */
 export const RECRUIT_MIN_PRICE = 4;
@@ -90,15 +93,18 @@ export function calculateWarriorStatRecruitValue(
   }, 0);
 }
 
-/** Recruitment price from warrior stats and known spells. */
+/** Recruitment price from warrior stats and known spells/skills. */
 export function calculateWarriorRecruitPrice(
   warrior: WarriorRecruitStats,
-  spellCount = 0
+  spellCount = 0,
+  skillCount = 0
 ): number {
   const statValue = calculateWarriorStatRecruitValue(warrior);
-  const spellValue = spellCount * RECRUIT_SPELL_COST_PER_SPELL;
+  const abilityValue =
+    spellCount * RECRUIT_SPELL_COST_PER_SPELL +
+    skillCount * RECRUIT_SKILL_COST_PER_SKILL;
   const rawPrice =
-    (RECRUIT_BASE_PRICE + statValue + spellValue) * RECRUIT_PRICE_MULTIPLIER;
+    (RECRUIT_BASE_PRICE + statValue + abilityValue) * RECRUIT_PRICE_MULTIPLIER;
 
   return Math.max(RECRUIT_MIN_PRICE, Math.round(rawPrice));
 }
@@ -106,7 +112,10 @@ export function calculateWarriorRecruitPrice(
 /** Gold granted when releasing a warrior (half the recruit/market price). */
 export function calculateWarriorReleaseGold(
   warrior: WarriorRecruitStats,
-  spellCount = 0
+  spellCount = 0,
+  skillCount = 0
 ): number {
-  return Math.round(calculateWarriorRecruitPrice(warrior, spellCount) / 2);
+  return Math.round(
+    calculateWarriorRecruitPrice(warrior, spellCount, skillCount) / 2
+  );
 }

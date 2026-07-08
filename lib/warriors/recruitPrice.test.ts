@@ -9,6 +9,7 @@ import {
   RECRUIT_BASE_PRICE,
   RECRUIT_MIN_PRICE,
   RECRUIT_PRICE_MULTIPLIER,
+  RECRUIT_SKILL_COST_PER_SKILL,
   RECRUIT_SPELL_COST_PER_SPELL,
   RECRUIT_STAT_BASE_COST,
   RECRUIT_STAT_LEVEL_MULTIPLIER,
@@ -109,13 +110,18 @@ describe("calculateWarriorStatRecruitValue", () => {
 });
 
 describe("calculateWarriorRecruitPrice", () => {
-  function expectedRecruitPrice(warrior: typeof BASELINE_WARRIOR, spellCount = 0): number {
+  function expectedRecruitPrice(
+    warrior: typeof BASELINE_WARRIOR,
+    spellCount = 0,
+    skillCount = 0
+  ): number {
     return Math.max(
       RECRUIT_MIN_PRICE,
       Math.round(
         (RECRUIT_BASE_PRICE +
           calculateWarriorStatRecruitValue(warrior) +
-          spellCount * RECRUIT_SPELL_COST_PER_SPELL) *
+          spellCount * RECRUIT_SPELL_COST_PER_SPELL +
+          skillCount * RECRUIT_SKILL_COST_PER_SKILL) *
           RECRUIT_PRICE_MULTIPLIER
       )
     );
@@ -166,15 +172,23 @@ describe("calculateWarriorRecruitPrice", () => {
     );
   });
 
-  it("adds spell premium before applying the global multiplier", () => {
+  it("adds spell and skill premiums before applying the global multiplier", () => {
     const warrior = {
       ...BASELINE_WARRIOR,
       health: 8,
     };
 
+    assert.equal(
+      calculateWarriorRecruitPrice(warrior, 2, 0),
+      expectedRecruitPrice(warrior, 2, 0)
+    );
+    assert.equal(
+      calculateWarriorRecruitPrice(warrior, 0, 2),
+      expectedRecruitPrice(warrior, 0, 2)
+    );
     assert.ok(
-      calculateWarriorRecruitPrice(warrior, 1) >
-        calculateWarriorRecruitPrice(warrior, 0)
+      calculateWarriorRecruitPrice(warrior, 2, 2) >
+        calculateWarriorRecruitPrice(warrior, 0, 0)
     );
   });
 
