@@ -7,6 +7,9 @@ export const HEREGELD_WEEKLY_GOLD_BONUS = 5;
 /** Weekly market spell options granted by the Expanded Grimoire perk. */
 export const EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK = 8;
 
+/** Market spell price multiplier granted by the Expanded Grimoire perk. */
+export const EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER = 0.9;
+
 /** Experience multiplier for the Runic Wisdom perk (1.1 = +10%). */
 export const RUNIC_WISDOM_XP_MULTIPLIER = 1.1;
 

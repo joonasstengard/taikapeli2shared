@@ -87,6 +87,22 @@ export function getCampaignPerkMarketSpellCount(
   return effect.count;
 }
 
+export function applyCampaignPerkToMarketSpellPrice(
+  basePrice: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (!perkId) {
+    return basePrice;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "market_spell_options" || !effect.priceMultiplier) {
+    return basePrice;
+  }
+
+  return Math.max(0, Math.round(basePrice * effect.priceMultiplier));
+}
+
 export function buildCampaignPerkWeeklyGoldDeltas(
   armies: Array<{
     id: number;

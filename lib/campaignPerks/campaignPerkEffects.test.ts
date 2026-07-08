@@ -3,12 +3,14 @@ import { describe, it } from "node:test";
 import { CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
+  EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
 } from "./campaignPerkConstants";
 import {
+  applyCampaignPerkToMarketSpellPrice,
   applyCampaignPerkToExperienceGain,
   applyCampaignPerkToNationHealthLoss,
   applyCampaignPerkToStartingGold,
@@ -98,6 +100,29 @@ describe("getCampaignPerkMarketSpellCount", () => {
     assert.equal(getCampaignPerkMarketSpellCount(4, CAMPAIGN_PERK_ID.warChest), 4);
     assert.equal(getCampaignPerkMarketSpellCount(4, null), 4);
     assert.equal(getCampaignPerkMarketSpellCount(4, undefined), 4);
+  });
+});
+
+describe("applyCampaignPerkToMarketSpellPrice", () => {
+  it("discounts market spells for Expanded Grimoire", () => {
+    assert.equal(EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER, 0.9);
+    assert.equal(
+      applyCampaignPerkToMarketSpellPrice(20, CAMPAIGN_PERK_ID.expandedGrimoire),
+      18
+    );
+    assert.equal(
+      applyCampaignPerkToMarketSpellPrice(13, CAMPAIGN_PERK_ID.expandedGrimoire),
+      12
+    );
+  });
+
+  it("returns the base price for unrelated or missing perks", () => {
+    assert.equal(
+      applyCampaignPerkToMarketSpellPrice(20, CAMPAIGN_PERK_ID.warChest),
+      20
+    );
+    assert.equal(applyCampaignPerkToMarketSpellPrice(20, null), 20);
+    assert.equal(applyCampaignPerkToMarketSpellPrice(20, undefined), 20);
   });
 });
 
