@@ -24,6 +24,11 @@ export const TRANSFORM_CONFIG: Record<string, TransformConfig> = {
     variantCount: 6,
     attackSoundCount: 2,
   },
+  [STATUS_EFFECT_KEY.transformBear]: {
+    filePrefix: "Bear",
+    variantCount: 6,
+    attackSoundCount: 2,
+  },
 };
 
 export function getTransformConfig(

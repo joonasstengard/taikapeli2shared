@@ -46,6 +46,12 @@ export const STATUS_EFFECTS: StatusEffect[] = [
     tags: ["transform"],
     hideBadge: true,
   },
+  {
+    key: STATUS_EFFECT_KEY.transformBear,
+    name: "Bear Form",
+    tags: ["transform"],
+    hideBadge: true,
+  },
 ];
 
 export const STATUS_EFFECT_BY_KEY: Record<string, StatusEffect> =

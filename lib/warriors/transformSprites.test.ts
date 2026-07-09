@@ -63,6 +63,20 @@ describe("getTransformSpriteSheetPath", () => {
     );
   });
 
+  it("returns the bear spritesheet matching warrior picture", () => {
+    assert.equal(
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformBear, 3),
+      `${WOLF_BASE}/Bear3.png`
+    );
+  });
+
+  it("wraps to a valid bear variant when picture exceeds variant count", () => {
+    assert.equal(
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformBear, 7),
+      `${WOLF_BASE}/Bear1.png`
+    );
+  });
+
   it("returns undefined for unknown transforms", () => {
     assert.equal(getTransformSpriteSheetPath("unknown", 1), undefined);
   });

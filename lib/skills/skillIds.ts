@@ -39,6 +39,7 @@ export const SKILL_ID = {
   repellingBlow: 38,
   repellingSlam: 39,
   transformDeer: 40,
+  transformBear: 41,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -86,6 +87,7 @@ export const RANGER_STARTING_SKILL_IDS = [
 export const SHAMAN_STARTING_SKILL_IDS = [
   SKILL_ID.transformWolf,
   SKILL_ID.transformDeer,
+  SKILL_ID.transformBear,
 ] as const;
 
 /** One of these is granted randomly when a Paladin is created. */
