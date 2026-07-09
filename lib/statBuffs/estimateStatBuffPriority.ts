@@ -150,10 +150,48 @@ export function estimateInlineStatBuffPriority(
   return Math.round(pointsPerTurn * duration * recipientMultiplier);
 }
 
+export function statModifiersMatch(
+  proposed: StatModifiers,
+  existing: StatModifiers
+): boolean {
+  const keys = new Set([
+    ...(Object.keys(proposed) as CombatStat[]),
+    ...(Object.keys(existing) as CombatStat[]),
+  ]);
+
+  for (const key of keys) {
+    if ((proposed[key] ?? 0) !== (existing[key] ?? 0)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+type ActiveStatBuff = Pick<
+  WarriorStatBuffInstance,
+  "turnsRemaining" | "statModifiers"
+>;
+
+export function hasMatchingActiveStatBuff(
+  statModifiers: StatModifiers,
+  existingBuffs: ActiveStatBuff[] | undefined
+): boolean {
+  if (!existingBuffs?.length) {
+    return false;
+  }
+
+  return existingBuffs.some(
+    (buff) =>
+      buff.turnsRemaining > 0 &&
+      statModifiersMatch(statModifiers, buff.statModifiers)
+  );
+}
+
 export function estimateStatBuffInstancePriority(
   statModifiers: StatModifiers,
   duration: number,
-  existingBuffs: WarriorStatBuffInstance[] | undefined,
+  existingBuffs: ActiveStatBuff[] | undefined,
   options: {
     combatOffenseMultiplier?: number;
     recipientMultiplier?: number;
@@ -161,8 +199,11 @@ export function estimateStatBuffInstancePriority(
     targetStatusEffects?: ActiveStatusEffect[] | undefined;
   } = {}
 ): number | null {
-  if (options.linkedTransformKey) {
-    return estimateInlineStatBuffPriority(statModifiers, duration, options);
+  if (
+    !options.linkedTransformKey &&
+    hasMatchingActiveStatBuff(statModifiers, existingBuffs)
+  ) {
+    return null;
   }
 
   return estimateInlineStatBuffPriority(statModifiers, duration, options);

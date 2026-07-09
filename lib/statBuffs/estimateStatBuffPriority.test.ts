@@ -4,7 +4,10 @@ import { STATUS_EFFECT_KEY } from "../statusEffects/statusEffectTypes";
 import {
   canApplyTransformToTarget,
   estimateInlineStatBuffPriority,
+  estimateStatBuffInstancePriority,
   getStatBuffFromEffect,
+  hasMatchingActiveStatBuff,
+  statModifiersMatch,
 } from "./estimateStatBuffPriority";
 import { sumStatBuffBonuses } from "./sumStatBuffBonuses";
 import { resolveCombatStats } from "../statusEffects/resolveCombatStats";
@@ -182,5 +185,81 @@ describe("canApplyTransformToTarget", () => {
 
   it("allows when no transform is active", () => {
     assert.equal(canApplyTransformToTarget(STATUS_EFFECT_KEY.transformWolf, []), true);
+  });
+});
+
+describe("statModifiersMatch", () => {
+  it("matches identical stat modifier sets", () => {
+    assert.equal(
+      statModifiersMatch({ strength: 3 }, { strength: 3 }),
+      true
+    );
+  });
+
+  it("does not match different stat modifier sets", () => {
+    assert.equal(
+      statModifiersMatch({ strength: 3 }, { strength: 5 }),
+      false
+    );
+  });
+});
+
+describe("hasMatchingActiveStatBuff", () => {
+  it("detects an active buff with the same modifiers", () => {
+    assert.equal(
+      hasMatchingActiveStatBuff({ strength: 3 }, [
+        { turnsRemaining: 2, statModifiers: { strength: 3 } },
+      ]),
+      true
+    );
+  });
+
+  it("ignores expired buffs", () => {
+    assert.equal(
+      hasMatchingActiveStatBuff({ strength: 3 }, [
+        { turnsRemaining: 0, statModifiers: { strength: 3 } },
+      ]),
+      false
+    );
+  });
+});
+
+describe("estimateStatBuffInstancePriority", () => {
+  it("returns null when the same stat buff is already active", () => {
+    assert.equal(
+      estimateStatBuffInstancePriority(
+        { strength: 3 },
+        5,
+        [{ turnsRemaining: 3, statModifiers: { strength: 3 } }]
+      ),
+      null
+    );
+  });
+
+  it("still values a new buff when no matching buff is active", () => {
+    assert.equal(
+      estimateStatBuffInstancePriority({ strength: 3 }, 5, []),
+      23
+    );
+  });
+
+  it("still uses transform status checks for linked transforms", () => {
+    assert.equal(
+      estimateStatBuffInstancePriority(
+        { strength: 5, speed: 5 },
+        3,
+        [],
+        {
+          linkedTransformKey: STATUS_EFFECT_KEY.transformWolf,
+          targetStatusEffects: [
+            {
+              effectKey: STATUS_EFFECT_KEY.transformWolf,
+              turnsRemaining: 1,
+            },
+          ],
+        }
+      ),
+      null
+    );
   });
 });
