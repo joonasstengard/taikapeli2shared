@@ -40,6 +40,7 @@ export const SKILL_ID = {
   repellingSlam: 39,
   transformDeer: 40,
   transformBear: 41,
+  bladeDance: 42,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -68,8 +69,9 @@ export const MARKSMAN_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SKILL_IDS = [
-  SKILL_ID.lifeSteal,
-  SKILL_ID.crescentSlash
+  // SKILL_ID.lifeSteal,
+  // SKILL_ID.crescentSlash,
+  SKILL_ID.bladeDance
 ] as const;
 
 /** One of these is granted randomly when a Berserker is created. */

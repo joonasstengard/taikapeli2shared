@@ -62,11 +62,18 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Moonblade: {
     2: {
-      skillIds: [SKILL_ID.eclipseHarvest, SKILL_ID.crescentSlash]
+      skillIds: [SKILL_ID.eclipseHarvest, SKILL_ID.crescentSlash, SKILL_ID.lifeSteal]
+    },
+    3: {
+      skillIds: [SKILL_ID.moonlitVeil],
+      skipChancePercent: 50,
     },
     4: {
-      skillIds: [SKILL_ID.moonlitVeil, SKILL_ID.fullMoonHarvest]
-    }
+      skillIds: [
+        SKILL_ID.fullMoonHarvest,
+        SKILL_ID.bladeDance,
+      ],
+    },
   },
   Paladin: {
     3: {

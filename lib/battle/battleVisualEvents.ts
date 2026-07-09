@@ -25,6 +25,13 @@ export type BattleVisualEvent =
       targetSlashFx: boolean;
     }
   | {
+      type: "bladeDance";
+      warriorId: number;
+      skillId: number;
+      originTile: string;
+      hitTiles: string[];
+    }
+  | {
       type: "wait";
       warriorId: number;
     };
@@ -71,6 +78,21 @@ export function useSkillEvent(
     effectTiles,
     casterAttackPose,
     targetSlashFx,
+  };
+}
+
+export function bladeDanceEvent(
+  warriorId: number,
+  skillId: number,
+  originTile: string,
+  hitTiles: string[]
+): BattleVisualEvent {
+  return {
+    type: "bladeDance",
+    warriorId,
+    skillId,
+    originTile,
+    hitTiles,
   };
 }
 

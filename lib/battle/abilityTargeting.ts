@@ -5,16 +5,24 @@ export type AbilityTargetingType =
   | "ally"
   | "enemy"
   | "enemyAoE"
+  | "enemyChain"
   | "allAllies"
   | "allEnemies";
 
 /** Tile distance from the primary target for enemyAoE splash hits. */
 export const ENEMY_AOE_SPLASH_RANGE = 1;
 
+/** Tile distance used when spreading enemyChain hits to the next target. */
+export const ENEMY_CHAIN_SPREAD_RANGE = 1;
+
 export function isEnemyTargeting(
   targetingType: AbilityTargetingType
-): targetingType is "enemy" | "enemyAoE" {
-  return targetingType === "enemy" || targetingType === "enemyAoE";
+): targetingType is "enemy" | "enemyAoE" | "enemyChain" {
+  return (
+    targetingType === "enemy" ||
+    targetingType === "enemyAoE" ||
+    targetingType === "enemyChain"
+  );
 }
 
 export function isEnemyAoETargeting(
@@ -23,9 +31,15 @@ export function isEnemyAoETargeting(
   return targetingType === "enemyAoE";
 }
 
+export function isEnemyChainTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "enemyChain" {
+  return targetingType === "enemyChain";
+}
+
 export function isSingleTargetTargeting(
   targetingType: AbilityTargetingType
-): targetingType is "ally" | "enemy" | "enemyAoE" {
+): targetingType is "ally" | "enemy" | "enemyAoE" | "enemyChain" {
   return targetingType === "ally" || isEnemyTargeting(targetingType);
 }
 
@@ -179,4 +193,108 @@ export function getEnemyAoESplashTargets<T extends AbilityTargetWarrior>(
       battleMapWidth
     );
   }) as T[];
+}
+
+/**
+ * Returns living enemy warriors connected to the primary target through
+ * repeated spreadRange adjacency (BFS). Includes the primary target when alive.
+ * Order is breadth-first from the primary target.
+ *
+ * Spread continues from the primary tile even if the primary is already defeated,
+ * so chain hits still resolve after a killing blow on the first target.
+ */
+export function getEnemyChainSpreadTargets<T extends AbilityTargetWarrior>(
+  allWarriors: readonly T[],
+  primaryTargetWarriorId: number,
+  casterArmyId: number,
+  battleMapWidth: number,
+  spreadRange: number = ENEMY_CHAIN_SPREAD_RANGE
+): T[] {
+  const primaryTarget = allWarriors.find(
+    (warrior) => warrior.id === primaryTargetWarriorId
+  );
+
+  if (
+    !primaryTarget?.battleTileCurrent ||
+    !isValidAbilityTarget("enemy", casterArmyId, primaryTarget.armyId)
+  ) {
+    return [];
+  }
+
+  const visitedIds = new Set<number>();
+  const orderedTargets: T[] = [];
+  const queue: Array<{ warriorId: number; tile: string }> = [
+    {
+      warriorId: primaryTarget.id,
+      tile: primaryTarget.battleTileCurrent,
+    },
+  ];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || visitedIds.has(current.warriorId)) {
+      continue;
+    }
+
+    visitedIds.add(current.warriorId);
+
+    const currentWarrior = allWarriors.find(
+      (warrior) => warrior.id === current.warriorId
+    );
+
+    if (
+      currentWarrior &&
+      isWarriorAliveOnBattleMap(currentWarrior) &&
+      currentWarrior.battleTileCurrent &&
+      isValidAbilityTarget("enemy", casterArmyId, currentWarrior.armyId)
+    ) {
+      orderedTargets.push(currentWarrior as T);
+    }
+
+    for (const warrior of allWarriors) {
+      if (
+        visitedIds.has(warrior.id) ||
+        !isWarriorAliveOnBattleMap(warrior) ||
+        !warrior.battleTileCurrent ||
+        !isValidAbilityTarget("enemy", casterArmyId, warrior.armyId)
+      ) {
+        continue;
+      }
+
+      if (
+        isWithinRange(
+          current.tile,
+          warrior.battleTileCurrent,
+          spreadRange,
+          battleMapWidth
+        )
+      ) {
+        queue.push({
+          warriorId: warrior.id,
+          tile: warrior.battleTileCurrent,
+        });
+      }
+    }
+  }
+
+  return orderedTargets;
+}
+
+/** Chain targets after the primary hit (same BFS order, primary omitted). */
+export function getEnemyChainSpreadTargetsAfterPrimary<
+  T extends AbilityTargetWarrior,
+>(
+  allWarriors: readonly T[],
+  primaryTargetWarriorId: number,
+  casterArmyId: number,
+  battleMapWidth: number,
+  spreadRange: number = ENEMY_CHAIN_SPREAD_RANGE
+): T[] {
+  return getEnemyChainSpreadTargets(
+    allWarriors,
+    primaryTargetWarriorId,
+    casterArmyId,
+    battleMapWidth,
+    spreadRange
+  ).filter((warrior) => warrior.id !== primaryTargetWarriorId);
 }
