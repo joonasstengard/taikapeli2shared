@@ -49,6 +49,20 @@ describe("getTransformSpriteSheetPath", () => {
     );
   });
 
+  it("returns the deer spritesheet matching warrior picture", () => {
+    assert.equal(
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformDeer, 4),
+      `${WOLF_BASE}/Deer4.png`
+    );
+  });
+
+  it("wraps to a valid deer variant when picture exceeds variant count", () => {
+    assert.equal(
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformDeer, 8),
+      `${WOLF_BASE}/Deer2.png`
+    );
+  });
+
   it("returns undefined for unknown transforms", () => {
     assert.equal(getTransformSpriteSheetPath("unknown", 1), undefined);
   });

@@ -103,12 +103,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     2: {
       skillIds: [
         SKILL_ID.primalSlam,
-        SKILL_ID.bogPotion,
-        SKILL_ID.transformWolf,
+        SKILL_ID.bogPotion
       ]
     },
     4: {
-      skillIds: [SKILL_ID.primalSlam, SKILL_ID.transformWolf]
+      skillIds: [SKILL_ID.primalSlam]
     },
   },
   Peasant: {

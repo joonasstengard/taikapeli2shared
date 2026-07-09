@@ -38,6 +38,7 @@ export const SKILL_ID = {
   blessHammer: 37,
   repellingBlow: 38,
   repellingSlam: 39,
+  transformDeer: 40,
 } as const;
 
 /** One of these is granted randomly when a Charger is created. */
@@ -83,8 +84,8 @@ export const RANGER_STARTING_SKILL_IDS = [
 
 /** One of these is granted randomly when a Shaman is created. */
 export const SHAMAN_STARTING_SKILL_IDS = [
-  SKILL_ID.bogPotion,
   SKILL_ID.transformWolf,
+  SKILL_ID.transformDeer,
 ] as const;
 
 /** One of these is granted randomly when a Paladin is created. */
