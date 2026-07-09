@@ -55,7 +55,6 @@ export const WARLOCK_STARTING_SPELL_IDS = [
 
 /** One of these is granted randomly when a Moonblade is created. */
 export const MOONBLADE_STARTING_SPELL_IDS = [
-  SPELL_ID.shadowBlink,
   SPELL_ID.moonBlast
 ] as const;
 

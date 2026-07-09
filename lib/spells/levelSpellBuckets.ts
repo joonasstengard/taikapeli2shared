@@ -22,8 +22,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     2: {
       spellIds: [
         SPELL_ID.desperateRune,
-        SPELL_ID.freezingWhisper,
-        SPELL_ID.teleport
+        SPELL_ID.freezingWhisper
       ]
     },
     4: {
@@ -72,7 +71,12 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   },
   Moonblade: {
     2: {
-      spellIds: [SPELL_ID.shadowBlink, SPELL_ID.teleport, SPELL_ID.moonBlast],
+      spellIds: [SPELL_ID.shadowBlink],
+      skipChancePercent: 99
+    },
+    3: {
+      spellIds: [SPELL_ID.teleport],
+      skipChancePercent: 99
     },
   },
   Shaman: {
