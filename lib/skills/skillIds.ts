@@ -17,7 +17,6 @@ export const SKILL_ID = {
   arrowVolley: 16,
   fadeArrow: 17,
   commandAttack: 18,
-  spiritWalk: 19,
   primalSlam: 20,
   bogPotion: 21,
   transformWolf: 22,

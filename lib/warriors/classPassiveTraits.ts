@@ -44,7 +44,7 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
   [CLASS_PASSIVE_TRAIT_KEYS.sanctified]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.sanctified,
     name: "Sanctified",
-    description: "Casting Holy spells heals for 1.",
+    description: "Restore 1 health after casting a Holy spell.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.soulHarvest]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.soulHarvest,

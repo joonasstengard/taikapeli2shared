@@ -44,6 +44,13 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
         SKILL_ID.battleDecree,
       ],
     },
+    3: {
+      skillIds: [
+        SKILL_ID.lastStand,
+        SKILL_ID.commandAttack,
+        SKILL_ID.battleDecree,
+      ],
+    },
     4: {
       skillIds: [
         SKILL_ID.lastStand,
@@ -77,7 +84,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Paladin: {
     3: {
-      skillIds: [SKILL_ID.raiseMorale, SKILL_ID.crusade]
+      skillIds: [SKILL_ID.crusade]
     },
   },
   Berserker: {
@@ -112,9 +119,6 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
         SKILL_ID.primalSlam,
         SKILL_ID.bogPotion
       ]
-    },
-    4: {
-      skillIds: [SKILL_ID.primalSlam]
     },
   },
   Peasant: {

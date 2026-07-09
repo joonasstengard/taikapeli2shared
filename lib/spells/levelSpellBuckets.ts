@@ -80,11 +80,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Shaman: {
-    2: {
-      spellIds: [SPELL_ID.spiritClaw],
-      skipChancePercent: 5
-    },
-    4: {
+    3: {
       spellIds: [SPELL_ID.spiritRend],
       skipChancePercent: 5
     },
