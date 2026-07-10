@@ -36,8 +36,7 @@ export const SORCERER_STARTING_SPELL_IDS = [
 
 /** One of these is granted randomly when a Priestess is created. */
 export const PRIESTESS_STARTING_SPELL_IDS = [
-  SPELL_ID.healingPrayer,
-  SPELL_ID.holySmite,
+  SPELL_ID.healingPrayer
 ] as const;
 
 /** One of these is granted randomly when a Paladin is created. */

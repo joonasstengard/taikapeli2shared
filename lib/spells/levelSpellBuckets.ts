@@ -25,12 +25,12 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
         SPELL_ID.freezingWhisper
       ]
     },
-    4: {
+    3: {
       spellIds: [SPELL_ID.desperateRune, SPELL_ID.icebolt,
       SPELL_ID.hellflame,
       SPELL_ID.thunder,]
     },
-    5: {
+    4: {
       spellIds: [SPELL_ID.icebolt,
       SPELL_ID.hellflame,
       SPELL_ID.thunder,],
@@ -39,7 +39,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   },
   Priestess: {
     2: {
-      spellIds: [SPELL_ID.healingPrayer, SPELL_ID.holySmite]
+      spellIds: [SPELL_ID.divineAegis,  SPELL_ID.holySmite]
     },
     4: {
       spellIds: [
