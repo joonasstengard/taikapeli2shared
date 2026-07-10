@@ -159,7 +159,7 @@ export function statModifiersMatch(
     ...(Object.keys(existing) as CombatStat[]),
   ]);
 
-  for (const key of keys) {
+  for (const key of Array.from(keys)) {
     if ((proposed[key] ?? 0) !== (existing[key] ?? 0)) {
       return false;
     }

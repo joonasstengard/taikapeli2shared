@@ -28,4 +28,6 @@ export const SPELL_ID = {
   massAegis: 27,
   manaPrayer: 28,
   manaBenediction: 29,
+  arcaneFocus: 30,
+  lightningArc: 31,
 } as const;

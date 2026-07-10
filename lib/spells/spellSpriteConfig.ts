@@ -20,6 +20,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.icebolt]: { fileName: "77.png", row: 3, frames: 12 },
   [SPELL_ID.thunderball]: { fileName: "506.png", row: 6, frames: 11 },
   [SPELL_ID.thunder]: { fileName: "241.png", row: 6, frames: 8 },
+  [SPELL_ID.lightningArc]: { fileName: "195.png", row: 6, frames: 14 },
   [SPELL_ID.desperateRune]: { fileName: "710.png", row: 2, frames: 18 },
   [SPELL_ID.holySmite]: { fileName: "577.png", row: 5, frames: 14 },
   [SPELL_ID.shadowBlink]: { fileName: "722.png", row: 2, frames: 23 },
@@ -42,6 +43,7 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.sacredInvocation]: { fileName: "136.png", row: 5, frames: 12 },
   [SPELL_ID.manaPrayer]: { fileName: "175.png", row: 5, frames: 10 },
   [SPELL_ID.manaBenediction]: { fileName: "175.png", row: 5, frames: 10 },
+  [SPELL_ID.arcaneFocus]: { fileName: "325.png", row: 2, frames: 8 },
 };
 
 export function getSpellSpriteSheetPath(fileName: string): string {

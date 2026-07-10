@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SPELL_ID } from "./spellIds";
 import { filterUnlockedSpells, isSpellUnlocked } from "./isSpellUnlocked";
+import { LEVEL_SPELL_BUCKETS_BY_CLASS } from "./levelSpellBuckets";
 
 describe("isSpellUnlocked", () => {
   it("returns true when warrior level meets required level", () => {
@@ -23,5 +24,15 @@ describe("filterUnlockedSpells", () => {
 
     assert.deepEqual(filterUnlockedSpells(spells, 2), [spells[0]]);
     assert.deepEqual(filterUnlockedSpells(spells, 3), spells);
+  });
+});
+
+describe("LEVEL_SPELL_BUCKETS_BY_CLASS", () => {
+  it("grants Lightning Arc to Sorcerers at level 3", () => {
+    assert.ok(
+      LEVEL_SPELL_BUCKETS_BY_CLASS.Sorcerer?.[3]?.spellIds.includes(
+        SPELL_ID.lightningArc
+      )
+    );
   });
 });

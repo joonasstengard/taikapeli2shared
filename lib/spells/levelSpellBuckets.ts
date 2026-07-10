@@ -21,9 +21,10 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   Sorcerer: {
     1: {
       spellIds: [
-        SPELL_ID.flamewheel,
-        SPELL_ID.frostball,
-        SPELL_ID.thunderball,
+        // SPELL_ID.flamewheel,
+        // SPELL_ID.frostball,
+        // SPELL_ID.thunderball,
+        SPELL_ID.lightningArc,
       ],
     },
     2: {
@@ -34,19 +35,16 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     },
     3: {
       spellIds: [
-        SPELL_ID.desperateRune,
-        SPELL_ID.icebolt,
-        SPELL_ID.hellflame,
-        SPELL_ID.thunder,
-      ],
+        SPELL_ID.arcaneFocus,
+        SPELL_ID.lightningArc,
+      ]
     },
     4: {
       spellIds: [
         SPELL_ID.icebolt,
         SPELL_ID.hellflame,
         SPELL_ID.thunder,
-      ],
-      skipChancePercent: 10,
+      ]
     },
   },
   Priestess: {

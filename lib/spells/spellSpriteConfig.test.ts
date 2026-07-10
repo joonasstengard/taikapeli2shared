@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SPELL_SPRITE_BY_ID } from "./spellSpriteConfig";
+import { SPELL_ID } from "./spellIds";
 
 describe("SPELL_SPRITE_BY_ID", () => {
   it("uses 1-based rows within the 9-row spell sheet layout", () => {
@@ -26,5 +27,13 @@ describe("SPELL_SPRITE_BY_ID", () => {
         `Conflicting frame counts for ${config.fileName}`
       );
     }
+  });
+
+  it("configures Lightning Arc with its dedicated spritesheet", () => {
+    assert.deepEqual(SPELL_SPRITE_BY_ID[SPELL_ID.lightningArc], {
+      fileName: "195.png",
+      row: 6,
+      frames: 14,
+    });
   });
 });
