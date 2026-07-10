@@ -25,7 +25,8 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.shadowBlink]: { fileName: "722.png", row: 2, frames: 23 },
   [SPELL_ID.teleport]: { fileName: "713.png", row: 2, frames: 23 },
   [SPELL_ID.freezingWhisper]: { fileName: "654.png", row: 3, frames: 17 },
-  [SPELL_ID.divineAegis]: { fileName: "655.png", row: 5, frames: 15 },
+  [SPELL_ID.sacredAegis]: { fileName: "655.png", row: 5, frames: 15 },
+  [SPELL_ID.massAegis]: { fileName: "655.png", row: 5, frames: 15 },
   [SPELL_ID.rottingTouch]: { fileName: "633.png", row: 8, frames: 15 },
   [SPELL_ID.bloodCurse]: { fileName: "508.png", row: 8, frames: 13 },
   [SPELL_ID.lifeDrain]: { fileName: "625.png", row: 8, frames: 15 },
@@ -39,6 +40,8 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.spiritClaw]: { fileName: "447.png", row: 4, frames: 9 },
   [SPELL_ID.spiritRend]: { fileName: "509.png", row: 4, frames: 13 },
   [SPELL_ID.sacredInvocation]: { fileName: "136.png", row: 5, frames: 12 },
+  [SPELL_ID.manaPrayer]: { fileName: "175.png", row: 5, frames: 10 },
+  [SPELL_ID.manaBenediction]: { fileName: "175.png", row: 5, frames: 10 },
 };
 
 export function getSpellSpriteSheetPath(fileName: string): string {

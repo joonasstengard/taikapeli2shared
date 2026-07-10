@@ -8,13 +8,25 @@ import {
   calculateSpellDamageBonus,
   calculateSpellHealAmount,
   calculateSpellHealBonus,
+  calculateSpellManaRestoreAmount,
+  calculateSpellManaRestoreBonus,
   calculateStaminaRestoreAmount,
   calculateStatScalingBonus,
+  hasManaRestoreEffect,
 } from "./spellPower";
 
 const healingPrayer = {
   baseDamageTarget: 0,
   baseHealTarget: 5,
+  baseManaRestore: 0,
+  scalingFactor: 0.5,
+  type: "Holy",
+};
+
+const manaPrayer = {
+  baseDamageTarget: 0,
+  baseHealTarget: 0,
+  baseManaRestore: 4,
   scalingFactor: 0.5,
   type: "Holy",
 };
@@ -52,6 +64,19 @@ describe("calculateSpellHealBonus", () => {
       2
     );
     assert.equal(calculateSpellHealBonus(flamewheel, { faith: 5, spellDamage: 10 }), 0);
+  });
+});
+
+describe("calculateSpellManaRestoreBonus", () => {
+  it("adds faith scaling only when the spell restores mana", () => {
+    assert.equal(
+      calculateSpellManaRestoreBonus(manaPrayer, { faith: 5, spellDamage: 0 }),
+      2
+    );
+    assert.equal(
+      calculateSpellManaRestoreBonus(flamewheel, { faith: 5, spellDamage: 10 }),
+      0
+    );
   });
 });
 
@@ -167,6 +192,72 @@ describe("calculateStaminaRestoreAmount", () => {
   it("returns zero when there is nothing to restore", () => {
     assert.equal(calculateStaminaRestoreAmount(0, 0, 12), 0);
     assert.equal(calculateStaminaRestoreAmount(3, 5, 0), 0);
+  });
+});
+
+describe("hasManaRestoreEffect", () => {
+  it("detects mana restore spells", () => {
+    assert.equal(hasManaRestoreEffect(manaPrayer), true);
+    assert.equal(hasManaRestoreEffect(healingPrayer), false);
+    assert.equal(hasManaRestoreEffect({}), false);
+  });
+});
+
+describe("calculateSpellManaRestoreAmount", () => {
+  it("includes faith bonus and caps at missing mana", () => {
+    assert.equal(
+      calculateSpellManaRestoreAmount(
+        manaPrayer,
+        { faith: 5, spellDamage: 0 },
+        2,
+        12,
+        10
+      ),
+      6
+    );
+    assert.equal(
+      calculateSpellManaRestoreAmount(
+        manaPrayer,
+        { faith: 5, spellDamage: 0 },
+        10,
+        12,
+        10
+      ),
+      2
+    );
+  });
+
+  it("returns zero for dead allies, full mana, or no mana pool", () => {
+    assert.equal(
+      calculateSpellManaRestoreAmount(
+        manaPrayer,
+        { faith: 5, spellDamage: 0 },
+        2,
+        12,
+        0
+      ),
+      0
+    );
+    assert.equal(
+      calculateSpellManaRestoreAmount(
+        manaPrayer,
+        { faith: 5, spellDamage: 0 },
+        12,
+        12,
+        10
+      ),
+      0
+    );
+    assert.equal(
+      calculateSpellManaRestoreAmount(
+        manaPrayer,
+        { faith: 5, spellDamage: 0 },
+        0,
+        0,
+        10
+      ),
+      0
+    );
   });
 });
 

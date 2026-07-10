@@ -8,7 +8,7 @@ export const SPELL_ID = {
   shadowBlink: 7,
   teleport: 8,
   freezingWhisper: 9,
-  divineAegis: 10,
+  sacredAegis: 10,
   rottingTouch: 11,
   bloodCurse: 12,
   thunder: 13,
@@ -25,4 +25,7 @@ export const SPELL_ID = {
   spiritClaw: 24,
   spiritRend: 25,
   sacredInvocation: 26,
+  massAegis: 27,
+  manaPrayer: 28,
+  manaBenediction: 29,
 } as const;

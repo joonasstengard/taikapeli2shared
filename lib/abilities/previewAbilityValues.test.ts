@@ -8,6 +8,7 @@ import {
   previewSkillDamage,
   previewSpellCombatValues,
   previewSpellDamage,
+  previewSpellManaRestore,
 } from "./previewAbilityValues";
 
 describe("calculateLastStandDamage", () => {
@@ -160,9 +161,64 @@ describe("previewSpellCombatValues", () => {
         damage: 5,
         heal: null,
         staminaRestore: null,
+        manaRestore: null,
         hasLastStandEffect: false,
         hasSacrificeEffect: false,
       }
+    );
+  });
+
+  it("includes mana restore when present", () => {
+    assert.deepEqual(
+      previewSpellCombatValues(
+        {
+          baseDamageTarget: 0,
+          baseHealTarget: 0,
+          baseManaRestore: 4,
+          scalingFactor: 0.5,
+          type: "Holy",
+          effect: null,
+        },
+        {
+          health: 10,
+          currentHealth: 10,
+          strength: 0,
+          faith: 5,
+          spellDamage: 0,
+        }
+      ),
+      {
+        damage: null,
+        heal: null,
+        staminaRestore: null,
+        manaRestore: 6,
+        hasLastStandEffect: false,
+        hasSacrificeEffect: false,
+      }
+    );
+  });
+});
+
+describe("previewSpellManaRestore", () => {
+  it("adds faith scaling for holy spells", () => {
+    assert.equal(
+      previewSpellManaRestore(
+        {
+          baseDamageTarget: 0,
+          baseHealTarget: 0,
+          baseManaRestore: 4,
+          scalingFactor: 0.5,
+          type: "Holy",
+        },
+        {
+          health: 10,
+          currentHealth: 10,
+          strength: 0,
+          faith: 5,
+          spellDamage: 0,
+        }
+      ),
+      6
     );
   });
 });
@@ -191,6 +247,7 @@ describe("previewSkillCombatValues", () => {
         damage: null,
         heal: null,
         staminaRestore: 3,
+        manaRestore: null,
         hasLastStandEffect: false,
         hasSacrificeEffect: false,
       }

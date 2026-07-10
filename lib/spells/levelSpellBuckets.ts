@@ -54,26 +54,33 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
       spellIds: [SPELL_ID.healingPrayer],
     },
     2: {
-      spellIds: [SPELL_ID.divineAegis, SPELL_ID.holySmite],
+      spellIds: [
+        SPELL_ID.manaPrayer,
+        SPELL_ID.sacredAegis,
+        SPELL_ID.holySmite,
+      ],
+    },
+    3: {
+      spellIds: [
+        SPELL_ID.penance,
+        SPELL_ID.sacredInvocation,
+        SPELL_ID.manaBenediction,
+      ],
     },
     4: {
       spellIds: [
-        SPELL_ID.divineAegis,
-        SPELL_ID.penance,
-        SPELL_ID.sacredInvocation,
+        SPELL_ID.massHealing,
+        SPELL_ID.massAegis
       ],
-    },
-    5: {
-      spellIds: [SPELL_ID.massHealing],
     },
   },
   Paladin: {
     1: {
       spellIds: [SPELL_ID.beaconOfLight, SPELL_ID.holySmite],
-      skipChancePercent: 50,
+      skipChancePercent: 2,
     },
     2: {
-      spellIds: [SPELL_ID.divineAegis, SPELL_ID.holySmite, SPELL_ID.consecrate],
+      spellIds: [SPELL_ID.sacredAegis, SPELL_ID.consecrate],
     },
     4: {
       spellIds: [SPELL_ID.penance, SPELL_ID.consecrate],

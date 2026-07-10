@@ -4,6 +4,7 @@ import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
 export interface SpellScalingValues {
   baseDamageTarget: number;
   baseHealTarget: number;
+  baseManaRestore?: number;
   scalingFactor: number;
   type: string | null;
 }
@@ -93,6 +94,18 @@ export function calculateSpellHealBonus(
   return calculateHolyFaithScalingBonus(spell, caster.faith);
 }
 
+/** Extra mana restoration from caster stats (e.g. faith on holy spells). */
+export function calculateSpellManaRestoreBonus(
+  spell: SpellScalingValues,
+  caster: SpellCasterCombatStats
+): number {
+  if ((spell.baseManaRestore ?? 0) <= 0) {
+    return 0;
+  }
+
+  return calculateHolyFaithScalingBonus(spell, caster.faith);
+}
+
 /** Extra damage from caster stats (faith on holy spells plus spellDamage on all damage spells). */
 export function calculateSpellDamageBonus(
   spell: SpellScalingValues,
@@ -147,6 +160,33 @@ export function calculateSpellHealAmount(
   return Math.min(rawHeal, missingHealth);
 }
 
+export function calculateSpellManaRestoreAmount(
+  spell: SpellScalingValues,
+  caster: SpellCasterCombatStats,
+  targetCurrentMana: number,
+  targetMaxMana: number,
+  targetCurrentHealth: number
+): number {
+  const baseManaRestore = spell.baseManaRestore ?? 0;
+  if (
+    baseManaRestore <= 0 ||
+    targetCurrentHealth <= 0 ||
+    targetMaxMana <= 0
+  ) {
+    return 0;
+  }
+
+  const missingMana = targetMaxMana - Math.max(targetCurrentMana, 0);
+  if (missingMana <= 0) {
+    return 0;
+  }
+
+  const restoreBonus = calculateSpellManaRestoreBonus(spell, caster);
+  const rawRestore = baseManaRestore + restoreBonus;
+
+  return Math.min(rawRestore, missingMana);
+}
+
 export function calculateSkillHealAmount(
   skill: SkillScalingValues,
   targetCurrentHealth: number,
@@ -170,6 +210,14 @@ export function calculateSkillHealAmount(
 
 export interface StaminaRestoreValues {
   baseStaminaRestore?: number;
+}
+
+export interface ManaRestoreValues {
+  baseManaRestore?: number;
+}
+
+export function hasManaRestoreEffect(ability: ManaRestoreValues): boolean {
+  return (ability.baseManaRestore ?? 0) > 0;
 }
 
 export function hasStaminaRestoreEffect(

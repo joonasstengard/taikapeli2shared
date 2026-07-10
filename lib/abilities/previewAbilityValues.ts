@@ -7,6 +7,7 @@ import {
   calculateSkillDamageBonus,
   calculateSpellDamageBonus,
   calculateSpellHealBonus,
+  calculateSpellManaRestoreBonus,
   type SkillScalingValues,
   type SpellCasterCombatStats,
   type SpellScalingValues,
@@ -35,6 +36,7 @@ export interface AbilityPreviewValues {
   damage: number | null;
   heal: number | null;
   staminaRestore: number | null;
+  manaRestore: number | null;
   hasLastStandEffect: boolean;
   hasSacrificeEffect: boolean;
 }
@@ -129,6 +131,20 @@ export function previewSpellHeal(
   );
 }
 
+export function previewSpellManaRestore(
+  spell: SpellScalingValues,
+  caster: AbilityPreviewCaster
+): number {
+  const baseManaRestore = spell.baseManaRestore ?? 0;
+  if (baseManaRestore <= 0) {
+    return 0;
+  }
+
+  return (
+    baseManaRestore + calculateSpellManaRestoreBonus(spell, toPreviewCasterStats(caster))
+  );
+}
+
 export function previewSkillHeal(
   skill: Pick<SkillScalingValues, "baseHealTarget">
 ): number {
@@ -139,10 +155,14 @@ export function previewSpellCombatValues(
   spell: AbilityPreviewInput,
   caster: AbilityPreviewCaster
 ): AbilityPreviewValues {
+  const manaRestore = spell.baseManaRestore ?? 0;
+
   return {
     damage: spell.baseDamageTarget > 0 ? previewSpellDamage(spell, caster) : null,
     heal: spell.baseHealTarget > 0 ? previewSpellHeal(spell, caster) : null,
     staminaRestore: null,
+    manaRestore:
+      manaRestore > 0 ? previewSpellManaRestore(spell, caster) : null,
     hasLastStandEffect: spell.effect?.effectType === "lastStand",
     hasSacrificeEffect: hasSacrificeEffect(spell.effect),
   };
@@ -158,6 +178,7 @@ export function previewSkillCombatValues(
     damage: skill.baseDamageTarget > 0 ? previewSkillDamage(skill, caster) : null,
     heal: skill.baseHealTarget > 0 ? previewSkillHeal(skill) : null,
     staminaRestore: staminaRestore > 0 ? staminaRestore : null,
+    manaRestore: null,
     hasLastStandEffect: skill.effect?.effectType === "lastStand",
     hasSacrificeEffect: hasSacrificeEffect(skill.effect),
   };

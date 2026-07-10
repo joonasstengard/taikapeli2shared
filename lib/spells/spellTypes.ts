@@ -14,6 +14,7 @@ export interface SpellDefinition {
   goldCost: number;
   baseDamageTarget: number;
   baseHealTarget: number;
+  baseManaRestore?: number;
   scalingFactor: number;
   type: string | null;
   range: number;
