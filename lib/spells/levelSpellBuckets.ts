@@ -88,8 +88,11 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     1: {
       spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
     },
+    2: {
+      spellIds: [SPELL_ID.chainRot, SPELL_ID.hemorrhage],
+    },
     3: {
-      spellIds: [SPELL_ID.lifeDevour],
+      spellIds: [SPELL_ID.lifeDevour, SPELL_ID.blightWave],
     },
     4: {
       spellIds: [SPELL_ID.deathRitual],

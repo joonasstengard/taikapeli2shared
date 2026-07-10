@@ -30,4 +30,7 @@ export const SPELL_ID = {
   manaBenediction: 29,
   arcaneFocus: 30,
   chainLightning: 31,
+  blightWave: 32,
+  hemorrhage: 33,
+  chainRot: 34,
 } as const;

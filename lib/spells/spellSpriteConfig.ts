@@ -44,6 +44,9 @@ export const SPELL_SPRITE_BY_ID: Record<number, SpellSpriteSheetConfig> = {
   [SPELL_ID.manaPrayer]: { fileName: "175.png", row: 5, frames: 10 },
   [SPELL_ID.manaBenediction]: { fileName: "175.png", row: 5, frames: 10 },
   [SPELL_ID.arcaneFocus]: { fileName: "325.png", row: 2, frames: 8 },
+  [SPELL_ID.blightWave]: { fileName: "576.png", row: 8, frames: 14 },
+  [SPELL_ID.hemorrhage]: { fileName: "385.png", row: 8, frames: 8 },
+  [SPELL_ID.chainRot]: { fileName: "294.png", row: 8, frames: 9 },
 };
 
 export function getSpellSpriteSheetPath(fileName: string): string {
