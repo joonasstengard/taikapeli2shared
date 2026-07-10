@@ -40,6 +40,14 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.lastStand, SKILL_ID.martyrdom, SKILL_ID.repellingSlam],
     },
   },
+  Infiltrator: {
+    1: {
+      skillIds: [SKILL_ID.stealthStrike],
+    },
+    3: {
+      skillIds: [SKILL_ID.shadowStrike],
+    },
+  },
   King: {
     1: {
       skillIds: [SKILL_ID.commandAttack, SKILL_ID.battleDecree],

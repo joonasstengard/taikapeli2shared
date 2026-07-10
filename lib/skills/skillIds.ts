@@ -40,4 +40,6 @@ export const SKILL_ID = {
   transformDeer: 40,
   transformBear: 41,
   bladeDance: 42,
+  shadowStrike: 43,
+  stealthStrike: 44,
 } as const;
