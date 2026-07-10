@@ -1,7 +1,7 @@
 // Max picture variant per class+gender combo for new warriors.
 // Spritesheets are named class+gender+picture, e.g. KnightMale1.png.
 
-export const WARRIOR_CLASSES = [
+export const COMMON_WARRIOR_CLASSES = [
   "Berserker",
   "Charger",
   "King",
@@ -16,6 +16,19 @@ export const WARRIOR_CLASSES = [
   "Sorcerer",
   "Warlock",
 ] as const;
+
+export const RARE_WARRIOR_CLASSES = ["Infiltrator"] as const;
+
+/** Chance (0–1) that recruitment rolls a rare class instead of a common one. */
+export const RARE_WARRIOR_CLASS_ROLL_CHANCE = 0.01;
+
+export const WARRIOR_CLASSES = [
+  ...COMMON_WARRIOR_CLASSES,
+  ...RARE_WARRIOR_CLASSES,
+] as const;
+
+export type CommonWarriorClass = (typeof COMMON_WARRIOR_CLASSES)[number];
+export type RareWarriorClass = (typeof RARE_WARRIOR_CLASSES)[number];
 export type WarriorClass = (typeof WARRIOR_CLASSES)[number];
 
 export const WARRIOR_GENDERS = ["Male", "Female"] as const;
@@ -59,7 +72,9 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   ShamanMale: 8,
   ShamanFemale: 0,
   SorcererFemale: 0,
-  SorcererMale: 10
+  SorcererMale: 10,
+  InfiltratorMale: 4,
+  InfiltratorFemale: 0,
 };
 
 export function getWarriorPictureCount(
