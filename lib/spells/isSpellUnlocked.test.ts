@@ -28,10 +28,10 @@ describe("filterUnlockedSpells", () => {
 });
 
 describe("LEVEL_SPELL_BUCKETS_BY_CLASS", () => {
-  it("grants Lightning Arc to Sorcerers at level 3", () => {
+  it("grants Chain Lightning to Sorcerers at level 3", () => {
     assert.ok(
       LEVEL_SPELL_BUCKETS_BY_CLASS.Sorcerer?.[3]?.spellIds.includes(
-        SPELL_ID.lightningArc
+        SPELL_ID.chainLightning
       )
     );
   });

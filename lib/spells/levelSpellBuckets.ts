@@ -21,10 +21,9 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   Sorcerer: {
     1: {
       spellIds: [
-        // SPELL_ID.flamewheel,
-        // SPELL_ID.frostball,
-        // SPELL_ID.thunderball,
-        SPELL_ID.lightningArc,
+        SPELL_ID.flamewheel,
+        SPELL_ID.frostball,
+        SPELL_ID.thunderball,
       ],
     },
     2: {
@@ -36,7 +35,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     3: {
       spellIds: [
         SPELL_ID.arcaneFocus,
-        SPELL_ID.lightningArc,
+        SPELL_ID.chainLightning,
       ]
     },
     4: {
@@ -89,11 +88,11 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
     1: {
       spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
     },
-    2: {
-      spellIds: [SPELL_ID.bloodCurse, SPELL_ID.rottingTouch, SPELL_ID.lifeDrain],
+    3: {
+      spellIds: [SPELL_ID.lifeDevour],
     },
     4: {
-      spellIds: [SPELL_ID.lifeDevour, SPELL_ID.deathRitual],
+      spellIds: [SPELL_ID.deathRitual],
     },
   },
   Moonblade: {

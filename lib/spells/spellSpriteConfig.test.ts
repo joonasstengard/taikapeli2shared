@@ -29,8 +29,8 @@ describe("SPELL_SPRITE_BY_ID", () => {
     }
   });
 
-  it("configures Lightning Arc with its dedicated spritesheet", () => {
-    assert.deepEqual(SPELL_SPRITE_BY_ID[SPELL_ID.lightningArc], {
+  it("configures Chain Lightning with its dedicated spritesheet", () => {
+    assert.deepEqual(SPELL_SPRITE_BY_ID[SPELL_ID.chainLightning], {
       fileName: "195.png",
       row: 6,
       frames: 14,
