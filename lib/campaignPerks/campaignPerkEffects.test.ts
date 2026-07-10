@@ -105,14 +105,14 @@ describe("getCampaignPerkMarketSpellCount", () => {
 
 describe("applyCampaignPerkToMarketSpellPrice", () => {
   it("discounts market spells for Expanded Grimoire", () => {
-    assert.equal(EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER, 0.9);
+    assert.equal(EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER, 0.8);
     assert.equal(
       applyCampaignPerkToMarketSpellPrice(20, CAMPAIGN_PERK_ID.expandedGrimoire),
-      18
+      16
     );
     assert.equal(
       applyCampaignPerkToMarketSpellPrice(13, CAMPAIGN_PERK_ID.expandedGrimoire),
-      12
+      10
     );
   });
 
