@@ -19,22 +19,31 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Record<WarriorClass, LevelSkillBucketsByLevel>
 > = {
   Charger: {
+    1: {
+      skillIds: [SKILL_ID.cavalryCharge],
+    },
     2: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
     },
     3: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
-    }
+    },
   },
   Knight: {
+    1: {
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.protect, SKILL_ID.repellingBlow],
+    },
     2: {
-      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.repellingBlow]
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.repellingBlow],
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.martyrdom, SKILL_ID.repellingSlam]
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.martyrdom, SKILL_ID.repellingSlam],
     },
   },
   King: {
+    1: {
+      skillIds: [SKILL_ID.commandAttack, SKILL_ID.battleDecree],
+    },
     2: {
       skillIds: [
         SKILL_ID.lastStand,
@@ -60,16 +69,23 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Marksman: {
+    1: {
+      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot],
+      skipChancePercent: 50,
+    },
     2: {
       skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
     },
     4: {
       skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
-    }
+    },
   },
   Moonblade: {
+    1: {
+      skillIds: [SKILL_ID.lifeSteal, SKILL_ID.crescentSlash],
+    },
     2: {
-      skillIds: [SKILL_ID.eclipseHarvest, SKILL_ID.crescentSlash, SKILL_ID.lifeSteal]
+      skillIds: [SKILL_ID.eclipseHarvest, SKILL_ID.crescentSlash, SKILL_ID.lifeSteal],
     },
     3: {
       skillIds: [SKILL_ID.moonlitVeil],
@@ -83,11 +99,17 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Paladin: {
+    1: {
+      skillIds: [SKILL_ID.blessHammer],
+    },
     3: {
-      skillIds: [SKILL_ID.crusade]
+      skillIds: [SKILL_ID.crusade],
     },
   },
   Berserker: {
+    1: {
+      skillIds: [SKILL_ID.eviscerate],
+    },
     2: {
       skillIds: [SKILL_ID.lunge],
     },
@@ -96,6 +118,14 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Ranger: {
+    1: {
+      skillIds: [
+        SKILL_ID.frozenArrow,
+        SKILL_ID.arrowVolley,
+        SKILL_ID.fadeArrow,
+      ],
+      skipChancePercent: 20,
+    },
     2: {
       skillIds: [
         SKILL_ID.frozenArrow,
@@ -114,11 +144,18 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     },
   },
   Shaman: {
+    1: {
+      skillIds: [
+        SKILL_ID.transformWolf,
+        SKILL_ID.transformDeer,
+        SKILL_ID.transformBear,
+      ],
+    },
     2: {
       skillIds: [
         SKILL_ID.primalSlam,
-        SKILL_ID.bogPotion
-      ]
+        SKILL_ID.bogPotion,
+      ],
     },
   },
   Peasant: {
