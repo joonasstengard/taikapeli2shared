@@ -31,13 +31,13 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Knight: {
     1: {
-      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.protect, SKILL_ID.repellingBlow],
+      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.repellingBlow],
     },
     2: {
-      skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.martyrdom, SKILL_ID.protect, SKILL_ID.repellingBlow],
+      skillIds: [SKILL_ID.protect, SKILL_ID.martyrdom],
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.martyrdom, SKILL_ID.repellingSlam],
+      skillIds: [SKILL_ID.lastStand, SKILL_ID.repellingSlam],
     },
   },
   Infiltrator: {
@@ -79,7 +79,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
     },
     4: {
-      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
+      skillIds: [SKILL_ID.repellingBolt],
     },
   },
   Moonblade: {
@@ -103,6 +103,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Paladin: {
     1: {
       skillIds: [SKILL_ID.blessHammer],
+      skipChancePercent: 50,
     },
     3: {
       skillIds: [SKILL_ID.crusade],
