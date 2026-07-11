@@ -66,5 +66,18 @@ describe("battleVisualEvents", () => {
         targetSlashFx: true,
       }
     );
+
+    assert.deepEqual(
+      useSkillEvent(2, 9, ["C3"], false, true, "C3"),
+      {
+        type: "useSkill",
+        warriorId: 2,
+        skillId: 9,
+        effectTiles: ["C3"],
+        casterAttackPose: false,
+        targetSlashFx: true,
+        casterWalkToTile: "C3",
+      }
+    );
   });
 });

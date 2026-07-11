@@ -136,6 +136,67 @@ describe("previewSkillDamage", () => {
       12
     );
   });
+
+  it("scales from speed when damageScalingStat is speed", () => {
+    const trample = {
+      baseDamageTarget: 1,
+      baseHealTarget: 0,
+      scalingFactor: 1,
+      damageScalingStat: "speed" as const,
+      type: null,
+      effect: null,
+    };
+
+    assert.equal(
+      previewSkillDamage(trample, {
+        health: 10,
+        currentHealth: 10,
+        strength: 20,
+        speed: 6,
+        faith: 0,
+        spellDamage: 0,
+      }),
+      7
+    );
+  });
+
+  it("uses effective speed from active stat buffs for speed-scaling skills", () => {
+    const trample = {
+      baseDamageTarget: 1,
+      baseHealTarget: 0,
+      scalingFactor: 1,
+      damageScalingStat: "speed" as const,
+      type: null,
+      effect: null,
+    };
+
+    assert.equal(
+      previewSkillDamage(trample, {
+        health: 10,
+        currentHealth: 10,
+        strength: 20,
+        speed: 5,
+        faith: 0,
+        spellDamage: 0,
+        statBuffs: [{ turnsRemaining: 2, statModifiers: { speed: 4 } }],
+      }),
+      10
+    );
+  });
+
+  it("ignores speed for default strength-scaling skills", () => {
+    assert.equal(
+      previewSkillDamage(strike, {
+        health: 10,
+        currentHealth: 10,
+        strength: 4,
+        speed: 20,
+        faith: 0,
+        spellDamage: 0,
+      }),
+      7
+    );
+  });
 });
 
 describe("previewSpellCombatValues", () => {

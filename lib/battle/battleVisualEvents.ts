@@ -23,6 +23,7 @@ export type BattleVisualEvent =
       effectTiles: string[];
       casterAttackPose: boolean;
       targetSlashFx: boolean;
+      casterWalkToTile?: string;
     }
   | {
       type: "bladeDance";
@@ -69,7 +70,8 @@ export function useSkillEvent(
   skillId: number,
   effectTiles: string[],
   casterAttackPose: boolean,
-  targetSlashFx: boolean
+  targetSlashFx: boolean,
+  casterWalkToTile?: string
 ): BattleVisualEvent {
   return {
     type: "useSkill",
@@ -78,6 +80,7 @@ export function useSkillEvent(
     effectTiles,
     casterAttackPose,
     targetSlashFx,
+    ...(casterWalkToTile ? { casterWalkToTile } : {}),
   };
 }
 

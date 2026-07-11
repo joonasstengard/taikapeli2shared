@@ -22,11 +22,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     1: {
       skillIds: [SKILL_ID.cavalryCharge],
     },
-    3: {
-      skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
+    2: {
+      skillIds: [SKILL_ID.trample, SKILL_ID.overrun],
     },
     4: {
-      skillIds: [SKILL_ID.cavalryOnslaught],
+      skillIds: [SKILL_ID.cavalryOnslaught, SKILL_ID.stampede],
     },
   },
   Knight: {

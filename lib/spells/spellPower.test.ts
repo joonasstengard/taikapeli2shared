@@ -5,6 +5,7 @@ import {
   calculateHolyFaithScalingBonus,
   calculateSkillDamageBonus,
   calculateSkillHealAmount,
+  calculateSkillStatScalingBonus,
   calculateSpellDamageBonus,
   calculateSpellHealAmount,
   calculateSpellHealBonus,
@@ -12,7 +13,11 @@ import {
   calculateSpellManaRestoreBonus,
   calculateStaminaRestoreAmount,
   calculateStatScalingBonus,
+  DEFAULT_SKILL_DAMAGE_SCALING_STAT,
+  getSkillDamageScalingStat,
+  getSkillScalingStatValue,
   hasManaRestoreEffect,
+  toSkillCasterCombatStats,
 } from "./spellPower";
 
 const healingPrayer = {
@@ -107,17 +112,129 @@ describe("calculateSpellDamageBonus", () => {
   });
 });
 
-describe("calculateSkillDamageBonus", () => {
-  it("adds strength scaling to damaging skills", () => {
+describe("getSkillDamageScalingStat", () => {
+  it("defaults to strength when damageScalingStat is omitted", () => {
     assert.equal(
-      calculateSkillDamageBonus(flamewheel, { strength: 6 }),
+      getSkillDamageScalingStat({}),
+      DEFAULT_SKILL_DAMAGE_SCALING_STAT
+    );
+  });
+
+  it("returns the configured scaling stat", () => {
+    assert.equal(
+      getSkillDamageScalingStat({
+        damageScalingStat: "speed",
+      }),
+      "speed"
+    );
+  });
+});
+
+describe("getSkillScalingStatValue", () => {
+  const caster = toSkillCasterCombatStats({
+    strength: 10,
+    speed: 4,
+    faith: 2,
+    spellDamage: 3,
+  });
+
+  it("reads each combat stat from caster stats", () => {
+    assert.equal(getSkillScalingStatValue(caster, "strength"), 10);
+    assert.equal(getSkillScalingStatValue(caster, "speed"), 4);
+    assert.equal(getSkillScalingStatValue(caster, "faith"), 2);
+    assert.equal(getSkillScalingStatValue(caster, "spellDamage"), 3);
+  });
+});
+
+describe("calculateSkillStatScalingBonus", () => {
+  it("floors stat times scaling factor", () => {
+    assert.equal(
+      calculateSkillStatScalingBonus({ scalingFactor: 0.5 }, 7),
       3
+    );
+  });
+});
+
+describe("calculateSkillDamageBonus", () => {
+  const caster = toSkillCasterCombatStats({
+    strength: 6,
+    speed: 9,
+    faith: 4,
+    spellDamage: 8,
+  });
+
+  it("adds strength scaling to damaging skills by default", () => {
+    assert.equal(
+      calculateSkillDamageBonus(flamewheel, caster),
+      3
+    );
+  });
+
+  it("adds speed scaling when damageScalingStat is speed", () => {
+    assert.equal(
+      calculateSkillDamageBonus(
+        { ...flamewheel, damageScalingStat: "speed" },
+        caster
+      ),
+      4
+    );
+  });
+
+  it("does not use strength when damageScalingStat is speed", () => {
+    assert.equal(
+      calculateSkillDamageBonus(
+        {
+          baseDamageTarget: 5,
+          baseHealTarget: 0,
+          scalingFactor: 1,
+          damageScalingStat: "speed",
+        },
+        toSkillCasterCombatStats({ strength: 20, speed: 3 })
+      ),
+      3
+    );
+  });
+
+  it("does not use speed when damageScalingStat is omitted", () => {
+    assert.equal(
+      calculateSkillDamageBonus(
+        { baseDamageTarget: 5, baseHealTarget: 0, scalingFactor: 1 },
+        toSkillCasterCombatStats({ strength: 3, speed: 20 })
+      ),
+      3
+    );
+  });
+
+  it("supports faith and spellDamage scaling stats", () => {
+    assert.equal(
+      calculateSkillDamageBonus(
+        {
+          baseDamageTarget: 2,
+          baseHealTarget: 0,
+          scalingFactor: 0.5,
+          damageScalingStat: "faith",
+        },
+        caster
+      ),
+      2
+    );
+    assert.equal(
+      calculateSkillDamageBonus(
+        {
+          baseDamageTarget: 2,
+          baseHealTarget: 0,
+          scalingFactor: 0.5,
+          damageScalingStat: "spellDamage",
+        },
+        caster
+      ),
+      4
     );
   });
 
   it("does not scale healing skills", () => {
     assert.equal(
-      calculateSkillDamageBonus(healingPrayer, { strength: 6 }),
+      calculateSkillDamageBonus(healingPrayer, caster),
       0
     );
   });

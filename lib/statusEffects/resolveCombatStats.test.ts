@@ -5,6 +5,7 @@ import {
   getEffectiveSpeed,
   getEffectiveStrength,
   resolveCombatStats,
+  toEffectiveSkillCasterCombatStats,
 } from "./resolveCombatStats";
 
 describe("resolveCombatStats", () => {
@@ -61,5 +62,28 @@ describe("resolveCombatStats", () => {
     ]);
 
     assert.deepEqual(result.effective, baseWarrior);
+  });
+});
+
+describe("toEffectiveSkillCasterCombatStats", () => {
+  const baseWarrior = {
+    strength: 7,
+    speed: 4,
+    faith: 2,
+    spellDamage: 3,
+  };
+
+  it("returns all effective combat stats for skill scaling", () => {
+    assert.deepEqual(
+      toEffectiveSkillCasterCombatStats(baseWarrior, [], [
+        { turnsRemaining: 2, statModifiers: { strength: 3, speed: 5 } },
+      ]),
+      {
+        strength: 10,
+        speed: 9,
+        faith: 2,
+        spellDamage: 3,
+      }
+    );
   });
 });

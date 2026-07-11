@@ -1,7 +1,11 @@
 import type { SpellEffect, SpellTargetingType } from "../spells/spellTypes";
+import type { CombatStat } from "../statusEffects/statusEffectTypes";
 
 export type SkillTargetingType = SpellTargetingType;
 export type SkillEffect = SpellEffect;
+
+/** Combat stat used to scale skill damage via scalingFactor. Defaults to strength. */
+export type SkillDamageScalingStat = CombatStat;
 
 /** Core skill fields shared by definitions and warrior-owned skills. */
 export interface SkillDefinition {
@@ -13,6 +17,10 @@ export interface SkillDefinition {
   baseHealTarget: number;
   baseStaminaRestore: number;
   scalingFactor: number;
+  /** When set, skill damage scales from this stat instead of strength. */
+  damageScalingStat?: SkillDamageScalingStat;
+  /** When true, battle visuals walk the caster to the target instead of an attack pose. */
+  casterWalkToTargetVisual?: boolean;
   type: string | null;
   range: number;
   targetingType: SkillTargetingType;

@@ -7,7 +7,7 @@ export const SKILL_ID = {
   criticalBolt: 6,
   longShot: 7,
   cavalryCharge: 8,
-  stomp: 9,
+  trample: 9,
   lifeSteal: 10,
   rallyTroops: 11,
   raiseMorale: 12,
@@ -45,4 +45,5 @@ export const SKILL_ID = {
   swiftDecree: 45,
   commandWar: 46,
   cavalryOnslaught: 47,
+  stampede: 48,
 } as const;

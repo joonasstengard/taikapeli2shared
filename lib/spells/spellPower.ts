@@ -1,3 +1,5 @@
+import type { SkillDamageScalingStat } from "../skills/skillTypes";
+import type { CombatStat } from "../statusEffects/statusEffectTypes";
 import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
 
 /** Spell fields used when calculating scaled combat power from caster stats. */
@@ -15,7 +17,11 @@ export interface SkillScalingValues {
   baseHealTarget: number;
   baseStaminaRestore?: number;
   scalingFactor: number;
+  damageScalingStat?: SkillDamageScalingStat;
 }
+
+export const DEFAULT_SKILL_DAMAGE_SCALING_STAT: SkillDamageScalingStat =
+  "strength";
 
 /** Caster stats that can scale spell damage or healing via a spell's scalingFactor. */
 export interface SpellCasterCombatStats {
@@ -24,9 +30,7 @@ export interface SpellCasterCombatStats {
 }
 
 /** Caster stats that can scale skill damage via a skill's scalingFactor. */
-export interface SkillCasterCombatStats {
-  strength: number;
-}
+export type SkillCasterCombatStats = Record<CombatStat, number>;
 
 export function toSpellCasterCombatStats(
   warrior: Partial<SpellCasterCombatStats>
@@ -72,14 +76,37 @@ export function toSkillCasterCombatStats(
 ): SkillCasterCombatStats {
   return {
     strength: warrior.strength ?? 0,
+    speed: warrior.speed ?? 0,
+    faith: warrior.faith ?? 0,
+    spellDamage: warrior.spellDamage ?? 0,
   };
+}
+
+export function getSkillDamageScalingStat(
+  skill: Pick<SkillScalingValues, "damageScalingStat">
+): SkillDamageScalingStat {
+  return skill.damageScalingStat ?? DEFAULT_SKILL_DAMAGE_SCALING_STAT;
+}
+
+export function getSkillScalingStatValue(
+  caster: SkillCasterCombatStats,
+  stat: SkillDamageScalingStat
+): number {
+  return caster[stat];
+}
+
+export function calculateSkillStatScalingBonus(
+  skill: Pick<SkillScalingValues, "scalingFactor">,
+  statValue: number
+): number {
+  return calculateStatScalingBonus(statValue, skill.scalingFactor);
 }
 
 export function calculateSkillStrengthScalingBonus(
   skill: Pick<SkillScalingValues, "scalingFactor">,
   strength: number
 ): number {
-  return calculateStatScalingBonus(strength, skill.scalingFactor);
+  return calculateSkillStatScalingBonus(skill, strength);
 }
 
 /** Extra healing from caster stats (e.g. faith on holy spells). */
@@ -121,7 +148,7 @@ export function calculateSpellDamageBonus(
   );
 }
 
-/** Extra damage from caster strength. Skill healing intentionally does not scale. */
+/** Extra damage from the skill's damageScalingStat (defaults to strength). Skill healing intentionally does not scale. */
 export function calculateSkillDamageBonus(
   skill: SkillScalingValues,
   caster: SkillCasterCombatStats
@@ -130,7 +157,11 @@ export function calculateSkillDamageBonus(
     return 0;
   }
 
-  return calculateSkillStrengthScalingBonus(skill, caster.strength);
+  const scalingStat = getSkillDamageScalingStat(skill);
+  return calculateSkillStatScalingBonus(
+    skill,
+    getSkillScalingStatValue(caster, scalingStat)
+  );
 }
 
 export function calculateSpellHealAmount(

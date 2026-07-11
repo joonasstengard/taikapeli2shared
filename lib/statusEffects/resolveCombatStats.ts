@@ -120,9 +120,7 @@ export function toEffectiveSkillCasterCombatStats(
   statusEffects?: ActiveStatusEffect[],
   statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): SkillCasterCombatStats {
-  return {
-    strength: getEffectiveStrength(warrior, statusEffects, statBuffs),
-  };
+  return resolveCombatStats(warrior, statusEffects, statBuffs).effective;
 }
 
 export function toEffectiveSpellCasterCombatStats(
