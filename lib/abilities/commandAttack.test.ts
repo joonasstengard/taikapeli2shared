@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   canAllyReceiveCommandAttack,
+  canAnyAllyReceiveCommandAttack,
   getCommandAttackableEnemies,
   hasCommandAttackEffect,
-  pickRandomCommandAttackTarget,
 } from "./commandAttack";
 
 const commander = {
@@ -20,6 +20,14 @@ const meleeAlly = {
   armyId: 10,
   currentHealth: 10,
   battleTileCurrent: "B1",
+  attackRange: 1,
+};
+
+const idleAlly = {
+  id: 8,
+  armyId: 10,
+  currentHealth: 10,
+  battleTileCurrent: "A2",
   attackRange: 1,
 };
 
@@ -138,13 +146,30 @@ describe("canAllyReceiveCommandAttack", () => {
   });
 });
 
-describe("pickRandomCommandAttackTarget", () => {
-  it("picks from the provided enemy list", () => {
-    const picked = pickRandomCommandAttackTarget(
-      [enemyInMeleeRange, enemyInRangedReach],
-      () => 0.5
+describe("canAnyAllyReceiveCommandAttack", () => {
+  it("is true when at least one ally in range can attack an enemy", () => {
+    assert.equal(
+      canAnyAllyReceiveCommandAttack(
+        commander,
+        [commander, meleeAlly, idleAlly, enemyInMeleeRange],
+        2,
+        8,
+        () => true
+      ),
+      true
     );
+  });
 
-    assert.equal(picked.id, enemyInRangedReach.id);
+  it("is false when allies are in range but none can attack", () => {
+    assert.equal(
+      canAnyAllyReceiveCommandAttack(
+        commander,
+        [commander, idleAlly],
+        2,
+        8,
+        () => true
+      ),
+      false
+    );
   });
 });

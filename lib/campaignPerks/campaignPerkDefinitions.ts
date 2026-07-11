@@ -59,7 +59,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.lightInTheDarkness,
     name: "Light In The Darkness",
-    description: "Warriors gain +2 Faith when recruited.",
+    description: "Warriors gain +3 Faith when recruited.",
     iconFileName: "light_in_the_darkness.png",
     effect: {
       type: "recruit_stat_bonus",
@@ -70,7 +70,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.umbralGrace,
     name: "Umbral Grace",
-    description: "Warriors gain +2 Speed when recruited.",
+    description: "Warriors gain +3 Speed when recruited.",
     iconFileName: "umbral_grace.png",
     effect: {
       type: "recruit_stat_bonus",
@@ -81,7 +81,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.heregeld,
     name: "Heregeld",
-    description: "Earn 5 extra gold every week.",
+    description: "Earn 4 extra gold every week.",
     iconFileName: "heregeld.png",
     effect: { type: "weekly_gold", bonus: HEREGELD_WEEKLY_GOLD_BONUS },
   },

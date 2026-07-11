@@ -22,11 +22,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     1: {
       skillIds: [SKILL_ID.cavalryCharge],
     },
-    2: {
-      skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
-    },
     3: {
       skillIds: [SKILL_ID.stomp, SKILL_ID.overrun],
+    },
+    4: {
+      skillIds: [SKILL_ID.cavalryOnslaught],
     },
   },
   Knight: {
@@ -57,22 +57,16 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
         SKILL_ID.lastStand,
         SKILL_ID.raiseMorale,
         SKILL_ID.rallyTroops,
-        SKILL_ID.commandAttack,
-        SKILL_ID.battleDecree,
       ],
     },
     3: {
       skillIds: [
-        SKILL_ID.lastStand,
-        SKILL_ID.commandAttack,
-        SKILL_ID.battleDecree,
+        SKILL_ID.swiftDecree, SKILL_ID.warDecree,
       ],
     },
     4: {
       skillIds: [
-        SKILL_ID.lastStand,
-        SKILL_ID.commandAttack,
-        SKILL_ID.warDecree,
+        SKILL_ID.commandWar,
       ],
     },
   },

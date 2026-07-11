@@ -1,4 +1,7 @@
-import { calculateTileDistance } from "../battle/abilityTargeting";
+import {
+  calculateTileDistance,
+  getAreaAbilityTargets,
+} from "../battle/abilityTargeting";
 import { isWarriorAliveOnBattleMap } from "../battle/tileOccupancy";
 import type { AbilityEffect } from "./abilityEffects";
 
@@ -68,13 +71,30 @@ export function canAllyReceiveCommandAttack<T extends CommandAttackParticipant>(
   );
 }
 
-export function pickRandomCommandAttackTarget<T>(
-  enemies: readonly T[],
-  random: () => number = Math.random
-): T {
-  if (enemies.length === 0) {
-    throw new Error("Cannot pick a command attack target from an empty list.");
-  }
+export function canAnyAllyReceiveCommandAttack<
+  T extends CommandAttackParticipant,
+>(
+  commander: CommandAttackParticipant,
+  allWarriors: readonly T[],
+  range: number,
+  battleMapWidth: number,
+  isAttackableEnemy: (enemy: T) => boolean
+): boolean {
+  const alliesInRange = getAreaAbilityTargets(
+    allWarriors,
+    commander,
+    range,
+    "allAllies",
+    battleMapWidth
+  );
 
-  return enemies[Math.floor(random() * enemies.length)]!;
+  return alliesInRange.some((ally) =>
+    canAllyReceiveCommandAttack(
+      commander,
+      ally,
+      allWarriors,
+      battleMapWidth,
+      isAttackableEnemy
+    )
+  );
 }

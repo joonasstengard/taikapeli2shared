@@ -42,4 +42,7 @@ export const SKILL_ID = {
   bladeDance: 42,
   shadowStrike: 43,
   stealthStrike: 44,
+  swiftDecree: 45,
+  commandWar: 46,
+  cavalryOnslaught: 47,
 } as const;
