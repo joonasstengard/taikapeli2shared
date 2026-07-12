@@ -116,8 +116,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     2: {
       skillIds: [SKILL_ID.lunge],
     },
+    3: {
+      skillIds: [SKILL_ID.cutthroat, SKILL_ID.berserk,],
+    },
     4: {
-      skillIds: [SKILL_ID.cutthroat, SKILL_ID.berserk],
+      skillIds: [ SKILL_ID.berserkCharge],
     },
   },
   Ranger: {
