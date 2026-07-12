@@ -19,6 +19,16 @@ export function isWarriorFrozen(
   );
 }
 
+export function isWarriorStunned(
+  statusEffects: Pick<WarriorStatusEffect, "effectKey" | "turnsRemaining">[] | undefined
+): boolean {
+  return (statusEffects ?? []).some(
+    (effect) =>
+      effect.effectKey === STATUS_EFFECT_KEY.stunned &&
+      effect.turnsRemaining > 0
+  );
+}
+
 /** Merges or extends a status effect on a warrior's active effect list. */
 export function upsertWarriorStatusEffect(
   statusEffects: WarriorStatusEffect[] | undefined,

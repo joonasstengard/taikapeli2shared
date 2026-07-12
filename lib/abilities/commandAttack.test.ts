@@ -144,6 +144,25 @@ describe("canAllyReceiveCommandAttack", () => {
       false
     );
   });
+
+  it("is false when the ally is stunned", () => {
+    const stunnedAlly = {
+      ...meleeAlly,
+      stunned: true,
+    };
+
+    assert.equal(
+      canAllyReceiveCommandAttack(
+        commander,
+        stunnedAlly,
+        [stunnedAlly, enemyInMeleeRange],
+        8,
+        () => true,
+        (ally) => !("stunned" in ally && ally.stunned)
+      ),
+      false
+    );
+  });
 });
 
 describe("canAnyAllyReceiveCommandAttack", () => {
@@ -170,6 +189,37 @@ describe("canAnyAllyReceiveCommandAttack", () => {
         () => true
       ),
       false
+    );
+  });
+
+  it("ignores stunned allies when another ally can attack", () => {
+    const stunnedAlly = {
+      ...meleeAlly,
+      stunned: true,
+    };
+
+    assert.equal(
+      canAnyAllyReceiveCommandAttack(
+        commander,
+        [commander, stunnedAlly, idleAlly, enemyInMeleeRange],
+        2,
+        8,
+        () => true,
+        (ally) => !("stunned" in ally && ally.stunned)
+      ),
+      false
+    );
+
+    assert.equal(
+      canAnyAllyReceiveCommandAttack(
+        commander,
+        [commander, stunnedAlly, rangedAlly, enemyInRangedReach],
+        2,
+        8,
+        () => true,
+        (ally) => !("stunned" in ally && ally.stunned)
+      ),
+      true
     );
   });
 });

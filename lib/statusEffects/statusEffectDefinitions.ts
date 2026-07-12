@@ -24,6 +24,11 @@ export const STATUS_EFFECTS: StatusEffect[] = [
     tags: ["blocks_movement"],
   },
   {
+    key: STATUS_EFFECT_KEY.stunned,
+    name: "Stunned",
+    tags: ["blocks_movement", "blocks_actions"],
+  },
+  {
     key: STATUS_EFFECT_KEY.invulnerable,
     name: "Invulnerable",
     tags: ["blocks_damage"],

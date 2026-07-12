@@ -37,7 +37,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.protect, SKILL_ID.martyrdom],
     },
     4: {
-      skillIds: [SKILL_ID.lastStand, SKILL_ID.repellingSlam],
+      skillIds: [SKILL_ID.repellingSlam, SKILL_ID.stunningSlam],
     },
   },
   Infiltrator: {

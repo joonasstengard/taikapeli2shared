@@ -1,5 +1,6 @@
 export const STATUS_EFFECT_KEY = {
   frozen: "frozen",
+  stunned: "stunned",
   invulnerable: "invulnerable",
   bleeding: "bleeding",
   transformWolf: "transformWolf",

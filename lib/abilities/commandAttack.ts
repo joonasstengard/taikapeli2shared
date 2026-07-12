@@ -58,8 +58,13 @@ export function canAllyReceiveCommandAttack<T extends CommandAttackParticipant>(
   ally: CommandAttackParticipant,
   allWarriors: readonly T[],
   battleMapWidth: number,
-  isAttackableEnemy: (enemy: T) => boolean
+  isAttackableEnemy: (enemy: T) => boolean,
+  canAllyAct: (ally: T) => boolean = () => true
 ): boolean {
+  if (!canAllyAct(ally as T)) {
+    return false;
+  }
+
   return (
     getCommandAttackableEnemies(
       commander,
@@ -78,7 +83,8 @@ export function canAnyAllyReceiveCommandAttack<
   allWarriors: readonly T[],
   range: number,
   battleMapWidth: number,
-  isAttackableEnemy: (enemy: T) => boolean
+  isAttackableEnemy: (enemy: T) => boolean,
+  canAllyAct: (ally: T) => boolean = () => true
 ): boolean {
   const alliesInRange = getAreaAbilityTargets(
     allWarriors,
@@ -94,7 +100,8 @@ export function canAnyAllyReceiveCommandAttack<
       ally,
       allWarriors,
       battleMapWidth,
-      isAttackableEnemy
+      isAttackableEnemy,
+      canAllyAct
     )
   );
 }
