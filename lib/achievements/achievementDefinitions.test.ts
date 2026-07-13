@@ -11,6 +11,7 @@ import {
   ARCANE_MYSTERIES_MIN_SPELL_PURCHASES,
   GHOST_WARRIOR_REQUIRED_CLASS,
 } from "./achievementDefinitions";
+import { CAMPAIGN_CHALLENGE_KEY } from "./campaignChallengeKeys";
 
 describe("achievement definitions", () => {
   it("uses unique achievement ids", () => {
@@ -165,4 +166,74 @@ describe("ghost warrior achievement definition", () => {
   it("uses a valid tier label", () => {
     assert.ok(ACHIEVEMENT_TIERS.includes(ghostWarriorDefinition.tier));
   });
+});
+
+const RACE_ONLY_ACHIEVEMENT_CASES = [
+  {
+    idKey: "humanOnlyCampaignWin" as const,
+    title: "Human alliance",
+    description: "Win a campaign only using Human warriors.",
+    challengeKey: "humanOnlyRecruitment" as const,
+  },
+  {
+    idKey: "elfOnlyCampaignWin" as const,
+    title: "Elven host",
+    description: "Win a campaign only using Elven warriors.",
+    challengeKey: "elfOnlyRecruitment" as const,
+  },
+  {
+    idKey: "dwarfOnlyCampaignWin" as const,
+    title: "Dwarven company",
+    description: "Win a campaign only using Dwarf warriors.",
+    challengeKey: "dwarfOnlyRecruitment" as const,
+  },
+  {
+    idKey: "orcOnlyCampaignWin" as const,
+    title: "Orcish warband",
+    description: "Win a campaign only using Orc warriors.",
+    challengeKey: "orcOnlyRecruitment" as const,
+  },
+] as const;
+
+describe("race-only campaign win achievement definitions", () => {
+  for (const achievementCase of RACE_ONLY_ACHIEVEMENT_CASES) {
+    describe(achievementCase.title, () => {
+      const definition =
+        ACHIEVEMENT_DEFINITIONS_BY_ID[ACHIEVEMENT_ID[achievementCase.idKey]];
+
+      it("is registered with the expected metadata", () => {
+        assert.equal(definition.title, achievementCase.title);
+        assert.equal(definition.description, achievementCase.description);
+        assert.equal(definition.category, "exploration");
+        assert.equal(definition.tier, "easy");
+        assert.equal(definition.isSecret, false);
+        assert.equal(definition.trigger, "campaign_won");
+      });
+
+      it("uses the expected recruitment challenge key", () => {
+        assert.equal(
+          definition.campaignChallengeKey,
+          CAMPAIGN_CHALLENGE_KEY[achievementCase.challengeKey]
+        );
+      });
+
+      it("does not rely on counter stats or unrelated win conditions", () => {
+        assert.equal(definition.counterStatKey, undefined);
+        assert.equal(definition.targetCount, undefined);
+        assert.equal(definition.requiredLeaguePoints, undefined);
+        assert.equal(definition.minTreasuryGold, undefined);
+        assert.equal(
+          definition.minDistinctRecruitedWarriorClasses,
+          undefined
+        );
+        assert.equal(definition.requiredWarriorNameContains, undefined);
+        assert.equal(definition.requiredWarriorClassInArmy, undefined);
+        assert.equal(definition.minSpellPurchases, undefined);
+      });
+
+      it("uses a valid tier label", () => {
+        assert.ok(ACHIEVEMENT_TIERS.includes(definition.tier));
+      });
+    });
+  }
 });

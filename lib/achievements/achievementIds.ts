@@ -16,6 +16,10 @@ export const ACHIEVEMENT_ID = {
   ismoCampaignWin: 15,
   arcaneMysteriesCampaignWin: 16,
   ghostWarriorCampaignWin: 17,
+  humanOnlyCampaignWin: 18,
+  elfOnlyCampaignWin: 19,
+  dwarfOnlyCampaignWin: 20,
+  orcOnlyCampaignWin: 21,
 } as const;
 
 export type AchievementId =
