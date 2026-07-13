@@ -3,10 +3,18 @@ export function getSpriteBackgroundPosition(
   column: number,
   row: number,
   columns: number,
-  rows: number
+  rows: number,
+  scale = 1
 ): string {
-  const x = column === 1 ? 0 : ((column - 1) / (columns - 1)) * 100;
-  const y = row === 1 ? 0 : ((row - 1) / (rows - 1)) * 100;
+  const normalizedScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
+  const x =
+    ((normalizedScale * (column - 0.5) - 0.5) /
+      (columns * normalizedScale - 1)) *
+    100;
+  const y =
+    ((normalizedScale * (row - 0.5) - 0.5) /
+      (rows * normalizedScale - 1)) *
+    100;
 
   return `${x}% ${y}%`;
 }

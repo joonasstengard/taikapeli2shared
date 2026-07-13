@@ -48,12 +48,12 @@ export const DEFAULT_WARRIOR_PICTURE_COUNT = 0;
 export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   Record<WarriorClassGenderKey, number>
 > = {
-  ChargerMale: 13,
+  ChargerMale: 23,
   ChargerFemale: 0,
   KingFemale: 0,
   KingMale: 14,
   KnightFemale: 0,
-  KnightMale: 17,
+  KnightMale: 23,
   MarksmanFemale: 0,
   MarksmanMale: 15,
   MoonbladeFemale: 0,
@@ -66,14 +66,14 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   PeasantMale: 26,
   PriestessFemale: 6,
   PriestessMale: 0,
-  BerserkerMale: 8,
+  BerserkerMale: 12,
   BerserkerFemale: 0,
-  RangerMale: 5,
+  RangerMale: 11,
   RangerFemale: 0,
   ShamanMale: 8,
   ShamanFemale: 0,
   SorcererFemale: 0,
-  SorcererMale: 10,
+  SorcererMale: 18,
   InfiltratorMale: 4,
   InfiltratorFemale: 0,
 };

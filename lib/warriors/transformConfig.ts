@@ -7,6 +7,8 @@ export interface TransformConfig {
   variantCount: number;
   /** Number of attack sound variants (1..attackSoundCount). */
   attackSoundCount: number;
+  /** Visual scale applied around each sprite frame's center. */
+  spriteScale?: number;
 }
 
 /**
@@ -28,6 +30,7 @@ export const TRANSFORM_CONFIG: Record<string, TransformConfig> = {
     filePrefix: "Bear",
     variantCount: 6,
     attackSoundCount: 2,
+    spriteScale: 1.5,
   },
 };
 

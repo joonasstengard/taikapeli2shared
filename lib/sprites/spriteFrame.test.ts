@@ -11,4 +11,15 @@ describe("getSpriteBackgroundPosition", () => {
   it("centers intermediate spell frames on variable-width sheets", () => {
     assert.equal(getSpriteBackgroundPosition(8, 6, 8, 9), "100% 62.5%");
   });
+
+  it("keeps a scaled frame centered", () => {
+    assert.equal(
+      getSpriteBackgroundPosition(1, 1, 6, 4, 1.5),
+      "3.125% 5%"
+    );
+    assert.equal(
+      getSpriteBackgroundPosition(6, 4, 6, 4, 1.5),
+      "96.875% 95%"
+    );
+  });
 });

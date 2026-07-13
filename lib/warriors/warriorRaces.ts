@@ -30,18 +30,20 @@ export const WARRIOR_PICTURE_RACE_RANGES: Partial<
   ChargerMale: [
     { race: "Human", from: 1, to: 9 },
     { race: "Orc", from: 10, to: 13 },
+    { race: "Elf", from: 14, to: 23 },
   ],
   KingMale: [{ race: "Human", from: 1, to: 7 }, { race: "Dwarf", from: 8, to: 14 }],
   KnightMale: [
     { race: "Human", from: 1, to: 10 },
-    { race: "Elf", from: 11, to: 17 },
+    { race: "Elf", from: 11, to: 23 },
   ],
   MarksmanMale: [{ race: "Human", from: 1, to: 9 }, { race: "Dwarf", from: 10, to: 15 }],
   MoonbladeMale: [{ race: "Elf", from: 1, to: 10 }],
   PeasantMale: [{ race: "Human", from: 1, to: 20 }, { race: "Dwarf", from: 21, to: 26 }],
-  BerserkerMale: [{ race: "Orc", from: 1, to: 4 }, { race: "Human", from: 5, to: 8 }],
-  RangerMale: [{ race: "Elf", from: 1, to: 5 }],
+  BerserkerMale: [{ race: "Human", from: 1, to: 4 }, { race: "Orc", from: 5, to: 12 }],
+  RangerMale: [{ race: "Elf", from: 1, to: 7 }, { race: "Orc", from: 8, to: 11 }],
   ShamanMale: [{ race: "Human", from: 1, to: 4 }, { race: "Orc", from: 5, to: 8 }],
+  SorcererMale: [{ race: "Human", from: 1, to: 10 }, { race: "Elf", from: 11, to: 18 }],
 };
 
 export function getWarriorRaceDisplayName(race: WarriorRace): string {
