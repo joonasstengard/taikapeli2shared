@@ -15,6 +15,7 @@ export const ACHIEVEMENT_ID = {
   diverseCompanyCampaignWin: 14,
   ismoCampaignWin: 15,
   arcaneMysteriesCampaignWin: 16,
+  ghostWarriorCampaignWin: 17,
 } as const;
 
 export type AchievementId =

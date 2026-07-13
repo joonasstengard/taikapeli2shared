@@ -9,6 +9,7 @@ import {
   CAMPAIGN_END_ACHIEVEMENT_DEFINITIONS,
   ISMO_WARRIOR_NAME_SUBSTRING,
   ARCANE_MYSTERIES_MIN_SPELL_PURCHASES,
+  GHOST_WARRIOR_REQUIRED_CLASS,
 } from "./achievementDefinitions";
 
 describe("achievement definitions", () => {
@@ -120,5 +121,48 @@ describe("arcane mysteries achievement definition", () => {
 
   it("uses a valid tier label", () => {
     assert.ok(ACHIEVEMENT_TIERS.includes(arcaneMysteriesDefinition.tier));
+  });
+});
+
+describe("ghost warrior achievement definition", () => {
+  const ghostWarriorDefinition =
+    ACHIEVEMENT_DEFINITIONS_BY_ID[ACHIEVEMENT_ID.ghostWarriorCampaignWin];
+
+  it("is registered with the expected metadata", () => {
+    assert.equal(ghostWarriorDefinition.title, "Ghost warrior");
+    assert.equal(
+      ghostWarriorDefinition.description,
+      "Win a campaign with an Infiltrator in your army."
+    );
+    assert.equal(ghostWarriorDefinition.category, "exploration");
+    assert.equal(ghostWarriorDefinition.tier, "medium");
+    assert.equal(ghostWarriorDefinition.isSecret, false);
+    assert.equal(ghostWarriorDefinition.trigger, "campaign_won");
+  });
+
+  it("uses the shared Infiltrator class constant", () => {
+    assert.equal(
+      ghostWarriorDefinition.requiredWarriorClassInArmy,
+      GHOST_WARRIOR_REQUIRED_CLASS
+    );
+    assert.equal(ghostWarriorDefinition.requiredWarriorClassInArmy, "Infiltrator");
+  });
+
+  it("does not rely on counter stats or unrelated win conditions", () => {
+    assert.equal(ghostWarriorDefinition.counterStatKey, undefined);
+    assert.equal(ghostWarriorDefinition.targetCount, undefined);
+    assert.equal(ghostWarriorDefinition.campaignChallengeKey, undefined);
+    assert.equal(ghostWarriorDefinition.requiredLeaguePoints, undefined);
+    assert.equal(ghostWarriorDefinition.minTreasuryGold, undefined);
+    assert.equal(
+      ghostWarriorDefinition.minDistinctRecruitedWarriorClasses,
+      undefined
+    );
+    assert.equal(ghostWarriorDefinition.requiredWarriorNameContains, undefined);
+    assert.equal(ghostWarriorDefinition.minSpellPurchases, undefined);
+  });
+
+  it("uses a valid tier label", () => {
+    assert.ok(ACHIEVEMENT_TIERS.includes(ghostWarriorDefinition.tier));
   });
 });

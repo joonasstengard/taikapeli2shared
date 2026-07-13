@@ -4,6 +4,7 @@ import {
   type CampaignChallengeKey,
 } from "./campaignChallengeKeys";
 import { STAT_KEY, type StatKey } from "./statKeys";
+import type { WarriorClass } from "../warriors/warriorPictureVariants";
 
 /** Starting nation health; undefeated runs must finish with this amount. */
 export const UNDEFEATED_CAMPAIGN_LEAGUE_POINTS = 100;
@@ -22,6 +23,9 @@ export const ISMO_WARRIOR_NAME_SUBSTRING = "Ismo";
 
 /** Minimum spell market purchases required for the arcane mysteries achievement. */
 export const ARCANE_MYSTERIES_MIN_SPELL_PURCHASES = 3;
+
+/** Warrior class that must be present in the army for the ghost warrior achievement. */
+export const GHOST_WARRIOR_REQUIRED_CLASS: WarriorClass = "Infiltrator";
 
 export type AchievementTrigger = "campaign_won";
 
@@ -46,6 +50,7 @@ export interface AchievementDefinition {
   minTreasuryGold?: number;
   minDistinctRecruitedWarriorClasses?: number;
   requiredWarriorNameContains?: string;
+  requiredWarriorClassInArmy?: WarriorClass;
   minSpellPurchases?: number;
 }
 
@@ -215,6 +220,16 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     isSecret: false,
     trigger: "campaign_won",
     minSpellPurchases: ARCANE_MYSTERIES_MIN_SPELL_PURCHASES,
+  },
+  {
+    id: ACHIEVEMENT_ID.ghostWarriorCampaignWin,
+    title: "Ghost warrior",
+    description: "Win a campaign with an Infiltrator in your army.",
+    category: "exploration",
+    tier: "medium",
+    isSecret: false,
+    trigger: "campaign_won",
+    requiredWarriorClassInArmy: GHOST_WARRIOR_REQUIRED_CLASS,
   },
 ];
 
