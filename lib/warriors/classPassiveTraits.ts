@@ -1,7 +1,9 @@
 import type { WarriorClass } from "./warriorPictureVariants";
 import { STATUS_EFFECT_KEY } from "../statusEffects/statusEffectTypes";
+import { isWarriorBleeding } from "../abilities/requiresBleedingTarget";
 import {
   isWarriorFrozen,
+  isWarriorStunned,
   upsertWarriorStatusEffect,
 } from "../statusEffects/warriorStatusEffect";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
@@ -59,7 +61,7 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
   [CLASS_PASSIVE_TRAIT_KEYS.rend]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.rend,
     name: "Rend",
-    description: "Basic attacks inflict Bleeding for 1 turn.",
+    description: "Basic attacks inflict Bleeding for 2 turns.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.devotion]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.devotion,
@@ -87,13 +89,13 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     key: CLASS_PASSIVE_TRAIT_KEYS.huntersMark,
     name: "Hunter's Mark",
     description:
-      "Basic attacks deal 1 additional damage to Frozen enemies.",
+      "Basic attacks deal 1 additional damage to Frozen, Bleeding, or Stunned enemies.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.kingsCommand]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.kingsCommand,
     name: "The King's Command",
     description:
-      "Restore 1 stamina to all other alive allies after using a skill or casting a spell.",
+      "Grant +1 strength for 1 turn to all other alive allies after using a skill or casting a spell.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
@@ -212,7 +214,7 @@ export function applyHumbleOriginsLevelUpBonus<T extends HumbleOriginsLevelUpSta
   return updated;
 }
 
-export const BASIC_ATTACK_BLEEDING_DURATION = 1;
+export const BASIC_ATTACK_BLEEDING_DURATION = 2;
 
 export function grantsBasicAttackBleeding(attackerClass: string): boolean {
   const trait = getClassPassiveTraitForClass(attackerClass);
@@ -352,41 +354,44 @@ export function applyWildChannelPrimalSkillManaRestoreToWarrior(
   };
 }
 
-export const KINGS_COMMAND_ALLY_STAMINA_RESTORE = 1;
+export const KINGS_COMMAND_STRENGTH_BUFF_BONUS = 1;
+export const KINGS_COMMAND_STRENGTH_BUFF_DURATION = 1;
+export const KINGS_COMMAND_STRENGTH_BUFF_LABEL = "King's Command";
 
-export function grantsKingsCommandAllyStaminaRestore(
+export function grantsKingsCommandAllyStrengthBuff(
   casterClass: string
 ): boolean {
   const trait = getClassPassiveTraitForClass(casterClass);
   return trait?.key === CLASS_PASSIVE_TRAIT_KEYS.kingsCommand;
 }
 
-export interface KingsCommandAllyWarrior {
+export interface KingsCommandAllyTarget {
   id: number;
   armyId: number;
   currentHealth: number;
-  currentStamina: number;
-  stamina: number;
 }
 
-export function applyKingsCommandStaminaRestoreToAlly(
-  ally: KingsCommandAllyWarrior,
+export function isKingsCommandStrengthBuffTarget(
+  ally: KingsCommandAllyTarget,
   caster: { id: number; warriorClass: string; armyId: number }
-): Pick<KingsCommandAllyWarrior, "currentStamina"> {
-  if (
-    !grantsKingsCommandAllyStaminaRestore(caster.warriorClass) ||
-    ally.id === caster.id ||
-    ally.armyId !== caster.armyId ||
-    ally.currentHealth <= 0
-  ) {
-    return { currentStamina: ally.currentStamina };
-  }
+): boolean {
+  return (
+    grantsKingsCommandAllyStrengthBuff(caster.warriorClass) &&
+    ally.id !== caster.id &&
+    ally.armyId === caster.armyId &&
+    ally.currentHealth > 0
+  );
+}
 
+export function createKingsCommandStrengthBuffParams(): {
+  statModifiers: { strength: number };
+  duration: number;
+  label: string;
+} {
   return {
-    currentStamina: Math.min(
-      ally.currentStamina + KINGS_COMMAND_ALLY_STAMINA_RESTORE,
-      ally.stamina
-    ),
+    statModifiers: { strength: KINGS_COMMAND_STRENGTH_BUFF_BONUS },
+    duration: KINGS_COMMAND_STRENGTH_BUFF_DURATION,
+    label: KINGS_COMMAND_STRENGTH_BUFF_LABEL,
   };
 }
 
@@ -454,7 +459,9 @@ export function grantsHuntersMarkBasicAttackBonus(
   const trait = getClassPassiveTraitForClass(attackerClass);
   return (
     trait?.key === CLASS_PASSIVE_TRAIT_KEYS.huntersMark &&
-    isWarriorFrozen(defenderStatusEffects)
+    (isWarriorFrozen(defenderStatusEffects) ||
+      isWarriorBleeding(defenderStatusEffects) ||
+      isWarriorStunned(defenderStatusEffects))
   );
 }
 

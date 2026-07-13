@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   applyBasicAttackBleedingToWarrior,
+  createKingsCommandStrengthBuffParams,
   applyHumbleOriginsExperienceBonus,
   applyHumbleOriginsLevelUpBonus,
-  applyKingsCommandStaminaRestoreToAlly,
   applySpellCastManaMasteryRestoreToWarrior,
   applyTakedownTraitRestoreToWarrior,
   applyWildChannelPrimalSkillManaRestoreToWarrior,
@@ -17,11 +17,12 @@ import {
   grantsBracedBasicAttackBonus,
   grantsHolySpellCastSelfHeal,
   grantsHuntersMarkBasicAttackBonus,
-  grantsKingsCommandAllyStaminaRestore,
+  grantsKingsCommandAllyStrengthBuff,
   grantsSpellCastManaMasteryRestore,
   grantsWildChannelPrimalSkillManaRestore,
   grantsWildChannelPrimalSpellStaminaRestore,
   getDevotionSpellHealBonus,
+  isKingsCommandStrengthBuffTarget,
 } from "./classPassiveTraits";
 
 describe("CLASS_PASSIVE_TRAITS", () => {
@@ -153,25 +154,30 @@ describe("calculateBasicAttackDamage", () => {
     );
   });
 
-  it("adds Hunter's Mark bonus against Frozen defenders", () => {
-    assert.equal(
-      calculateBasicAttackDamage(4, "Berserker", {
-        attackerClass: "Ranger",
-        defenderStatusEffects: [
-          { effectKey: "frozen", turnsRemaining: 1 },
-        ],
-      }),
-      5
-    );
+  it("adds Hunter's Mark bonus against Frozen, Bleeding, or Stunned defenders", () => {
+    for (const effectKey of ["frozen", "bleeding", "stunned"]) {
+      assert.equal(
+        calculateBasicAttackDamage(4, "Berserker", {
+          attackerClass: "Ranger",
+          defenderStatusEffects: [{ effectKey, turnsRemaining: 1 }],
+        }),
+        5
+      );
+    }
   });
 
-  it("does not add Hunter's Mark bonus against non-Frozen defenders", () => {
+  it("does not add Hunter's Mark bonus against unaffected defenders", () => {
     assert.equal(
       calculateBasicAttackDamage(4, "Berserker", {
         attackerClass: "Ranger",
-        defenderStatusEffects: [
-          { effectKey: "frozen", turnsRemaining: 0 },
-        ],
+        defenderStatusEffects: [{ effectKey: "frozen", turnsRemaining: 0 }],
+      }),
+      4
+    );
+    assert.equal(
+      calculateBasicAttackDamage(4, "Berserker", {
+        attackerClass: "Ranger",
+        defenderStatusEffects: [],
       }),
       4
     );
@@ -201,17 +207,25 @@ describe("grantsBracedBasicAttackBonus", () => {
 });
 
 describe("grantsHuntersMarkBasicAttackBonus", () => {
-  it("applies to Ranger attacks against Frozen targets", () => {
-    assert.equal(
-      grantsHuntersMarkBasicAttackBonus("Ranger", [
-        { effectKey: "frozen", turnsRemaining: 1 },
-      ]),
-      true
-    );
+  it("applies to Ranger attacks against Frozen, Bleeding, or Stunned targets", () => {
+    for (const effectKey of ["frozen", "bleeding", "stunned"]) {
+      assert.equal(
+        grantsHuntersMarkBasicAttackBonus("Ranger", [
+          { effectKey, turnsRemaining: 1 },
+        ]),
+        true
+      );
+    }
   });
 
-  it("does not apply without Frozen or for other classes", () => {
+  it("does not apply without a qualifying status or for other classes", () => {
     assert.equal(grantsHuntersMarkBasicAttackBonus("Ranger", []), false);
+    assert.equal(
+      grantsHuntersMarkBasicAttackBonus("Ranger", [
+        { effectKey: "bleeding", turnsRemaining: 0 },
+      ]),
+      false
+    );
     assert.equal(
       grantsHuntersMarkBasicAttackBonus("Marksman", [
         { effectKey: "frozen", turnsRemaining: 1 },
@@ -528,79 +542,68 @@ describe("applyWildChannelPrimalSkillManaRestoreToWarrior", () => {
   });
 });
 
-describe("grantsKingsCommandAllyStaminaRestore", () => {
+describe("grantsKingsCommandAllyStrengthBuff", () => {
   it("applies to King skill and spell use", () => {
-    assert.equal(grantsKingsCommandAllyStaminaRestore("King"), true);
+    assert.equal(grantsKingsCommandAllyStrengthBuff("King"), true);
   });
 
   it("does not apply to other classes", () => {
-    assert.equal(grantsKingsCommandAllyStaminaRestore("Paladin"), false);
-    assert.equal(grantsKingsCommandAllyStaminaRestore("Charger"), false);
+    assert.equal(grantsKingsCommandAllyStrengthBuff("Paladin"), false);
+    assert.equal(grantsKingsCommandAllyStrengthBuff("Charger"), false);
   });
 });
 
-describe("applyKingsCommandStaminaRestoreToAlly", () => {
+describe("isKingsCommandStrengthBuffTarget", () => {
   const kingCaster = { id: 1, warriorClass: "King", armyId: 10 };
   const ally = {
     id: 2,
     armyId: 10,
     currentHealth: 5,
-    currentStamina: 3,
-    stamina: 8,
   };
 
-  it("restores 1 stamina to alive allies in the same army", () => {
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(ally, kingCaster),
-      { currentStamina: 4 }
+  it("targets alive allies in the same army", () => {
+    assert.equal(isKingsCommandStrengthBuffTarget(ally, kingCaster), true);
+  });
+
+  it("does not target the caster", () => {
+    assert.equal(
+      isKingsCommandStrengthBuffTarget({ ...ally, id: 1 }, kingCaster),
+      false
     );
   });
 
-  it("does not restore stamina to the caster", () => {
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(
-        { ...ally, id: 1 },
-        kingCaster
-      ),
-      { currentStamina: 3 }
+  it("does not target enemies or dead allies", () => {
+    assert.equal(
+      isKingsCommandStrengthBuffTarget({ ...ally, armyId: 99 }, kingCaster),
+      false
     );
-  });
-
-  it("does not restore stamina to enemies or dead allies", () => {
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(
-        { ...ally, armyId: 99 },
-        kingCaster
-      ),
-      { currentStamina: 3 }
-    );
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(
+    assert.equal(
+      isKingsCommandStrengthBuffTarget(
         { ...ally, currentHealth: 0 },
         kingCaster
       ),
-      { currentStamina: 3 }
+      false
     );
   });
 
-  it("caps restored stamina at max", () => {
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(
-        { ...ally, currentStamina: 8 },
-        kingCaster
-      ),
-      { currentStamina: 8 }
-    );
-  });
-
-  it("does not restore stamina for non-King casters", () => {
-    assert.deepEqual(
-      applyKingsCommandStaminaRestoreToAlly(ally, {
+  it("does not target allies for non-King casters", () => {
+    assert.equal(
+      isKingsCommandStrengthBuffTarget(ally, {
         ...kingCaster,
         warriorClass: "Paladin",
       }),
-      { currentStamina: 3 }
+      false
     );
+  });
+});
+
+describe("createKingsCommandStrengthBuffParams", () => {
+  it("returns a 1-turn +1 strength buff", () => {
+    assert.deepEqual(createKingsCommandStrengthBuffParams(), {
+      statModifiers: { strength: 1 },
+      duration: 1,
+      label: "King's Command",
+    });
   });
 });
 
@@ -616,11 +619,11 @@ describe("getDevotionSpellHealBonus", () => {
 });
 
 describe("applyBasicAttackBleedingToWarrior", () => {
-  it("adds bleeding for 1 turn", () => {
+  it("adds bleeding for 2 turns", () => {
     const result = applyBasicAttackBleedingToWarrior(undefined);
     assert.equal(result.length, 1);
     assert.equal(result[0]?.effectKey, "bleeding");
-    assert.equal(result[0]?.turnsRemaining, 1);
+    assert.equal(result[0]?.turnsRemaining, 2);
   });
 
   it("extends existing bleeding duration", () => {
