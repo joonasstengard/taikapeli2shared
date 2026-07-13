@@ -25,6 +25,23 @@ function isMaxRecruitmentsBroken(
   );
 }
 
+function isRecruitmentOutsideAllowedClasses(
+  event: CampaignChallengeEvent,
+  allowedClasses: ReadonlySet<WarriorClass>
+): boolean {
+  return (
+    event.type === "player_recruited" &&
+    !allowedClasses.has(event.warriorClass)
+  );
+}
+
+const HOLY_ORDER_CLASSES = new Set<WarriorClass>(["Priestess", "Paladin"]);
+const ARCANE_CIRCLE_CLASSES = new Set<WarriorClass>([
+  "Sorcerer",
+  "Shaman",
+  "Warlock",
+]);
+
 export const CAMPAIGN_CHALLENGE_DEFINITIONS: CampaignChallengeDefinition[] = [
   {
     key: CAMPAIGN_CHALLENGE_KEY.peasantsOnlyRecruitment,
@@ -42,6 +59,16 @@ export const CAMPAIGN_CHALLENGE_DEFINITIONS: CampaignChallengeDefinition[] = [
   {
     key: CAMPAIGN_CHALLENGE_KEY.maxOneRecruitment,
     isBrokenBy: (event) => isMaxRecruitmentsBroken(event, 1),
+  },
+  {
+    key: CAMPAIGN_CHALLENGE_KEY.holyOrderRecruitment,
+    isBrokenBy: (event) =>
+      isRecruitmentOutsideAllowedClasses(event, HOLY_ORDER_CLASSES),
+  },
+  {
+    key: CAMPAIGN_CHALLENGE_KEY.arcaneCircleRecruitment,
+    isBrokenBy: (event) =>
+      isRecruitmentOutsideAllowedClasses(event, ARCANE_CIRCLE_CLASSES),
   },
 ];
 
