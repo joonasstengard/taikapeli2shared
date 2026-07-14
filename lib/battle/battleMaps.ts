@@ -9,6 +9,7 @@ export const BATTLE_MAP_KEYS = [
   "darkGraySnow1",
   "darkSnow1",
   "darkend",
+  "darkCave",
   "duskWoods1",
   "duskWoods2",
   "fantasyForest1",
@@ -39,6 +40,7 @@ export interface BattleMapConfig extends BattleMapTemplate {
 }
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
+  darkCave: {},
   darkend: {
     blockedTiles: ["C2"],
     blockedTileObjects: {
