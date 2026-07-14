@@ -31,7 +31,7 @@ describe("BLOCKED_OBJECTS", () => {
       return;
     }
 
-    assert.equal(config.frameMs, 240);
+    assert.equal(config.frameMs, 1000);
   });
 
   it("resolves blocked object spritesheet paths under /objects/SpriteSheets", () => {

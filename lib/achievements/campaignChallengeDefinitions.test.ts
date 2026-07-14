@@ -331,7 +331,7 @@ describe("race-only recruitment challenges", () => {
   it("does not break orc-only when recruiting Orc portrait variants", () => {
     const orcRecruits = [
       recruitmentEvent("Charger", 1, "Male", 10),
-      recruitmentEvent("Berserker", 2, "Male", 1),
+      recruitmentEvent("Berserker", 2, "Male", 5),
       recruitmentEvent("Shaman", 3, "Male", 5),
     ] as const;
 

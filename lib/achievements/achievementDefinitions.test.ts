@@ -177,13 +177,13 @@ const RACE_ONLY_ACHIEVEMENT_CASES = [
   },
   {
     idKey: "elfOnlyCampaignWin" as const,
-    title: "Elven host",
-    description: "Win a campaign only using Elven warriors.",
+    title: "Elven might",
+    description: "Win a campaign only using Elf warriors.",
     challengeKey: "elfOnlyRecruitment" as const,
   },
   {
     idKey: "dwarfOnlyCampaignWin" as const,
-    title: "Dwarven company",
+    title: "Dwarven ingenuity",
     description: "Win a campaign only using Dwarf warriors.",
     challengeKey: "dwarfOnlyRecruitment" as const,
   },

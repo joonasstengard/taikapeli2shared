@@ -41,9 +41,11 @@ describe("getWarriorRace", () => {
     assert.equal(getWarriorRace("Ranger", "Male", 5), "Elf");
   });
 
-  it("maps BerserkerMale picture ranges to Orc", () => {
-    assert.equal(getWarriorRace("Berserker", "Male", 1), "Orc");
-    assert.equal(getWarriorRace("Berserker", "Male", 4), "Orc");
+  it("maps BerserkerMale picture ranges to Human and Orc", () => {
+    assert.equal(getWarriorRace("Berserker", "Male", 1), "Human");
+    assert.equal(getWarriorRace("Berserker", "Male", 4), "Human");
+    assert.equal(getWarriorRace("Berserker", "Male", 5), "Orc");
+    assert.equal(getWarriorRace("Berserker", "Male", 12), "Orc");
   });
 
   it("maps ShamanMale picture ranges to Human and Orc", () => {
