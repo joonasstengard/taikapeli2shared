@@ -6,6 +6,7 @@ import {
 
 export const BATTLE_MAP_KEYS = [
   "stoneGarden",
+  "darkGraySnow1",
   "darkSnow1",
   "darkend",
   "duskWoods1",
@@ -13,6 +14,8 @@ export const BATTLE_MAP_KEYS = [
   "fantasyForest1",
   "fantasyForest2",
   "fantasyGrasslands",
+  "grayGrasslands1",
+  "grayGrasslands2",
   "snowLand1",
   "snowLand2",
   "snowValley",
@@ -40,22 +43,36 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
     blockedTiles: ["C2"],
     blockedTileObjects: {
       C2: "campfire"
-    },},
-  darkSnow1: {blockedTiles: ["A2","E3"]},
+    },
+  },
+  darkGraySnow1: { blockedTiles: ["A4", "B4"],
+    blockedTileObjects: {
+      A4: "deerHorn6",
+      B4: "deer6"
+    },
+  },
+  darkSnow1: { blockedTiles: ["A2", "E3"] },
   deadCanyon: {
     blockedTiles: ["A2", "E3"],
   },
   decayedTundra: {
     blockedTiles: ["A2", "E3", "C2", "A5"],
   },
-  duskWoods1: {blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"]},
-  duskWoods2: {blockedTiles: ["A1", "A4", "E1"]},
+  duskWoods1: { blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"] },
+  duskWoods2: { blockedTiles: ["A1", "A4", "E1"] },
   fantasyForest1: {
     blockedTiles: ["E4", "A2", "E2", "A3", "E3"],
   },
-  fantasyForest2: {blockedTiles: ["A1", "E2", "E5"]},
+  fantasyForest2: { blockedTiles: ["A1", "E2", "E5"] },
   fantasyGrasslands: {
     blockedTiles: ["A2", "E1", "D3", "E3"],
+  },
+  grayGrasslands1: {},
+  grayGrasslands2: {
+    blockedTiles: ["E4"],
+    blockedTileObjects: {
+      E4: "deerHorn2"
+    },
   },
   snowLand1: {
     blockedTiles: ["A4", "A3", "E1", "E2"],
@@ -147,17 +164,17 @@ export function getBattleMapConfig(
 ): BattleMapConfig {
   const battleMapKey =
     typeof battleMapKeyOrSelection === "object" &&
-    battleMapKeyOrSelection !== null
+      battleMapKeyOrSelection !== null
       ? battleMapKeyOrSelection.battleMapKey
       : battleMapKeyOrSelection;
 
   const resolvedDimensions =
     typeof battleMapKeyOrSelection === "object" &&
-    battleMapKeyOrSelection !== null
+      battleMapKeyOrSelection !== null
       ? resolveBattleMapDimensions(
-          battleMapKeyOrSelection.battleMapWidth,
-          battleMapKeyOrSelection.battleMapHeight
-        )
+        battleMapKeyOrSelection.battleMapWidth,
+        battleMapKeyOrSelection.battleMapHeight
+      )
       : resolveBattleMapDimensions(dimensions?.width, dimensions?.height);
 
   const key = (battleMapKey ?? DEFAULT_BATTLE_MAP_KEY) as BattleMapKey;
