@@ -22,4 +22,10 @@ describe("getSpriteBackgroundPosition", () => {
       "96.875% 95%"
     );
   });
+
+  it("supports single-row spritesheets without invalid background positions", () => {
+    assert.equal(getSpriteBackgroundPosition(1, 1, 6, 1), "0% 0%");
+    assert.equal(getSpriteBackgroundPosition(6, 1, 6, 1), "100% 0%");
+    assert.equal(getSpriteBackgroundPosition(3, 1, 6, 1), "40% 0%");
+  });
 });

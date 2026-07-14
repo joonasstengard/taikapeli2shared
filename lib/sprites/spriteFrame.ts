@@ -7,14 +7,16 @@ export function getSpriteBackgroundPosition(
   scale = 1
 ): string {
   const normalizedScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
+  const xDenominator = columns * normalizedScale - 1;
+  const yDenominator = rows * normalizedScale - 1;
   const x =
-    ((normalizedScale * (column - 0.5) - 0.5) /
-      (columns * normalizedScale - 1)) *
-    100;
+    xDenominator <= 0
+      ? 0
+      : ((normalizedScale * (column - 0.5) - 0.5) / xDenominator) * 100;
   const y =
-    ((normalizedScale * (row - 0.5) - 0.5) /
-      (rows * normalizedScale - 1)) *
-    100;
+    yDenominator <= 0
+      ? 0
+      : ((normalizedScale * (row - 0.5) - 0.5) / yDenominator) * 100;
 
   return `${x}% ${y}%`;
 }

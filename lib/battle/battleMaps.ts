@@ -1,3 +1,4 @@
+import type { BlockedObjectKey } from "./blockedObjectConfig";
 import {
   BATTLE_MAP_DEFAULT_HEIGHT,
   BATTLE_MAP_DEFAULT_WIDTH,
@@ -6,6 +7,7 @@ import {
 export const BATTLE_MAP_KEYS = [
   "stoneGarden",
   "darkSnow1",
+  "darkend",
   "duskWoods1",
   "duskWoods2",
   "fantasyForest1",
@@ -24,6 +26,8 @@ export const DEFAULT_BATTLE_MAP_KEY: BattleMapKey = "fantasyForest1";
 
 export interface BattleMapTemplate {
   blockedTiles?: string[];
+  /** Optional per-tile blocked object; falls back to map texture overlays when omitted. */
+  blockedTileObjects?: Partial<Record<string, BlockedObjectKey>>;
 }
 
 export interface BattleMapConfig extends BattleMapTemplate {
@@ -32,6 +36,11 @@ export interface BattleMapConfig extends BattleMapTemplate {
 }
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
+  darkend: {
+    blockedTiles: ["C2"],
+    blockedTileObjects: {
+      C2: "campfire"
+    },},
   darkSnow1: {blockedTiles: ["A2","E3"]},
   deadCanyon: {
     blockedTiles: ["A2", "E3"],
@@ -91,6 +100,36 @@ function filterBlockedTilesForMap(
   return visibleBlockedTiles.length > 0 ? visibleBlockedTiles : undefined;
 }
 
+function filterBlockedTileObjectsForMap(
+  blockedTileObjects: Partial<Record<string, BlockedObjectKey>> | undefined,
+  blockedTiles: string[] | undefined,
+  dimensions: Pick<BattleMapConfig, "width" | "height">
+): Partial<Record<string, BlockedObjectKey>> | undefined {
+  if (!blockedTileObjects || !blockedTiles?.length) {
+    return undefined;
+  }
+
+  const visibleBlockedTileIds = new Set(
+    blockedTiles.map((tileId) => tileId.toLowerCase())
+  );
+
+  const visibleBlockedTileObjects: Partial<Record<string, BlockedObjectKey>> =
+    {};
+
+  for (const [tileId, objectKey] of Object.entries(blockedTileObjects)) {
+    if (
+      visibleBlockedTileIds.has(tileId.toLowerCase()) &&
+      isTileWithinBattleMap(tileId, dimensions)
+    ) {
+      visibleBlockedTileObjects[tileId] = objectKey;
+    }
+  }
+
+  return Object.keys(visibleBlockedTileObjects).length > 0
+    ? visibleBlockedTileObjects
+    : undefined;
+}
+
 export function getBattleMapConfig(
   battleMapKey: string | null | undefined,
   dimensions?: Pick<BattleMapConfig, "width" | "height"> | null
@@ -123,14 +162,37 @@ export function getBattleMapConfig(
 
   const key = (battleMapKey ?? DEFAULT_BATTLE_MAP_KEY) as BattleMapKey;
   const template = BATTLE_MAPS[key] ?? BATTLE_MAPS[DEFAULT_BATTLE_MAP_KEY];
+  const blockedTiles = filterBlockedTilesForMap(
+    template.blockedTiles,
+    resolvedDimensions
+  );
 
   return {
     ...resolvedDimensions,
-    blockedTiles: filterBlockedTilesForMap(
-      template.blockedTiles,
+    blockedTiles,
+    blockedTileObjects: filterBlockedTileObjectsForMap(
+      template.blockedTileObjects,
+      blockedTiles,
       resolvedDimensions
     ),
   };
+}
+
+export function getBlockedTileObjectKey(
+  tileId: string,
+  battleMap: BattleMapConfig
+): BlockedObjectKey | undefined {
+  const blockedTileObjects = battleMap.blockedTileObjects;
+  if (!blockedTileObjects) {
+    return undefined;
+  }
+
+  const normalizedTileId = tileId.toLowerCase();
+  const entry = Object.entries(blockedTileObjects).find(
+    ([blockedTileId]) => blockedTileId.toLowerCase() === normalizedTileId
+  );
+
+  return entry?.[1];
 }
 
 export function isBlockedBattleTile(
