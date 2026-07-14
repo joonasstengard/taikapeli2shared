@@ -182,6 +182,7 @@ describe("getAbilityDisplayRows", () => {
     assert.ok(
       !rows.some((row) => row.kind === "stat" && row.label === "Scaling")
     );
+    assert.ok(!rows.some((row) => row.kind === "scaling"));
     assert.ok(!rows.some((row) => row.kind === "stat" && row.label === "Range"));
     assert.ok(
       rows.some(
@@ -218,9 +219,7 @@ describe("getAbilityDisplayRows", () => {
     });
 
     const noteIndex = rows.findIndex((row) => row.kind === "note");
-    const scalingIndex = rows.findIndex(
-      (row) => row.kind === "stat" && row.label === "Scaling"
-    );
+    const scalingIndex = rows.findIndex((row) => row.kind === "scaling");
 
     assert.ok(noteIndex >= 0);
     assert.ok(noteIndex < scalingIndex);

@@ -3,7 +3,7 @@ import {
   getSkillDamageScalingStat,
   type SkillScalingValues,
 } from "../spells/spellPower";
-import type { SkillDefinition } from "../skills/skillTypes";
+import type { SkillDefinition, SkillDamageScalingStat } from "../skills/skillTypes";
 import type { SpellDefinition } from "../spells/spellTypes";
 
 export type AbilityDisplayKind = "skill" | "spell";
@@ -43,11 +43,14 @@ export interface GetAbilityDisplayRowsOptions {
   notes?: string[];
 }
 
+export type AbilityScalingStatKey = SkillDamageScalingStat | "spellDamage";
+
 export type AbilityDisplayRow =
   | { kind: "unlock"; requiredLevel: number }
   | { kind: "description"; text: string }
   | { kind: "cost"; resource: "mana" | "stamina"; amount: number }
   | { kind: "stat"; label: string; value: string }
+  | { kind: "scaling"; factor: number; statKeys: AbilityScalingStatKey[] }
   | { kind: "note"; text: string };
 
 const TARGETING_LABELS: Record<AbilityTargetingType, string> = {
@@ -109,11 +112,27 @@ export function formatSpellScalingLabel(
     return null;
   }
 
+  const statLabels = getSpellScalingStatKeys(spell).map((statKey) =>
+    formatScalingStatLabel(statKey)
+  );
+
+  return `${spell.scalingFactor} (${statLabels.join(", ")})`;
+}
+
+export function getSkillScalingStatKeys(
+  skill: Pick<SkillScalingValues, "damageScalingStat">
+): AbilityScalingStatKey[] {
+  return [getSkillDamageScalingStat(skill)];
+}
+
+export function getSpellScalingStatKeys(
+  spell: Pick<SpellDefinition, "type">
+): AbilityScalingStatKey[] {
   if (spell.type === "Holy") {
-    return `${spell.scalingFactor} (Spell Damage, Faith)`;
+    return ["spellDamage", "faith"];
   }
 
-  return `${spell.scalingFactor} (Spell Damage)`;
+  return ["spellDamage"];
 }
 
 function resolveCombatValue(
@@ -201,12 +220,15 @@ export function getAbilityDisplayRows(
     rows.push({ kind: "note", text: note });
   }
 
-  const scalingLabel =
-    kind === "skill"
-      ? formatSkillScalingLabel(ability)
-      : formatSpellScalingLabel(ability);
-  if (scalingLabel !== null) {
-    rows.push({ kind: "stat", label: "Scaling", value: scalingLabel });
+  if (ability.scalingFactor > 0) {
+    rows.push({
+      kind: "scaling",
+      factor: ability.scalingFactor,
+      statKeys:
+        kind === "skill"
+          ? getSkillScalingStatKeys(ability)
+          : getSpellScalingStatKeys(ability),
+    });
   }
 
   const typeLabel = formatAbilityType(ability.type);
