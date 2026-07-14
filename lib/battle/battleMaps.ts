@@ -5,7 +5,9 @@ import {
 
 export const BATTLE_MAP_KEYS = [
   "stoneGarden",
-  "duskWoods",
+  "darkSnow1",
+  "duskWoods1",
+  "duskWoods2",
   "fantasyForest1",
   "fantasyForest2",
   "fantasyGrasslands",
@@ -30,8 +32,15 @@ export interface BattleMapConfig extends BattleMapTemplate {
 }
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
-  stoneGarden: {},
-  duskWoods: {blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"]},
+  darkSnow1: {blockedTiles: ["A2","E3"]},
+  deadCanyon: {
+    blockedTiles: ["A2", "E3"],
+  },
+  decayedTundra: {
+    blockedTiles: ["A2", "E3", "C2", "A5"],
+  },
+  duskWoods1: {blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"]},
+  duskWoods2: {blockedTiles: ["A1", "A4", "E1"]},
   fantasyForest1: {
     blockedTiles: ["E4", "A2", "E2", "A3", "E3"],
   },
@@ -48,12 +57,7 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   snowValley: {
     blockedTiles: ["B3", "E1", "D3"],
   },
-  decayedTundra: {
-    blockedTiles: ["A2", "E3", "C2", "A5"],
-  },
-  deadCanyon: {
-    blockedTiles: ["A2", "E3"],
-  }
+  stoneGarden: {},
 };
 
 export interface BattleMapSelection {
