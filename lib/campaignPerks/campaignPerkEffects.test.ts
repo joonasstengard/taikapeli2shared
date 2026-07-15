@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
@@ -16,12 +17,19 @@ import {
   applyCampaignPerkToExperienceGain,
   applyCampaignPerkToNationHealthLoss,
   applyCampaignPerkToStartingGold,
+  applyCampaignPerkToTrainingCost,
   applyRecruitStatBonuses,
   buildCampaignPerkWeeklyGoldDeltas,
+  calculateTrainingCostForCampaignPerk,
   getCampaignPerkMarketSpellCount,
   getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
+  calculateTrainingCostForArmyPerk,
 } from "./campaignPerkEffects";
+import {
+  calculateTrainingCost,
+  trainingCostForPoint,
+} from "../warriors/trainingCost";
 
 describe("applyCampaignPerkToStartingGold", () => {
   it("adds the War Chest bonus", () => {
@@ -245,6 +253,145 @@ describe("applyRecruitStatBonuses", () => {
         { faith: 0, speed: 2 }
       ),
       { faith: 3, speed: 7 }
+    );
+  });
+});
+
+describe("applyCampaignPerkToTrainingCost", () => {
+  it("discounts training costs for Durn Kharad Drill", () => {
+    assert.equal(DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER, 0.8);
+    assert.equal(
+      applyCampaignPerkToTrainingCost(10, CAMPAIGN_PERK_ID.durnKharadDrill),
+      8
+    );
+    assert.equal(
+      applyCampaignPerkToTrainingCost(13, CAMPAIGN_PERK_ID.durnKharadDrill),
+      10
+    );
+    assert.equal(
+      applyCampaignPerkToTrainingCost(2, CAMPAIGN_PERK_ID.durnKharadDrill),
+      2
+    );
+  });
+
+  it("rounds the same way as market spell discounts", () => {
+    assert.equal(
+      applyCampaignPerkToTrainingCost(11, CAMPAIGN_PERK_ID.durnKharadDrill),
+      Math.round(11 * DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER)
+    );
+  });
+
+  it("ignores unrelated perks", () => {
+    assert.equal(
+      applyCampaignPerkToTrainingCost(10, CAMPAIGN_PERK_ID.warChest),
+      10
+    );
+    assert.equal(
+      applyCampaignPerkToTrainingCost(10, CAMPAIGN_PERK_ID.expandedGrimoire),
+      10
+    );
+  });
+
+  it("returns the base cost when no perk is set", () => {
+    assert.equal(applyCampaignPerkToTrainingCost(10, null), 10);
+    assert.equal(applyCampaignPerkToTrainingCost(10, undefined), 10);
+  });
+
+  it("does not change zero or negative costs", () => {
+    assert.equal(
+      applyCampaignPerkToTrainingCost(0, CAMPAIGN_PERK_ID.durnKharadDrill),
+      0
+    );
+    assert.equal(
+      applyCampaignPerkToTrainingCost(-5, CAMPAIGN_PERK_ID.durnKharadDrill),
+      -5
+    );
+  });
+});
+
+describe("calculateTrainingCostForCampaignPerk", () => {
+  it("matches the base training cost without a perk", () => {
+    assert.equal(
+      calculateTrainingCostForCampaignPerk(5, 10, null),
+      calculateTrainingCost(5, 10)
+    );
+    assert.equal(
+      calculateTrainingCostForCampaignPerk(5, 10, CAMPAIGN_PERK_ID.warChest),
+      calculateTrainingCost(5, 10)
+    );
+  });
+
+  it("applies Durn Kharad Drill per training point for multi-level trains", () => {
+    const fromStat = 5;
+    const toStat = 10;
+    let expected = 0;
+
+    for (let level = fromStat; level < toStat; level += 1) {
+      expected += applyCampaignPerkToTrainingCost(
+        trainingCostForPoint(level),
+        CAMPAIGN_PERK_ID.durnKharadDrill
+      );
+    }
+
+    assert.equal(
+      calculateTrainingCostForCampaignPerk(
+        fromStat,
+        toStat,
+        CAMPAIGN_PERK_ID.durnKharadDrill
+      ),
+      expected
+    );
+    assert.equal(expected, 36);
+    assert.equal(calculateTrainingCost(fromStat, toStat), 45);
+  });
+
+  it("returns zero when the target is not higher than the current stat", () => {
+    assert.equal(
+      calculateTrainingCostForCampaignPerk(
+        10,
+        10,
+        CAMPAIGN_PERK_ID.durnKharadDrill
+      ),
+      0
+    );
+    assert.equal(
+      calculateTrainingCostForCampaignPerk(
+        10,
+        8,
+        CAMPAIGN_PERK_ID.durnKharadDrill
+      ),
+      0
+    );
+  });
+});
+
+describe("calculateTrainingCostForArmyPerk (player army contract)", () => {
+  it("discounts training when the player army has Durn Kharad Drill", () => {
+    assert.equal(
+      calculateTrainingCostForArmyPerk(
+        5,
+        10,
+        CAMPAIGN_PERK_ID.durnKharadDrill
+      ),
+      36
+    );
+  });
+
+  it("does not discount training for unrelated army perks", () => {
+    assert.equal(
+      calculateTrainingCostForArmyPerk(5, 10, CAMPAIGN_PERK_ID.runicWisdom),
+      calculateTrainingCost(5, 10)
+    );
+  });
+
+  it("ignores invalid stored perk ids", () => {
+    assert.equal(
+      calculateTrainingCostForArmyPerk(5, 10, "not_a_real_perk"),
+      calculateTrainingCost(5, 10)
+    );
+    assert.equal(
+      calculateTrainingCostForArmyPerk(5, 10, null),
+      calculateTrainingCost(5, 10)
     );
   });
 });

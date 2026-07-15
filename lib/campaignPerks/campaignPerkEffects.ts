@@ -1,3 +1,4 @@
+import { trainingCostForPoint } from "../warriors/trainingCost";
 import type { CampaignPerkId } from "./campaignPerkIds";
 import { isCampaignPerkId } from "./campaignPerkIds";
 import { MIN_NATION_HEALTH_LOSS_AFTER_PERK } from "./campaignPerkConstants";
@@ -155,4 +156,56 @@ export function applyCampaignPerkToNationHealthLoss(
     MIN_NATION_HEALTH_LOSS_AFTER_PERK,
     baseLoss - effect.reduction
   );
+}
+
+export function applyCampaignPerkToTrainingCost(
+  baseCost: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (baseCost <= 0 || !perkId) {
+    return baseCost;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "training_cost_multiplier") {
+    return baseCost;
+  }
+
+  return Math.max(0, Math.round(baseCost * effect.multiplier));
+}
+
+/** Total gold cost to train a stat range after applying the army's campaign perk. */
+export function calculateTrainingCostForCampaignPerk(
+  fromStat: number,
+  toStat: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (toStat <= fromStat) {
+    return 0;
+  }
+
+  let total = 0;
+
+  for (let level = fromStat; level < toStat; level += 1) {
+    total += applyCampaignPerkToTrainingCost(
+      trainingCostForPoint(level),
+      perkId
+    );
+  }
+
+  return total;
+}
+
+/**
+ * Resolves an army's stored campaignPerkId and returns the training gold cost.
+ * Used by player training (`trainWarriorStat`) so army perk application matches AI.
+ */
+export function calculateTrainingCostForArmyPerk(
+  fromStat: number,
+  toStat: number,
+  campaignPerkId: string | null | undefined
+): number {
+  const perkId =
+    campaignPerkId && isCampaignPerkId(campaignPerkId) ? campaignPerkId : null;
+  return calculateTrainingCostForCampaignPerk(fromStat, toStat, perkId);
 }

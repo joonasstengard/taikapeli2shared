@@ -22,6 +22,9 @@ export const LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS = 3;
 /** Speed bonus granted to warriors when recruited with Umbral Grace. */
 export const UMBRAL_GRACE_RECRUIT_SPEED_BONUS = 3;
 
+/** Training cost multiplier for Durn Kharad Drill (0.8 = 20% less). */
+export const DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER = 0.8;
+
 /** How many perks are offered to the player at campaign start. */
 export const CAMPAIGN_PERK_OPTIONS_COUNT = 3;
 

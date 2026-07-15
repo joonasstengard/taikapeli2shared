@@ -1,5 +1,6 @@
 import { CAMPAIGN_PERK_ID, type CampaignPerkId } from "./campaignPerkIds";
 import {
+  DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
@@ -18,7 +19,8 @@ export type CampaignPerkEffect =
   | { type: "market_spell_options"; count: number; priceMultiplier?: number }
   | { type: "warrior_xp_multiplier"; multiplier: number }
   | { type: "nation_health_loss_reduction"; reduction: number }
-  | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number };
+  | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number }
+  | { type: "training_cost_multiplier"; multiplier: number };
 
 export interface CampaignPerkDefinition {
   id: CampaignPerkId;
@@ -95,6 +97,16 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
       type: "market_spell_options",
       count: EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
       priceMultiplier: EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.durnKharadDrill,
+    name: "Durn Kharad Drill",
+    description: "Warrior training costs 20% less gold.",
+    iconFileName: "durn_kharad_drill.png",
+    effect: {
+      type: "training_cost_multiplier",
+      multiplier: DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
     },
   },
 ];

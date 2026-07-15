@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { ALL_CAMPAIGN_PERK_IDS, CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   HEREGELD_WEEKLY_GOLD_BONUS,
@@ -71,6 +72,17 @@ describe("CAMPAIGN_PERK_DEFINITIONS", () => {
       priceMultiplier: EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
     });
     assert.match(expandedGrimoire.description, /20% less gold/);
+
+    const durnKharadDrill = getCampaignPerkDefinition(
+      CAMPAIGN_PERK_ID.durnKharadDrill
+    );
+    assert.equal(DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER, 0.8);
+    assert.deepEqual(durnKharadDrill.effect, {
+      type: "training_cost_multiplier",
+      multiplier: DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
+    });
+    assert.equal(durnKharadDrill.iconFileName, "durn_kharad_drill.png");
+    assert.match(durnKharadDrill.description, /20% less gold/);
   });
 
   it("throws for unknown campaign perks", () => {
