@@ -31,6 +31,9 @@ export const DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER = 0.8;
  */
 export const ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET = -1;
 
+/** Extra Peasants granted at campaign start by Pressed Into Service. */
+export const PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT = 1;
+
 /** How many perks are offered to the player at campaign start. */
 export const CAMPAIGN_PERK_OPTIONS_COUNT = 3;
 

@@ -7,6 +7,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   HEREGELD_WEEKLY_GOLD_BONUS,
+  PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
@@ -96,6 +97,19 @@ describe("CAMPAIGN_PERK_DEFINITIONS", () => {
     assert.equal(abilityMastery.iconFileName, "ability_mastery.png");
     assert.equal(abilityMastery.name, "Ability Mastery");
     assert.match(abilityMastery.description, /one level earlier/);
+
+    const pressedIntoService = getCampaignPerkDefinition(
+      CAMPAIGN_PERK_ID.pressedIntoService
+    );
+    assert.equal(PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT, 1);
+    assert.deepEqual(pressedIntoService.effect, {
+      type: "starting_warrior",
+      warriorClass: "Peasant",
+      count: PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
+    });
+    assert.equal(pressedIntoService.iconFileName, "pressed_into_service.png");
+    assert.equal(pressedIntoService.name, "Pressed Into Service");
+    assert.match(pressedIntoService.description, /extra Peasant/);
   });
 
   it("throws for unknown campaign perks", () => {

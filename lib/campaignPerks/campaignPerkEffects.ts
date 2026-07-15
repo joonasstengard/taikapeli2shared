@@ -1,4 +1,5 @@
 import { trainingCostForPoint } from "../warriors/trainingCost";
+import type { WarriorClass } from "../warriors/warriorPictureVariants";
 import type { CampaignPerkId } from "./campaignPerkIds";
 import { isCampaignPerkId } from "./campaignPerkIds";
 import { MIN_NATION_HEALTH_LOSS_AFTER_PERK } from "./campaignPerkConstants";
@@ -7,6 +8,11 @@ import { CAMPAIGN_PERK_DEFINITIONS_BY_ID } from "./campaignPerkDefinitions";
 export interface RecruitStatBonuses {
   faith: number;
   speed: number;
+}
+
+export interface StartingWarriorGrant {
+  warriorClass: WarriorClass;
+  count: number;
 }
 
 const NO_RECRUIT_STAT_BONUSES: RecruitStatBonuses = { faith: 0, speed: 0 };
@@ -55,6 +61,30 @@ export function applyCampaignPerkToStartingGold(
   }
 
   return baseGold + effect.bonus;
+}
+
+/**
+ * Returns warriors granted into the army at campaign start (in addition to
+ * normal recruitment). Empty when the perk does not grant starting warriors.
+ */
+export function getCampaignPerkStartingWarriors(
+  perkId: CampaignPerkId | null | undefined
+): StartingWarriorGrant[] {
+  if (!perkId) {
+    return [];
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "starting_warrior" || effect.count <= 0) {
+    return [];
+  }
+
+  return [
+    {
+      warriorClass: effect.warriorClass,
+      count: effect.count,
+    },
+  ];
 }
 
 export function getCampaignPerkWeeklyGoldBonus(

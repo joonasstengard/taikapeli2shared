@@ -1,3 +1,4 @@
+import type { WarriorClass } from "../warriors/warriorPictureVariants";
 import { CAMPAIGN_PERK_ID, type CampaignPerkId } from "./campaignPerkIds";
 import {
   ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
@@ -5,6 +6,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
@@ -22,7 +24,12 @@ export type CampaignPerkEffect =
   | { type: "nation_health_loss_reduction"; reduction: number }
   | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number }
   | { type: "training_cost_multiplier"; multiplier: number }
-  | { type: "ability_required_level_offset"; offset: number };
+  | { type: "ability_required_level_offset"; offset: number }
+  | {
+      type: "starting_warrior";
+      warriorClass: WarriorClass;
+      count: number;
+    };
 
 export interface CampaignPerkDefinition {
   id: CampaignPerkId;
@@ -119,6 +126,17 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
     effect: {
       type: "ability_required_level_offset",
       offset: ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.pressedIntoService,
+    name: "Pressed Into Service",
+    description: "Start with an extra Peasant in your army.",
+    iconFileName: "pressed_into_service.png",
+    effect: {
+      type: "starting_warrior",
+      warriorClass: "Peasant",
+      count: PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
     },
   },
 ];

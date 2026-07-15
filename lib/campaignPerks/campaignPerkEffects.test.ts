@@ -8,6 +8,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
@@ -26,6 +27,7 @@ import {
   calculateTrainingCostForCampaignPerk,
   getAbilityRequiredLevelOffset,
   getCampaignPerkMarketSpellCount,
+  getCampaignPerkStartingWarriors,
   getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
   calculateTrainingCostForArmyPerk,
@@ -56,10 +58,39 @@ describe("applyCampaignPerkToStartingGold", () => {
       applyCampaignPerkToStartingGold(50, CAMPAIGN_PERK_ID.heregeld),
       50
     );
+    assert.equal(
+      applyCampaignPerkToStartingGold(50, CAMPAIGN_PERK_ID.pressedIntoService),
+      50
+    );
   });
 
   it("returns the base amount when no perk is set", () => {
     assert.equal(applyCampaignPerkToStartingGold(50, null), 50);
+  });
+});
+
+describe("getCampaignPerkStartingWarriors", () => {
+  it("returns a Peasant grant for Pressed Into Service", () => {
+    assert.equal(PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT, 1);
+    assert.deepEqual(
+      getCampaignPerkStartingWarriors(CAMPAIGN_PERK_ID.pressedIntoService),
+      [
+        {
+          warriorClass: "Peasant",
+          count: PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
+        },
+      ]
+    );
+  });
+
+  it("returns an empty list for unrelated perks and missing ids", () => {
+    assert.deepEqual(getCampaignPerkStartingWarriors(CAMPAIGN_PERK_ID.warChest), []);
+    assert.deepEqual(
+      getCampaignPerkStartingWarriors(CAMPAIGN_PERK_ID.runicWisdom),
+      []
+    );
+    assert.deepEqual(getCampaignPerkStartingWarriors(null), []);
+    assert.deepEqual(getCampaignPerkStartingWarriors(undefined), []);
   });
 });
 
