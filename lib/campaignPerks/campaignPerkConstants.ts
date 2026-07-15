@@ -37,6 +37,12 @@ export const PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT = 1;
 /** Maximum recruit market price when the army has Muster Edict. */
 export const MUSTER_EDICT_MAX_RECRUIT_PRICE = 20;
 
+/**
+ * Release-gold multiplier for Grave Tax (1 = full recruit value).
+ * Default without this perk is half recruit value.
+ */
+export const GRAVE_TAX_RELEASE_GOLD_MULTIPLIER = 1;
+
 /** How many perks are offered to the player at campaign start. */
 export const CAMPAIGN_PERK_OPTIONS_COUNT = 3;
 

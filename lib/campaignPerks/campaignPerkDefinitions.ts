@@ -11,6 +11,7 @@ import {
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
+  GRAVE_TAX_RELEASE_GOLD_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
@@ -27,6 +28,7 @@ export type CampaignPerkEffect =
   | { type: "training_cost_multiplier"; multiplier: number }
   | { type: "ability_required_level_offset"; offset: number }
   | { type: "recruit_price_cap"; maxPrice: number }
+  | { type: "release_gold_multiplier"; multiplier: number }
   | {
       type: "starting_warrior";
       warriorClass: WarriorClass;
@@ -149,6 +151,16 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
     effect: {
       type: "recruit_price_cap",
       maxPrice: MUSTER_EDICT_MAX_RECRUIT_PRICE,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.graveTax,
+    name: "Grave Tax",
+    description: "Releasing a warrior returns their full gold value.",
+    iconFileName: "grave_tax.png",
+    effect: {
+      type: "release_gold_multiplier",
+      multiplier: GRAVE_TAX_RELEASE_GOLD_MULTIPLIER,
     },
   },
 ];

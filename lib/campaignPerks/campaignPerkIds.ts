@@ -10,6 +10,7 @@ export const CAMPAIGN_PERK_ID = {
   abilityMastery: "ability_mastery",
   pressedIntoService: "pressed_into_service",
   musterEdict: "muster_edict",
+  graveTax: "grave_tax",
 } as const;
 
 export type CampaignPerkId =

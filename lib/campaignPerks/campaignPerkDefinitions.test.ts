@@ -9,6 +9,7 @@ import {
   HEREGELD_WEEKLY_GOLD_BONUS,
   PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   MUSTER_EDICT_MAX_RECRUIT_PRICE,
+  GRAVE_TAX_RELEASE_GOLD_MULTIPLIER,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
@@ -121,6 +122,16 @@ describe("CAMPAIGN_PERK_DEFINITIONS", () => {
     assert.equal(musterEdict.iconFileName, "muster_edict.png");
     assert.equal(musterEdict.name, "Muster Edict");
     assert.match(musterEdict.description, /never exceed 20 gold/);
+
+    const graveTax = getCampaignPerkDefinition(CAMPAIGN_PERK_ID.graveTax);
+    assert.equal(GRAVE_TAX_RELEASE_GOLD_MULTIPLIER, 1);
+    assert.deepEqual(graveTax.effect, {
+      type: "release_gold_multiplier",
+      multiplier: GRAVE_TAX_RELEASE_GOLD_MULTIPLIER,
+    });
+    assert.equal(graveTax.iconFileName, "grave_tax.png");
+    assert.equal(graveTax.name, "Grave Tax");
+    assert.match(graveTax.description, /full gold value/);
   });
 
   it("throws for unknown campaign perks", () => {

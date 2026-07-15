@@ -6,6 +6,7 @@ import {
   DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
+  GRAVE_TAX_RELEASE_GOLD_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
   MUSTER_EDICT_MAX_RECRUIT_PRICE,
@@ -28,8 +29,11 @@ import {
   buildCampaignPerkWeeklyGoldDeltas,
   calculateRecruitPriceForArmyPerk,
   calculateTrainingCostForCampaignPerk,
+  calculateWarriorReleaseGoldForArmyPerk,
+  calculateWarriorReleaseGoldForArmyPerks,
   getAbilityRequiredLevelOffset,
   getCampaignPerkMarketSpellCount,
+  getCampaignPerkReleaseGoldMultiplier,
   getCampaignPerkStartingWarriors,
   getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
@@ -692,5 +696,110 @@ describe("Muster Edict does not affect release gold", () => {
     const releaseGold = calculateWarriorReleaseGold(expensiveWarrior, 2, 2);
     assert.equal(releaseGold, Math.round(baseRecruit / 2));
     assert.notEqual(releaseGold, Math.round(cappedRecruit / 2));
+  });
+
+  it("keeps army-perk release gold at half uncapped for Muster Edict alone", () => {
+    const baseRecruit = calculateWarriorRecruitPrice(expensiveWarrior, 2, 2);
+    assert.ok(baseRecruit > MUSTER_EDICT_MAX_RECRUIT_PRICE);
+
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerk(
+        expensiveWarrior,
+        2,
+        2,
+        CAMPAIGN_PERK_ID.musterEdict
+      ),
+      Math.round(baseRecruit / 2)
+    );
+  });
+});
+
+describe("Grave Tax release gold", () => {
+  const expensiveWarrior = {
+    health: 18,
+    mana: 8,
+    strength: 12,
+    stamina: 15,
+    speed: 8,
+    faith: 4,
+    spellDamage: 6,
+    attackRange: 2,
+  };
+
+  it("returns the full uncapped recruit price for Grave Tax alone", () => {
+    const baseRecruit = calculateWarriorRecruitPrice(expensiveWarrior, 2, 2);
+    assert.ok(baseRecruit > MUSTER_EDICT_MAX_RECRUIT_PRICE);
+    assert.equal(GRAVE_TAX_RELEASE_GOLD_MULTIPLIER, 1);
+
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerk(
+        expensiveWarrior,
+        2,
+        2,
+        CAMPAIGN_PERK_ID.graveTax
+      ),
+      baseRecruit
+    );
+    assert.ok(
+      calculateWarriorReleaseGoldForArmyPerk(
+        expensiveWarrior,
+        2,
+        2,
+        CAMPAIGN_PERK_ID.graveTax
+      ) >
+        calculateWarriorReleaseGold(expensiveWarrior, 2, 2)
+    );
+  });
+
+  it("uses the capped recruit price when Grave Tax is stacked with Muster Edict", () => {
+    const baseRecruit = calculateWarriorRecruitPrice(expensiveWarrior, 2, 2);
+    assert.ok(baseRecruit > MUSTER_EDICT_MAX_RECRUIT_PRICE);
+
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerks(expensiveWarrior, 2, 2, [
+        CAMPAIGN_PERK_ID.graveTax,
+        CAMPAIGN_PERK_ID.musterEdict,
+      ]),
+      MUSTER_EDICT_MAX_RECRUIT_PRICE
+    );
+  });
+
+  it("falls back to half recruit gold without a release perk", () => {
+    const baseRecruit = calculateWarriorRecruitPrice(expensiveWarrior, 1, 0);
+
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerk(expensiveWarrior, 1, 0, null),
+      Math.round(baseRecruit / 2)
+    );
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerk(
+        expensiveWarrior,
+        1,
+        0,
+        CAMPAIGN_PERK_ID.warChest
+      ),
+      Math.round(baseRecruit / 2)
+    );
+    assert.equal(
+      calculateWarriorReleaseGoldForArmyPerk(
+        expensiveWarrior,
+        1,
+        0,
+        "not_a_real_perk"
+      ),
+      Math.round(baseRecruit / 2)
+    );
+  });
+
+  it("reports Grave Tax release multiplier via getCampaignPerkReleaseGoldMultiplier", () => {
+    assert.equal(
+      getCampaignPerkReleaseGoldMultiplier([CAMPAIGN_PERK_ID.graveTax]),
+      GRAVE_TAX_RELEASE_GOLD_MULTIPLIER
+    );
+    assert.equal(getCampaignPerkReleaseGoldMultiplier([null]), 0.5);
+    assert.equal(
+      getCampaignPerkReleaseGoldMultiplier([CAMPAIGN_PERK_ID.musterEdict]),
+      0.5
+    );
   });
 });

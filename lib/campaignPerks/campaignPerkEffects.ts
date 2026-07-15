@@ -1,9 +1,16 @@
+import {
+  calculateWarriorRecruitPrice,
+  type WarriorRecruitStats,
+} from "../warriors/recruitPrice";
 import { trainingCostForPoint } from "../warriors/trainingCost";
 import type { WarriorClass } from "../warriors/warriorPictureVariants";
 import type { CampaignPerkId } from "./campaignPerkIds";
 import { isCampaignPerkId } from "./campaignPerkIds";
 import { MIN_NATION_HEALTH_LOSS_AFTER_PERK } from "./campaignPerkConstants";
 import { CAMPAIGN_PERK_DEFINITIONS_BY_ID } from "./campaignPerkDefinitions";
+
+/** Default release refund without a release_gold_multiplier perk (half recruit). */
+const DEFAULT_RELEASE_GOLD_MULTIPLIER = 0.5;
 
 export interface RecruitStatBonuses {
   faith: number;
@@ -205,8 +212,9 @@ export function applyCampaignPerkToTrainingCost(
 }
 
 /**
- * Caps recruit market price for Muster Edict (and similar). Does not affect
- * release gold — call sites must keep using the uncapped recruit formula there.
+ * Caps recruit market price for Muster Edict (and similar).
+ * Alone, this does not change the default half-price release refund; Grave Tax
+ * release value does run through recruit-price caps (see release helpers below).
  */
 export function applyCampaignPerkToRecruitPrice(
   basePrice: number,
@@ -235,6 +243,95 @@ export function calculateRecruitPriceForArmyPerk(
   const perkId =
     campaignPerkId && isCampaignPerkId(campaignPerkId) ? campaignPerkId : null;
   return applyCampaignPerkToRecruitPrice(basePrice, perkId);
+}
+
+/**
+ * Highest release-gold multiplier among the given perks, or the default half
+ * refund when none grant a release multiplier.
+ */
+export function getCampaignPerkReleaseGoldMultiplier(
+  perkIds: readonly (CampaignPerkId | null | undefined)[]
+): number {
+  let multiplier: number | null = null;
+
+  for (const perkId of perkIds) {
+    if (!perkId) {
+      continue;
+    }
+
+    const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+    if (effect?.type !== "release_gold_multiplier") {
+      continue;
+    }
+
+    multiplier =
+      multiplier === null
+        ? effect.multiplier
+        : Math.max(multiplier, effect.multiplier);
+  }
+
+  return multiplier ?? DEFAULT_RELEASE_GOLD_MULTIPLIER;
+}
+
+/**
+ * Gold granted when releasing a warrior for an army perk stack.
+ *
+ * Default: half of the uncapped recruit price (Muster Edict alone does not
+ * change this).
+ * Grave Tax: full recruit value, after applying any recruit-price caps in the
+ * same perk stack (safe for a future multi-perk world).
+ */
+export function calculateWarriorReleaseGoldForArmyPerks(
+  warrior: WarriorRecruitStats,
+  spellCount: number,
+  skillCount: number,
+  perkIds: readonly (CampaignPerkId | null | undefined)[]
+): number {
+  const resolvedPerkIds = perkIds.filter(
+    (perkId): perkId is CampaignPerkId =>
+      typeof perkId === "string" && isCampaignPerkId(perkId)
+  );
+  const uncappedRecruit = calculateWarriorRecruitPrice(
+    warrior,
+    spellCount,
+    skillCount
+  );
+  const hasReleaseMultiplierPerk = resolvedPerkIds.some((perkId) => {
+    const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+    return effect?.type === "release_gold_multiplier";
+  });
+
+  if (!hasReleaseMultiplierPerk) {
+    return Math.round(uncappedRecruit * DEFAULT_RELEASE_GOLD_MULTIPLIER);
+  }
+
+  const cappedRecruit = resolvedPerkIds.reduce(
+    (price, perkId) => applyCampaignPerkToRecruitPrice(price, perkId),
+    uncappedRecruit
+  );
+  const releaseMultiplier = getCampaignPerkReleaseGoldMultiplier(resolvedPerkIds);
+
+  return Math.round(cappedRecruit * releaseMultiplier);
+}
+
+/**
+ * Resolves an army's stored campaignPerkId and returns release gold.
+ * Used by player release and computer economy so both stay aligned.
+ */
+export function calculateWarriorReleaseGoldForArmyPerk(
+  warrior: WarriorRecruitStats,
+  spellCount: number,
+  skillCount: number,
+  campaignPerkId: string | null | undefined
+): number {
+  const perkId =
+    campaignPerkId && isCampaignPerkId(campaignPerkId) ? campaignPerkId : null;
+  return calculateWarriorReleaseGoldForArmyPerks(
+    warrior,
+    spellCount,
+    skillCount,
+    perkId ? [perkId] : []
+  );
 }
 
 /**
