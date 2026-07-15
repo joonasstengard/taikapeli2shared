@@ -52,4 +52,6 @@ export const SKILL_ID = {
   kneeCrack: 52,
   skullCrack: 53,
   brutalCharge: 54,
+  ribShatter: 55,
+  spineCrack: 56,
 } as const;

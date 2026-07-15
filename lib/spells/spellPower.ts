@@ -275,6 +275,19 @@ export function calculateStaminaRestoreAmount(
   return Math.min(baseStaminaRestore, missingStamina);
 }
 
+/** Resource removed from a target, capped at its current resource amount. */
+export function calculateResourceReduceAmount(
+  resourceReduce: number | undefined,
+  targetCurrentResource: number
+): number {
+  const amount = resourceReduce ?? 0;
+  if (amount <= 0 || targetCurrentResource <= 0) {
+    return 0;
+  }
+
+  return Math.min(amount, targetCurrentResource);
+}
+
 /** Heal amount when a drain effect converts damage dealt into caster HP. */
 export function calculateDrainHealAmount(
   damageDealt: number,

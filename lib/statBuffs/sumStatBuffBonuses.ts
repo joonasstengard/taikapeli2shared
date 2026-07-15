@@ -20,6 +20,18 @@ export function hasPositiveStatModifiers(
   );
 }
 
+export function hasNegativeStatModifiers(
+  statModifiers: StatModifiers | undefined
+): boolean {
+  if (!statModifiers) {
+    return false;
+  }
+
+  return Object.values(statModifiers).some(
+    (value) => typeof value === "number" && value < 0
+  );
+}
+
 export function sumStatBuffBonuses(
   statBuffs: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[] | undefined
 ): Partial<Record<CombatStat, number>> {

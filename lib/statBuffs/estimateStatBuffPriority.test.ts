@@ -3,13 +3,22 @@ import { describe, it } from "node:test";
 import { STATUS_EFFECT_KEY } from "../statusEffects/statusEffectTypes";
 import {
   canApplyTransformToTarget,
+  estimateEnemyStatDebuffPriorityBonus,
   estimateInlineStatBuffPriority,
+  estimateInlineStatDebuffPriority,
   estimateStatBuffInstancePriority,
+  estimateStatDebuffInstancePriority,
   getStatBuffFromEffect,
+  getStatDebuffFromEffect,
   hasMatchingActiveStatBuff,
+  STAT_DEBUFF_PRIORITY_SCALE,
+  sumWeightedStatDebuffPoints,
   statModifiersMatch,
 } from "./estimateStatBuffPriority";
-import { sumStatBuffBonuses } from "./sumStatBuffBonuses";
+import {
+  hasNegativeStatModifiers,
+  sumStatBuffBonuses,
+} from "./sumStatBuffBonuses";
 import { resolveCombatStats } from "../statusEffects/resolveCombatStats";
 
 describe("getStatBuffFromEffect", () => {
@@ -52,6 +61,71 @@ describe("getStatBuffFromEffect", () => {
       }),
       null
     );
+  });
+
+  it("ignores negative-only applyStatBuff effects", () => {
+    assert.equal(
+      getStatBuffFromEffect({
+        effectType: "applyStatBuff",
+        duration: 1,
+        statModifiers: { speed: -8 },
+      }),
+      null
+    );
+  });
+});
+
+describe("getStatDebuffFromEffect", () => {
+  it("detects negative applyStatBuff effects", () => {
+    assert.deepEqual(
+      getStatDebuffFromEffect({
+        effectType: "applyStatBuff",
+        duration: 1,
+        statModifiers: { speed: -8 },
+      }),
+      {
+        statModifiers: { speed: -8 },
+        duration: 1,
+      }
+    );
+  });
+
+  it("ignores positive-only applyStatBuff effects", () => {
+    assert.equal(
+      getStatDebuffFromEffect({
+        effectType: "applyStatBuff",
+        duration: 2,
+        statModifiers: { strength: 3 },
+      }),
+      null
+    );
+  });
+
+  it("ignores non-stat effects and invalid durations", () => {
+    assert.equal(
+      getStatDebuffFromEffect({
+        effectType: "applyStatus",
+        statusKey: STATUS_EFFECT_KEY.frozen,
+        duration: 1,
+      }),
+      null
+    );
+    assert.equal(
+      getStatDebuffFromEffect({
+        effectType: "applyStatBuff",
+        duration: 0,
+        statModifiers: { strength: -5 },
+      }),
+      null
+    );
+  });
+});
+
+describe("hasNegativeStatModifiers", () => {
+  it("detects negative modifiers and ignores positive-only sets", () => {
+    assert.equal(hasNegativeStatModifiers({ speed: -8 }), true);
+    assert.equal(hasNegativeStatModifiers({ strength: 3 }), false);
+    assert.equal(hasNegativeStatModifiers(undefined), false);
   });
 });
 
@@ -261,5 +335,134 @@ describe("estimateStatBuffInstancePriority", () => {
       ),
       null
     );
+  });
+});
+
+describe("estimateInlineStatDebuffPriority", () => {
+  it("values knee crack speed debuff modestly for its duration", () => {
+    const priority = estimateInlineStatDebuffPriority({ speed: -8 }, 1);
+    assert.equal(priority, Math.round(8 * 1.2 * STAT_DEBUFF_PRIORITY_SCALE));
+    assert.equal(priority, 3);
+  });
+
+  it("values skull crack strength debuff modestly for its duration", () => {
+    const priority = estimateInlineStatDebuffPriority({ strength: -5 }, 1);
+    assert.equal(priority, Math.round(5 * 1.5 * STAT_DEBUFF_PRIORITY_SCALE));
+    assert.equal(priority, 3);
+  });
+
+  it("scales with duration", () => {
+    assert.equal(estimateInlineStatDebuffPriority({ strength: -5 }, 2), 5);
+  });
+
+  it("scores below an equivalent ally buff of the same magnitude", () => {
+    const buffPriority = estimateInlineStatBuffPriority({ strength: 5 }, 1);
+    const debuffPriority = estimateInlineStatDebuffPriority({ strength: -5 }, 1);
+
+    assert.ok(buffPriority !== null && debuffPriority !== null);
+    assert.ok(debuffPriority < buffPriority);
+    assert.equal(buffPriority, 8);
+    assert.equal(debuffPriority, 3);
+  });
+
+  it("returns null for positive-only modifiers or invalid duration", () => {
+    assert.equal(estimateInlineStatDebuffPriority({ strength: 5 }, 1), null);
+    assert.equal(estimateInlineStatDebuffPriority({ strength: -5 }, 0), null);
+  });
+});
+
+describe("sumWeightedStatDebuffPoints", () => {
+  it("only counts negative modifiers", () => {
+    assert.equal(
+      sumWeightedStatDebuffPoints({ strength: -5, speed: 4 }),
+      5 * 1.5 * STAT_DEBUFF_PRIORITY_SCALE
+    );
+  });
+});
+
+describe("estimateStatDebuffInstancePriority", () => {
+  it("returns null when the same debuff is already active", () => {
+    assert.equal(
+      estimateStatDebuffInstancePriority(
+        { speed: -8 },
+        1,
+        [{ turnsRemaining: 1, statModifiers: { speed: -8 } }]
+      ),
+      null
+    );
+  });
+
+  it("still values a new debuff when no matching debuff is active", () => {
+    assert.equal(
+      estimateStatDebuffInstancePriority({ speed: -8 }, 1, []),
+      3
+    );
+  });
+
+  it("ignores expired matching debuffs", () => {
+    assert.equal(
+      estimateStatDebuffInstancePriority(
+        { strength: -5 },
+        1,
+        [{ turnsRemaining: 0, statModifiers: { strength: -5 } }]
+      ),
+      3
+    );
+  });
+});
+
+describe("estimateEnemyStatDebuffPriorityBonus", () => {
+  it("returns the knee crack / skull crack bonuses from effects", () => {
+    assert.equal(
+      estimateEnemyStatDebuffPriorityBonus(
+        {
+          effectType: "applyStatBuff",
+          duration: 1,
+          statModifiers: { speed: -8 },
+        },
+        undefined
+      ),
+      3
+    );
+    assert.equal(
+      estimateEnemyStatDebuffPriorityBonus(
+        {
+          effectType: "applyStatBuff",
+          duration: 1,
+          statModifiers: { strength: -5 },
+        },
+        undefined
+      ),
+      3
+    );
+  });
+
+  it("returns 0 when the matching debuff is already active", () => {
+    assert.equal(
+      estimateEnemyStatDebuffPriorityBonus(
+        {
+          effectType: "applyStatBuff",
+          duration: 1,
+          statModifiers: { speed: -8 },
+        },
+        [{ turnsRemaining: 1, statModifiers: { speed: -8 } }]
+      ),
+      0
+    );
+  });
+
+  it("returns 0 for positive buffs and non-stat effects", () => {
+    assert.equal(
+      estimateEnemyStatDebuffPriorityBonus(
+        {
+          effectType: "applyStatBuff",
+          duration: 2,
+          statModifiers: { strength: 3 },
+        },
+        undefined
+      ),
+      0
+    );
+    assert.equal(estimateEnemyStatDebuffPriorityBonus(null, undefined), 0);
   });
 });

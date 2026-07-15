@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   calculateDrainHealAmount,
   calculateHolyFaithScalingBonus,
+  calculateResourceReduceAmount,
   calculateSkillDamageBonus,
   calculateSkillHealAmount,
   calculateSkillStatScalingBonus,
@@ -42,6 +43,15 @@ const flamewheel = {
   scalingFactor: 0.5,
   type: "Fire",
 };
+
+describe("calculateResourceReduceAmount", () => {
+  it("caps a reduction at the target's current resource", () => {
+    assert.equal(calculateResourceReduceAmount(10, 6), 6);
+    assert.equal(calculateResourceReduceAmount(4, 10), 4);
+    assert.equal(calculateResourceReduceAmount(undefined, 10), 0);
+    assert.equal(calculateResourceReduceAmount(10, 0), 0);
+  });
+});
 
 describe("calculateStatScalingBonus", () => {
   it("floors stat times scaling factor", () => {

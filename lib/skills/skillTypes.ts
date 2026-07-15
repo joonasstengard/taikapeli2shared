@@ -16,6 +16,8 @@ export interface SkillDefinition {
   baseDamageTarget: number;
   baseHealTarget: number;
   baseStaminaRestore: number;
+  staminaReduce?: number;
+  manaReduce?: number;
   scalingFactor: number;
   /** When set, skill damage scales from this stat instead of strength. */
   damageScalingStat?: SkillDamageScalingStat;

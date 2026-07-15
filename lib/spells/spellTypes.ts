@@ -15,6 +15,8 @@ export interface SpellDefinition {
   baseDamageTarget: number;
   baseHealTarget: number;
   baseManaRestore?: number;
+  staminaReduce?: number;
+  manaReduce?: number;
   scalingFactor: number;
   type: string | null;
   range: number;

@@ -127,8 +127,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     1: {
       skillIds: [SKILL_ID.kneeCrack, SKILL_ID.skullCrack],
     },
-    3: {
+    2: {
       skillIds: [SKILL_ID.brutalCharge],
+    },
+    3: {
+      skillIds: [SKILL_ID.ribShatter, SKILL_ID.spineCrack],
     },
   },
   Ranger: {
