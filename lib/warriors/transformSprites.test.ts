@@ -30,49 +30,49 @@ describe("resolveTransformVariantIndex", () => {
 describe("getTransformSpriteSheetPath", () => {
   it("returns the wolf spritesheet matching warrior picture", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformWolf, 7),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformSkarWolf, 7),
       `${WOLF_BASE}/Wolf7.png`
     );
   });
 
   it("wraps to a valid wolf variant when picture exceeds variant count", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformWolf, 15),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformSkarWolf, 15),
       `${WOLF_BASE}/Wolf5.png`
     );
   });
 
   it("defaults to variant 1 for invalid picture", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformWolf, 0),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformSkarWolf, 0),
       `${WOLF_BASE}/Wolf1.png`
     );
   });
 
   it("returns the deer spritesheet matching warrior picture", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformDeer, 4),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformThalenStag, 4),
       `${WOLF_BASE}/Deer4.png`
     );
   });
 
   it("wraps to a valid deer variant when picture exceeds variant count", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformDeer, 8),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformThalenStag, 8),
       `${WOLF_BASE}/Deer2.png`
     );
   });
 
   it("returns the bear spritesheet matching warrior picture", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformBear, 3),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformAeronorBear, 3),
       `${WOLF_BASE}/Bear3.png`
     );
   });
 
   it("wraps to a valid bear variant when picture exceeds variant count", () => {
     assert.equal(
-      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformBear, 7),
+      getTransformSpriteSheetPath(STATUS_EFFECT_KEY.transformAeronorBear, 7),
       `${WOLF_BASE}/Bear1.png`
     );
   });

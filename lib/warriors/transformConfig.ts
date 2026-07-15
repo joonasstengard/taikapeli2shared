@@ -16,17 +16,17 @@ export interface TransformConfig {
  * a transform status effect (sprites + attack sounds live under the usual folders).
  */
 export const TRANSFORM_CONFIG: Record<string, TransformConfig> = {
-  [STATUS_EFFECT_KEY.transformWolf]: {
+  [STATUS_EFFECT_KEY.transformSkarWolf]: {
     filePrefix: "Wolf",
     variantCount: 10,
     attackSoundCount: 2,
   },
-  [STATUS_EFFECT_KEY.transformDeer]: {
+  [STATUS_EFFECT_KEY.transformThalenStag]: {
     filePrefix: "Deer",
     variantCount: 6,
     attackSoundCount: 2,
   },
-  [STATUS_EFFECT_KEY.transformBear]: {
+  [STATUS_EFFECT_KEY.transformAeronorBear]: {
     filePrefix: "Bear",
     variantCount: 6,
     attackSoundCount: 2,

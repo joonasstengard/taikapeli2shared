@@ -40,14 +40,14 @@ describe("getStatBuffFromEffect", () => {
     assert.deepEqual(
       getStatBuffFromEffect({
         effectType: "applyTransform",
-        statusKey: STATUS_EFFECT_KEY.transformWolf,
+        statusKey: STATUS_EFFECT_KEY.transformSkarWolf,
         duration: 3,
         statModifiers: { strength: 5, speed: 5 },
       }),
       {
         statModifiers: { strength: 5, speed: 5 },
         duration: 3,
-        linkedTransformKey: STATUS_EFFECT_KEY.transformWolf,
+        linkedTransformKey: STATUS_EFFECT_KEY.transformSkarWolf,
       }
     );
   });
@@ -172,7 +172,7 @@ describe("resolveCombatStats with stat buffs", () => {
   it("does not read transform stats from status definitions", () => {
     const result = resolveCombatStats(baseWarrior, [
       {
-        effectKey: STATUS_EFFECT_KEY.transformWolf,
+        effectKey: STATUS_EFFECT_KEY.transformSkarWolf,
         turnsRemaining: 3,
       },
     ]);
@@ -184,7 +184,7 @@ describe("resolveCombatStats with stat buffs", () => {
   it("applies wolf combat stats when provided as stat buffs", () => {
     const result = resolveCombatStats(
       baseWarrior,
-      [{ effectKey: STATUS_EFFECT_KEY.transformWolf, turnsRemaining: 3 }],
+      [{ effectKey: STATUS_EFFECT_KEY.transformSkarWolf, turnsRemaining: 3 }],
       [{ turnsRemaining: 3, statModifiers: { strength: 5, speed: 5 } }]
     );
 
@@ -203,7 +203,7 @@ describe("estimateInlineStatBuffPriority", () => {
     const priority = estimateInlineStatBuffPriority(
       { strength: 5, speed: 5 },
       3,
-      { linkedTransformKey: STATUS_EFFECT_KEY.transformWolf }
+      { linkedTransformKey: STATUS_EFFECT_KEY.transformSkarWolf }
     );
     assert.equal(priority, 41);
   });
@@ -214,10 +214,10 @@ describe("estimateInlineStatBuffPriority", () => {
         { strength: 5, speed: 5 },
         3,
         {
-          linkedTransformKey: STATUS_EFFECT_KEY.transformWolf,
+          linkedTransformKey: STATUS_EFFECT_KEY.transformSkarWolf,
           targetStatusEffects: [
             {
-              effectKey: STATUS_EFFECT_KEY.transformWolf,
+              effectKey: STATUS_EFFECT_KEY.transformSkarWolf,
               turnsRemaining: 1,
             },
           ],
@@ -247,9 +247,9 @@ describe("estimateInlineStatBuffPriority", () => {
 describe("canApplyTransformToTarget", () => {
   it("blocks when any transform is active", () => {
     assert.equal(
-      canApplyTransformToTarget(STATUS_EFFECT_KEY.transformWolf, [
+      canApplyTransformToTarget(STATUS_EFFECT_KEY.transformSkarWolf, [
         {
-          effectKey: STATUS_EFFECT_KEY.transformWolf,
+          effectKey: STATUS_EFFECT_KEY.transformSkarWolf,
           turnsRemaining: 2,
         },
       ]),
@@ -258,7 +258,7 @@ describe("canApplyTransformToTarget", () => {
   });
 
   it("allows when no transform is active", () => {
-    assert.equal(canApplyTransformToTarget(STATUS_EFFECT_KEY.transformWolf, []), true);
+    assert.equal(canApplyTransformToTarget(STATUS_EFFECT_KEY.transformSkarWolf, []), true);
   });
 });
 
@@ -324,10 +324,10 @@ describe("estimateStatBuffInstancePriority", () => {
         3,
         [],
         {
-          linkedTransformKey: STATUS_EFFECT_KEY.transformWolf,
+          linkedTransformKey: STATUS_EFFECT_KEY.transformSkarWolf,
           targetStatusEffects: [
             {
-              effectKey: STATUS_EFFECT_KEY.transformWolf,
+              effectKey: STATUS_EFFECT_KEY.transformSkarWolf,
               turnsRemaining: 1,
             },
           ],

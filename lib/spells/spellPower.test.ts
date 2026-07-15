@@ -97,16 +97,16 @@ describe("calculateSpellManaRestoreBonus", () => {
 
 describe("calculateSpellDamageBonus", () => {
   it("adds faith scaling only when the spell deals damage", () => {
-    const holySmite = {
+    const ilyrsSmite = {
       baseDamageTarget: 4,
       baseHealTarget: 0,
       scalingFactor: 0.5,
       type: "Holy",
     };
 
-    assert.equal(calculateSpellDamageBonus(holySmite, { faith: 5, spellDamage: 0 }), 2);
-    assert.equal(calculateSpellDamageBonus(holySmite, { faith: 0, spellDamage: 10 }), 5);
-    assert.equal(calculateSpellDamageBonus(holySmite, { faith: 5, spellDamage: 6 }), 5);
+    assert.equal(calculateSpellDamageBonus(ilyrsSmite, { faith: 5, spellDamage: 0 }), 2);
+    assert.equal(calculateSpellDamageBonus(ilyrsSmite, { faith: 0, spellDamage: 10 }), 5);
+    assert.equal(calculateSpellDamageBonus(ilyrsSmite, { faith: 5, spellDamage: 6 }), 5);
     assert.equal(calculateSpellDamageBonus(healingPrayer, { faith: 5, spellDamage: 10 }), 0);
   });
 

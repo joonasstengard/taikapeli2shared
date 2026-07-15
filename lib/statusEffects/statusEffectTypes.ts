@@ -3,9 +3,9 @@ export const STATUS_EFFECT_KEY = {
   stunned: "stunned",
   invulnerable: "invulnerable",
   bleeding: "bleeding",
-  transformWolf: "transformWolf",
-  transformDeer: "transformDeer",
-  transformBear: "transformBear",
+  transformSkarWolf: "transformSkarWolf",
+  transformThalenStag: "transformThalenStag",
+  transformAeronorBear: "transformAeronorBear",
 } as const;
 
 export type StatusEffectKey =

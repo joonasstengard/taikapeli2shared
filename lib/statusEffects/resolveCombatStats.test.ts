@@ -56,7 +56,7 @@ describe("resolveCombatStats", () => {
   it("does not apply transform stats from status effect alone", () => {
     const result = resolveCombatStats(baseWarrior, [
       {
-        effectKey: STATUS_EFFECT_KEY.transformWolf,
+        effectKey: STATUS_EFFECT_KEY.transformSkarWolf,
         turnsRemaining: 3,
       },
     ]);

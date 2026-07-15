@@ -72,11 +72,11 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Marksman: {
     1: {
-      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot],
+      skillIds: [SKILL_ID.crowsBolt, SKILL_ID.longShot],
       skipChancePercent: 50,
     },
     2: {
-      skillIds: [SKILL_ID.criticalBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
+      skillIds: [SKILL_ID.crowsBolt, SKILL_ID.longShot, SKILL_ID.takeAim],
     },
     4: {
       skillIds: [SKILL_ID.repellingBolt],
@@ -163,9 +163,9 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   Shaman: {
     1: {
       skillIds: [
-        SKILL_ID.transformWolf,
-        SKILL_ID.transformDeer,
-        SKILL_ID.transformBear,
+        SKILL_ID.transformSkarWolf,
+        SKILL_ID.transformThalenStag,
+        SKILL_ID.transformAeronorBear,
       ],
     },
     2: {
@@ -177,7 +177,7 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Peasant: {
     2: {
-      skillIds: [SKILL_ID.jab, SKILL_ID.desperateSwing, SKILL_ID.scrounge, SKILL_ID.panicStrike],
+      skillIds: [SKILL_ID.jab, SKILL_ID.desperateSwing, SKILL_ID.fieldScavenge, SKILL_ID.panicStrike],
     },
     4: {
       skillIds: [SKILL_ID.jab, SKILL_ID.desperateSwing, SKILL_ID.panicStrike],
