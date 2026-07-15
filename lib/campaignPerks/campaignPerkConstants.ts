@@ -25,6 +25,12 @@ export const UMBRAL_GRACE_RECRUIT_SPEED_BONUS = 3;
 /** Training cost multiplier for Durn Kharad Drill (0.8 = 20% less). */
 export const DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER = 0.8;
 
+/**
+ * Required-level offset for Ability Mastery (-1 = unlock one level earlier).
+ * Applied to warrior skill/spell grants at recruitment.
+ */
+export const ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET = -1;
+
 /** How many perks are offered to the player at campaign start. */
 export const CAMPAIGN_PERK_OPTIONS_COUNT = 3;
 

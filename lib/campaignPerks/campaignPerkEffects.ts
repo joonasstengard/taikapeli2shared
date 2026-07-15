@@ -174,6 +174,59 @@ export function applyCampaignPerkToTrainingCost(
   return Math.max(0, Math.round(baseCost * effect.multiplier));
 }
 
+/**
+ * Returns the required-level offset for ability unlocks (0 when the perk does
+ * not affect unlock levels).
+ */
+export function getAbilityRequiredLevelOffset(
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (!perkId) {
+    return 0;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "ability_required_level_offset") {
+    return 0;
+  }
+
+  return effect.offset;
+}
+
+/**
+ * Lowers (or raises) a stored ability requiredLevel for the army's perk.
+ * Never goes below level 1.
+ */
+export function applyCampaignPerkToAbilityRequiredLevel(
+  requiredLevel: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  const offset = getAbilityRequiredLevelOffset(perkId);
+  if (offset === 0) {
+    return requiredLevel;
+  }
+
+  return Math.max(1, requiredLevel + offset);
+}
+
+/**
+ * Applies Ability Mastery (or similar) to a list of skill/spell grants.
+ * Returns the same array reference when the perk has no unlock-level effect.
+ */
+export function applyCampaignPerkToAbilityGrants<
+  T extends { requiredLevel: number },
+>(grants: T[], perkId: CampaignPerkId | null | undefined): T[] {
+  const offset = getAbilityRequiredLevelOffset(perkId);
+  if (offset === 0) {
+    return grants;
+  }
+
+  return grants.map((grant) => ({
+    ...grant,
+    requiredLevel: Math.max(1, grant.requiredLevel + offset),
+  }));
+}
+
 /** Total gold cost to train a stat range after applying the army's campaign perk. */
 export function calculateTrainingCostForCampaignPerk(
   fromStat: number,

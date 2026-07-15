@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { ALL_CAMPAIGN_PERK_IDS, CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
   DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
@@ -83,6 +84,18 @@ describe("CAMPAIGN_PERK_DEFINITIONS", () => {
     });
     assert.equal(durnKharadDrill.iconFileName, "durn_kharad_drill.png");
     assert.match(durnKharadDrill.description, /20% less gold/);
+
+    const abilityMastery = getCampaignPerkDefinition(
+      CAMPAIGN_PERK_ID.abilityMastery
+    );
+    assert.equal(ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET, -1);
+    assert.deepEqual(abilityMastery.effect, {
+      type: "ability_required_level_offset",
+      offset: ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
+    });
+    assert.equal(abilityMastery.iconFileName, "ability_mastery.png");
+    assert.equal(abilityMastery.name, "Ability Mastery");
+    assert.match(abilityMastery.description, /one level earlier/);
   });
 
   it("throws for unknown campaign perks", () => {

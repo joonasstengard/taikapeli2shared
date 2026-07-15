@@ -1,5 +1,6 @@
 import { CAMPAIGN_PERK_ID, type CampaignPerkId } from "./campaignPerkIds";
 import {
+  ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
   DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
@@ -20,7 +21,8 @@ export type CampaignPerkEffect =
   | { type: "warrior_xp_multiplier"; multiplier: number }
   | { type: "nation_health_loss_reduction"; reduction: number }
   | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number }
-  | { type: "training_cost_multiplier"; multiplier: number };
+  | { type: "training_cost_multiplier"; multiplier: number }
+  | { type: "ability_required_level_offset"; offset: number };
 
 export interface CampaignPerkDefinition {
   id: CampaignPerkId;
@@ -107,6 +109,16 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
     effect: {
       type: "training_cost_multiplier",
       multiplier: DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.abilityMastery,
+    name: "Ability Mastery",
+    description: "Skills and spells unlock one level earlier.",
+    iconFileName: "ability_mastery.png",
+    effect: {
+      type: "ability_required_level_offset",
+      offset: ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
     },
   },
 ];

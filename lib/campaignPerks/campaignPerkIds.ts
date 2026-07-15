@@ -7,6 +7,7 @@ export const CAMPAIGN_PERK_ID = {
   heregeld: "heregeld",
   expandedGrimoire: "expanded_grimoire",
   durnKharadDrill: "durn_kharad_drill",
+  abilityMastery: "ability_mastery",
 } as const;
 
 export type CampaignPerkId =

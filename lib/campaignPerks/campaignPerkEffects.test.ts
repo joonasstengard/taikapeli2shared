@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CAMPAIGN_PERK_ID } from "./campaignPerkIds";
 import {
+  ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET,
   DURN_KHARAD_DRILL_TRAINING_COST_MULTIPLIER,
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
@@ -13,6 +14,8 @@ import {
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
 import {
+  applyCampaignPerkToAbilityGrants,
+  applyCampaignPerkToAbilityRequiredLevel,
   applyCampaignPerkToMarketSpellPrice,
   applyCampaignPerkToExperienceGain,
   applyCampaignPerkToNationHealthLoss,
@@ -21,6 +24,7 @@ import {
   applyRecruitStatBonuses,
   buildCampaignPerkWeeklyGoldDeltas,
   calculateTrainingCostForCampaignPerk,
+  getAbilityRequiredLevelOffset,
   getCampaignPerkMarketSpellCount,
   getCampaignPerkWeeklyGoldBonus,
   getRecruitStatBonuses,
@@ -30,6 +34,9 @@ import {
   calculateTrainingCost,
   trainingCostForPoint,
 } from "../warriors/trainingCost";
+import { isAbilityUnlocked } from "../warriors/isAbilityUnlocked";
+import { LEVEL_SKILL_BUCKETS_BY_CLASS } from "../skills/levelSkillBuckets";
+import { LEVEL_SPELL_BUCKETS_BY_CLASS } from "../spells/levelSpellBuckets";
 
 describe("applyCampaignPerkToStartingGold", () => {
   it("adds the War Chest bonus", () => {
@@ -393,5 +400,150 @@ describe("calculateTrainingCostForArmyPerk (player army contract)", () => {
       calculateTrainingCostForArmyPerk(5, 10, null),
       calculateTrainingCost(5, 10)
     );
+  });
+});
+
+describe("getAbilityRequiredLevelOffset", () => {
+  it("returns -1 for Ability Mastery", () => {
+    assert.equal(ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET, -1);
+    assert.equal(
+      getAbilityRequiredLevelOffset(CAMPAIGN_PERK_ID.abilityMastery),
+      ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET
+    );
+  });
+
+  it("returns zero for unrelated or missing perks", () => {
+    assert.equal(getAbilityRequiredLevelOffset(CAMPAIGN_PERK_ID.warChest), 0);
+    assert.equal(getAbilityRequiredLevelOffset(null), 0);
+    assert.equal(getAbilityRequiredLevelOffset(undefined), 0);
+  });
+});
+
+describe("applyCampaignPerkToAbilityRequiredLevel", () => {
+  it("unlocks abilities one level earlier for Ability Mastery", () => {
+    assert.equal(
+      applyCampaignPerkToAbilityRequiredLevel(
+        4,
+        CAMPAIGN_PERK_ID.abilityMastery
+      ),
+      3
+    );
+    assert.equal(
+      applyCampaignPerkToAbilityRequiredLevel(
+        3,
+        CAMPAIGN_PERK_ID.abilityMastery
+      ),
+      2
+    );
+    assert.equal(
+      applyCampaignPerkToAbilityRequiredLevel(
+        2,
+        CAMPAIGN_PERK_ID.abilityMastery
+      ),
+      1
+    );
+  });
+
+  it("never reduces requiredLevel below 1", () => {
+    assert.equal(
+      applyCampaignPerkToAbilityRequiredLevel(
+        1,
+        CAMPAIGN_PERK_ID.abilityMastery
+      ),
+      1
+    );
+  });
+
+  it("leaves requiredLevel unchanged for unrelated or missing perks", () => {
+    assert.equal(
+      applyCampaignPerkToAbilityRequiredLevel(3, CAMPAIGN_PERK_ID.warChest),
+      3
+    );
+    assert.equal(applyCampaignPerkToAbilityRequiredLevel(3, null), 3);
+    assert.equal(applyCampaignPerkToAbilityRequiredLevel(3, undefined), 3);
+  });
+
+  it("makes a former level-3 ability usable at warrior level 2", () => {
+    const adjusted = applyCampaignPerkToAbilityRequiredLevel(
+      3,
+      CAMPAIGN_PERK_ID.abilityMastery
+    );
+
+    assert.equal(isAbilityUnlocked(2, 3), false);
+    assert.equal(isAbilityUnlocked(2, adjusted), true);
+    assert.equal(isAbilityUnlocked(1, adjusted), false);
+  });
+});
+
+describe("applyCampaignPerkToAbilityGrants", () => {
+  it("lowers requiredLevel on every grant for Ability Mastery", () => {
+    const grants = [
+      { skillId: 10, requiredLevel: 1 },
+      { skillId: 20, requiredLevel: 2 },
+      { skillId: 30, requiredLevel: 4 },
+    ];
+
+    assert.deepEqual(
+      applyCampaignPerkToAbilityGrants(grants, CAMPAIGN_PERK_ID.abilityMastery),
+      [
+        { skillId: 10, requiredLevel: 1 },
+        { skillId: 20, requiredLevel: 1 },
+        { skillId: 30, requiredLevel: 3 },
+      ]
+    );
+  });
+
+  it("returns the same array reference when the perk has no unlock offset", () => {
+    const grants = [{ spellId: 1, requiredLevel: 3 }];
+
+    assert.equal(
+      applyCampaignPerkToAbilityGrants(grants, CAMPAIGN_PERK_ID.warChest),
+      grants
+    );
+    assert.equal(applyCampaignPerkToAbilityGrants(grants, null), grants);
+  });
+
+  it("does not mutate the original grants array", () => {
+    const grants = [
+      { skillId: 1, requiredLevel: 3 },
+      { skillId: 2, requiredLevel: 4 },
+    ];
+
+    applyCampaignPerkToAbilityGrants(grants, CAMPAIGN_PERK_ID.abilityMastery);
+
+    assert.deepEqual(grants, [
+      { skillId: 1, requiredLevel: 3 },
+      { skillId: 2, requiredLevel: 4 },
+    ]);
+  });
+
+  it("shifts every class skill/spell bucket level earlier without going below 1", () => {
+    const skillBucketLevels = [
+      ...new Set(
+        Object.values(LEVEL_SKILL_BUCKETS_BY_CLASS).flatMap((buckets) =>
+          Object.keys(buckets ?? {}).map(Number)
+        )
+      ),
+    ];
+    const spellBucketLevels = [
+      ...new Set(
+        Object.values(LEVEL_SPELL_BUCKETS_BY_CLASS).flatMap((buckets) =>
+          Object.keys(buckets ?? {}).map(Number)
+        )
+      ),
+    ];
+
+    for (const requiredLevel of [...skillBucketLevels, ...spellBucketLevels]) {
+      const adjusted = applyCampaignPerkToAbilityRequiredLevel(
+        requiredLevel,
+        CAMPAIGN_PERK_ID.abilityMastery
+      );
+
+      assert.equal(adjusted, Math.max(1, requiredLevel - 1));
+      if (requiredLevel > 1) {
+        assert.equal(isAbilityUnlocked(requiredLevel - 1, adjusted), true);
+        assert.equal(isAbilityUnlocked(requiredLevel - 1, requiredLevel), false);
+      }
+    }
   });
 });
