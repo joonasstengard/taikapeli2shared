@@ -8,6 +8,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  MUSTER_EDICT_MAX_RECRUIT_PRICE,
   PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
@@ -20,10 +21,12 @@ import {
   applyCampaignPerkToMarketSpellPrice,
   applyCampaignPerkToExperienceGain,
   applyCampaignPerkToNationHealthLoss,
+  applyCampaignPerkToRecruitPrice,
   applyCampaignPerkToStartingGold,
   applyCampaignPerkToTrainingCost,
   applyRecruitStatBonuses,
   buildCampaignPerkWeeklyGoldDeltas,
+  calculateRecruitPriceForArmyPerk,
   calculateTrainingCostForCampaignPerk,
   getAbilityRequiredLevelOffset,
   getCampaignPerkMarketSpellCount,
@@ -36,6 +39,10 @@ import {
   calculateTrainingCost,
   trainingCostForPoint,
 } from "../warriors/trainingCost";
+import {
+  calculateWarriorRecruitPrice,
+  calculateWarriorReleaseGold,
+} from "../warriors/recruitPrice";
 import { isAbilityUnlocked } from "../warriors/isAbilityUnlocked";
 import { LEVEL_SKILL_BUCKETS_BY_CLASS } from "../skills/levelSkillBuckets";
 import { LEVEL_SPELL_BUCKETS_BY_CLASS } from "../spells/levelSpellBuckets";
@@ -576,5 +583,114 @@ describe("applyCampaignPerkToAbilityGrants", () => {
         assert.equal(isAbilityUnlocked(requiredLevel - 1, requiredLevel), false);
       }
     }
+  });
+});
+
+describe("applyCampaignPerkToRecruitPrice", () => {
+  it("caps recruit prices at 20 gold for Muster Edict", () => {
+    assert.equal(MUSTER_EDICT_MAX_RECRUIT_PRICE, 20);
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(45, CAMPAIGN_PERK_ID.musterEdict),
+      20
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(21, CAMPAIGN_PERK_ID.musterEdict),
+      20
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(20, CAMPAIGN_PERK_ID.musterEdict),
+      20
+    );
+  });
+
+  it("does not raise prices that are already at or below the cap", () => {
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(4, CAMPAIGN_PERK_ID.musterEdict),
+      4
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(19, CAMPAIGN_PERK_ID.musterEdict),
+      19
+    );
+  });
+
+  it("ignores unrelated perks", () => {
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(45, CAMPAIGN_PERK_ID.warChest),
+      45
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(45, CAMPAIGN_PERK_ID.durnKharadDrill),
+      45
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(45, CAMPAIGN_PERK_ID.expandedGrimoire),
+      45
+    );
+  });
+
+  it("returns the base price when no perk is set", () => {
+    assert.equal(applyCampaignPerkToRecruitPrice(45, null), 45);
+    assert.equal(applyCampaignPerkToRecruitPrice(45, undefined), 45);
+  });
+
+  it("does not change zero or negative prices", () => {
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(0, CAMPAIGN_PERK_ID.musterEdict),
+      0
+    );
+    assert.equal(
+      applyCampaignPerkToRecruitPrice(-5, CAMPAIGN_PERK_ID.musterEdict),
+      -5
+    );
+  });
+});
+
+describe("calculateRecruitPriceForArmyPerk (player army contract)", () => {
+  it("caps recruit charges when the army has Muster Edict", () => {
+    assert.equal(
+      calculateRecruitPriceForArmyPerk(50, CAMPAIGN_PERK_ID.musterEdict),
+      MUSTER_EDICT_MAX_RECRUIT_PRICE
+    );
+  });
+
+  it("does not cap recruit charges for unrelated army perks", () => {
+    assert.equal(
+      calculateRecruitPriceForArmyPerk(50, CAMPAIGN_PERK_ID.runicWisdom),
+      50
+    );
+  });
+
+  it("ignores invalid stored perk ids", () => {
+    assert.equal(calculateRecruitPriceForArmyPerk(50, "not_a_real_perk"), 50);
+    assert.equal(calculateRecruitPriceForArmyPerk(50, null), 50);
+  });
+});
+
+describe("Muster Edict does not affect release gold", () => {
+  const expensiveWarrior = {
+    health: 18,
+    mana: 8,
+    strength: 12,
+    stamina: 15,
+    speed: 8,
+    faith: 4,
+    spellDamage: 6,
+    attackRange: 2,
+  };
+
+  it("leaves calculateWarriorReleaseGold based on the uncapped recruit price", () => {
+    const baseRecruit = calculateWarriorRecruitPrice(expensiveWarrior, 2, 2);
+    assert.ok(baseRecruit > MUSTER_EDICT_MAX_RECRUIT_PRICE);
+
+    const cappedRecruit = applyCampaignPerkToRecruitPrice(
+      baseRecruit,
+      CAMPAIGN_PERK_ID.musterEdict
+    );
+    assert.equal(cappedRecruit, MUSTER_EDICT_MAX_RECRUIT_PRICE);
+
+    const releaseGold = calculateWarriorReleaseGold(expensiveWarrior, 2, 2);
+    assert.equal(releaseGold, Math.round(baseRecruit / 2));
+    assert.notEqual(releaseGold, Math.round(cappedRecruit / 2));
   });
 });

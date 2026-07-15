@@ -8,6 +8,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   HEREGELD_WEEKLY_GOLD_BONUS,
   PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
+  MUSTER_EDICT_MAX_RECRUIT_PRICE,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
@@ -110,6 +111,16 @@ describe("CAMPAIGN_PERK_DEFINITIONS", () => {
     assert.equal(pressedIntoService.iconFileName, "pressed_into_service.png");
     assert.equal(pressedIntoService.name, "Pressed Into Service");
     assert.match(pressedIntoService.description, /extra Peasant/);
+
+    const musterEdict = getCampaignPerkDefinition(CAMPAIGN_PERK_ID.musterEdict);
+    assert.equal(MUSTER_EDICT_MAX_RECRUIT_PRICE, 20);
+    assert.deepEqual(musterEdict.effect, {
+      type: "recruit_price_cap",
+      maxPrice: MUSTER_EDICT_MAX_RECRUIT_PRICE,
+    });
+    assert.equal(musterEdict.iconFileName, "muster_edict.png");
+    assert.equal(musterEdict.name, "Muster Edict");
+    assert.match(musterEdict.description, /never exceed 20 gold/);
   });
 
   it("throws for unknown campaign perks", () => {

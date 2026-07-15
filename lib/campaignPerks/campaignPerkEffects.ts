@@ -205,6 +205,39 @@ export function applyCampaignPerkToTrainingCost(
 }
 
 /**
+ * Caps recruit market price for Muster Edict (and similar). Does not affect
+ * release gold — call sites must keep using the uncapped recruit formula there.
+ */
+export function applyCampaignPerkToRecruitPrice(
+  basePrice: number,
+  perkId: CampaignPerkId | null | undefined
+): number {
+  if (basePrice <= 0 || !perkId) {
+    return basePrice;
+  }
+
+  const effect = CAMPAIGN_PERK_DEFINITIONS_BY_ID[perkId]?.effect;
+  if (effect?.type !== "recruit_price_cap") {
+    return basePrice;
+  }
+
+  return Math.min(basePrice, effect.maxPrice);
+}
+
+/**
+ * Resolves an army's stored campaignPerkId and returns the recruit gold cost.
+ * Used by player recruitment so army perk application matches AI.
+ */
+export function calculateRecruitPriceForArmyPerk(
+  basePrice: number,
+  campaignPerkId: string | null | undefined
+): number {
+  const perkId =
+    campaignPerkId && isCampaignPerkId(campaignPerkId) ? campaignPerkId : null;
+  return applyCampaignPerkToRecruitPrice(basePrice, perkId);
+}
+
+/**
  * Returns the required-level offset for ability unlocks (0 when the perk does
  * not affect unlock levels).
  */

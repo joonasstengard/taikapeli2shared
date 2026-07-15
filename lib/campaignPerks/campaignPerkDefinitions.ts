@@ -6,6 +6,7 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELLS_PER_WEEK,
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  MUSTER_EDICT_MAX_RECRUIT_PRICE,
   PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
   RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
@@ -25,6 +26,7 @@ export type CampaignPerkEffect =
   | { type: "recruit_stat_bonus"; stat: RecruitStatBonusStat; bonus: number }
   | { type: "training_cost_multiplier"; multiplier: number }
   | { type: "ability_required_level_offset"; offset: number }
+  | { type: "recruit_price_cap"; maxPrice: number }
   | {
       type: "starting_warrior";
       warriorClass: WarriorClass;
@@ -137,6 +139,16 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
       type: "starting_warrior",
       warriorClass: "Peasant",
       count: PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT,
+    },
+  },
+  {
+    id: CAMPAIGN_PERK_ID.musterEdict,
+    name: "Muster Edict",
+    description: "Warrior recruitment costs never exceed 20 gold.",
+    iconFileName: "muster_edict.png",
+    effect: {
+      type: "recruit_price_cap",
+      maxPrice: MUSTER_EDICT_MAX_RECRUIT_PRICE,
     },
   },
 ];

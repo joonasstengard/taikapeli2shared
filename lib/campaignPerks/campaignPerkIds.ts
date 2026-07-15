@@ -9,6 +9,7 @@ export const CAMPAIGN_PERK_ID = {
   durnKharadDrill: "durn_kharad_drill",
   abilityMastery: "ability_mastery",
   pressedIntoService: "pressed_into_service",
+  musterEdict: "muster_edict",
 } as const;
 
 export type CampaignPerkId =

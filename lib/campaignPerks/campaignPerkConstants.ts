@@ -34,6 +34,9 @@ export const ABILITY_MASTERY_REQUIRED_LEVEL_OFFSET = -1;
 /** Extra Peasants granted at campaign start by Pressed Into Service. */
 export const PRESSED_INTO_SERVICE_STARTING_PEASANT_COUNT = 1;
 
+/** Maximum recruit market price when the army has Muster Edict. */
+export const MUSTER_EDICT_MAX_RECRUIT_PRICE = 20;
+
 /** How many perks are offered to the player at campaign start. */
 export const CAMPAIGN_PERK_OPTIONS_COUNT = 3;
 
