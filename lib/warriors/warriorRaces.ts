@@ -4,6 +4,7 @@ import {
   type WarriorClassGenderKey,
   type WarriorGender,
 } from "./warriorPictureVariants";
+import { getWarriorShiningSprite } from "./warriorShiningSprites";
 
 export const WARRIOR_RACES = ["Human", "Dwarf", "Elf", "Orc"] as const;
 export type WarriorRace = (typeof WARRIOR_RACES)[number];
@@ -55,6 +56,11 @@ export function getWarriorRace(
   gender: WarriorGender,
   picture: number
 ): WarriorRace {
+  const shiningSprite = getWarriorShiningSprite(warriorClass, gender, picture);
+  if (shiningSprite) {
+    return shiningSprite.race;
+  }
+
   const key = `${warriorClass}${gender}` as WarriorClassGenderKey;
   const ranges = WARRIOR_PICTURE_RACE_RANGES[key];
 

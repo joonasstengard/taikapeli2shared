@@ -9,7 +9,6 @@ import {
   WARRIOR_PICTURE_COUNT_OVERRIDES,
   type WarriorClassGenderKey,
 } from "./warriorPictureVariants";
-
 function comboKey(
   warriorClass: (typeof WARRIOR_CLASSES)[number],
   gender: (typeof WARRIOR_GENDERS)[number]

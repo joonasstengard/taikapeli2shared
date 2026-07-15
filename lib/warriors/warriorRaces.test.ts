@@ -59,6 +59,17 @@ describe("getWarriorRace", () => {
     assert.equal(getWarriorRace("Charger", "Male", 0), DEFAULT_WARRIOR_RACE);
     assert.equal(getWarriorRace("Charger", "Male", 99), DEFAULT_WARRIOR_RACE);
   });
+
+});
+
+describe("shining warrior race overrides", () => {
+  it("uses the configured race for every shining spritesheet", () => {
+    // Covered in warriorShiningSprites.test.ts per-entry; keep a race-module smoke check here.
+    assert.equal(getWarriorRace("Knight", "Male", 999), "Human");
+    assert.equal(getWarriorRace("Marksman", "Male", 999), "Dwarf");
+    assert.equal(getWarriorRace("Ranger", "Male", 999), "Orc");
+    assert.equal(getWarriorRace("Priestess", "Female", 999), "Human");
+  });
 });
 
 describe("formatWarriorClassLabel", () => {
