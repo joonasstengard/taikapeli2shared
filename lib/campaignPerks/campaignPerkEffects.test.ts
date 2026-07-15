@@ -6,8 +6,10 @@ import {
   EXPANDED_GRIMOIRE_MARKET_SPELL_PRICE_MULTIPLIER,
   HEREGELD_WEEKLY_GOLD_BONUS,
   LIGHT_IN_THE_DARKNESS_RECRUIT_FAITH_BONUS,
+  RESILIENT_NATION_HEALTH_LOSS_REDUCTION,
   RUNIC_WISDOM_XP_MULTIPLIER,
   UMBRAL_GRACE_RECRUIT_SPEED_BONUS,
+  WAR_CHEST_STARTING_GOLD_BONUS,
 } from "./campaignPerkConstants";
 import {
   applyCampaignPerkToMarketSpellPrice,
@@ -23,9 +25,10 @@ import {
 
 describe("applyCampaignPerkToStartingGold", () => {
   it("adds the War Chest bonus", () => {
+    assert.equal(WAR_CHEST_STARTING_GOLD_BONUS, 20);
     assert.equal(
       applyCampaignPerkToStartingGold(50, CAMPAIGN_PERK_ID.warChest),
-      65
+      70
     );
   });
 
@@ -47,6 +50,7 @@ describe("applyCampaignPerkToStartingGold", () => {
 
 describe("getCampaignPerkWeeklyGoldBonus", () => {
   it("returns the Heregeld bonus", () => {
+    assert.equal(HEREGELD_WEEKLY_GOLD_BONUS, 5);
     assert.equal(
       getCampaignPerkWeeklyGoldBonus(CAMPAIGN_PERK_ID.heregeld),
       HEREGELD_WEEKLY_GOLD_BONUS
@@ -176,9 +180,10 @@ describe("applyCampaignPerkToExperienceGain", () => {
 
 describe("applyCampaignPerkToNationHealthLoss", () => {
   it("reduces loss for Resilient Nation", () => {
+    assert.equal(RESILIENT_NATION_HEALTH_LOSS_REDUCTION, 10);
     assert.equal(
       applyCampaignPerkToNationHealthLoss(30, CAMPAIGN_PERK_ID.resilientNation),
-      25
+      20
     );
   });
 

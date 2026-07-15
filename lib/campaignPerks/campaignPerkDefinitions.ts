@@ -32,7 +32,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.warChest,
     name: "War Chest",
-    description: "Start the campaign with 15 extra gold.",
+    description: "Start the campaign with 20 extra gold.",
     iconFileName: "war_chest.png",
     effect: { type: "starting_gold", bonus: WAR_CHEST_STARTING_GOLD_BONUS },
   },
@@ -49,7 +49,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.resilientNation,
     name: "Resilient Nation",
-    description: "Defeats cost 5 less nation health.",
+    description: "Defeats cost 10 less nation health.",
     iconFileName: "resilient_nation.png",
     effect: {
       type: "nation_health_loss_reduction",
@@ -81,7 +81,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
   {
     id: CAMPAIGN_PERK_ID.heregeld,
     name: "Heregeld",
-    description: "Earn 4 extra gold every week.",
+    description: "Earn 5 extra gold every week.",
     iconFileName: "heregeld.png",
     effect: { type: "weekly_gold", bonus: HEREGELD_WEEKLY_GOLD_BONUS },
   },
@@ -89,7 +89,7 @@ export const CAMPAIGN_PERK_DEFINITIONS: CampaignPerkDefinition[] = [
     id: CAMPAIGN_PERK_ID.expandedGrimoire,
     name: "Expanded Grimoire",
     description:
-      "The weekly spell market offers 8 spells instead of 4, and spells cost 10% less gold.",
+      "The weekly spell market offers 8 spells instead of 4, and spells cost 20% less gold.",
     iconFileName: "expanded_grimoire.png",
     effect: {
       type: "market_spell_options",
