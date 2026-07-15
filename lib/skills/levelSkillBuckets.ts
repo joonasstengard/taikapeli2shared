@@ -123,6 +123,14 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [ SKILL_ID.berserkCharge],
     },
   },
+  Brutalizer: {
+    1: {
+      skillIds: [SKILL_ID.kneeCrack, SKILL_ID.skullCrack],
+    },
+    3: {
+      skillIds: [SKILL_ID.brutalCharge],
+    },
+  },
   Ranger: {
     1: {
       skillIds: [

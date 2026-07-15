@@ -3,6 +3,7 @@
 
 export const COMMON_WARRIOR_CLASSES = [
   "Berserker",
+  "Brutalizer",
   "Charger",
   "King",
   "Knight",
@@ -68,6 +69,8 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   PriestessMale: 0,
   BerserkerMale: 12,
   BerserkerFemale: 0,
+  BrutalizerMale: 13,
+  BrutalizerFemale: 0,
   RangerMale: 11,
   RangerFemale: 0,
   ShamanMale: 8,

@@ -100,6 +100,12 @@ const CLASS_STAGE_ACCENTS: Partial<Record<WarriorClass, StageAccent>> = {
     groundShadow: "rgba(36, 14, 10, 0.44)",
     spriteGlow: "0 0 5px rgba(220, 120, 96, 0.14)",
   },
+  Brutalizer: {
+    spotlight:
+      "radial-gradient(ellipse, rgba(180, 72, 56, 0.24) 0%, rgba(110, 44, 32, 0.12) 48%, transparent 72%)",
+    groundShadow: "rgba(42, 10, 6, 0.48)",
+    spriteGlow: "0 0 5px rgba(180, 72, 56, 0.14)",
+  },
   Charger: {
     spotlight:
       "radial-gradient(ellipse, rgba(230, 150, 96, 0.22) 0%, rgba(170, 96, 56, 0.11) 48%, transparent 72%)",

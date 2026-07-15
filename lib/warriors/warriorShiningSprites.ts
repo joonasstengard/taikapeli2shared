@@ -43,6 +43,12 @@ export const WARRIOR_SHINING_SPRITES: readonly WarriorShiningSprite[] = [
     picture: 999,
   },
   {
+    warriorClass: "Brutalizer",
+    race: "Orc",
+    gender: "Male",
+    picture: 999,
+  },
+  {
     warriorClass: "King",
     race: "Human",
     gender: "Male",
