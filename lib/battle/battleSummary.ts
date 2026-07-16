@@ -287,27 +287,15 @@ export function buildBattleSummary(params: {
   };
 }
 
-export const BATTLE_SUMMARY_STAT_LABELS: Record<keyof BattleWarriorStatDeltas, string> =
-  {
-    health: "Health",
-    mana: "Mana",
-    strength: "Strength",
-    stamina: "Stamina",
-    speed: "Speed",
-    faith: "Faith",
-    spellDamage: "Spell damage",
-  };
-
-export function formatBattleSummaryStatDeltas(
+export function listBattleSummaryStatDeltas(
   statDeltas: BattleWarriorStatDeltas
-): string[] {
+): Array<{ key: keyof BattleWarriorStatDeltas; delta: number }> {
   return STAT_KEYS.flatMap((key) => {
     const delta = statDeltas[key];
     if (delta === 0) {
       return [];
     }
 
-    const sign = delta > 0 ? "+" : "";
-    return [`${BATTLE_SUMMARY_STAT_LABELS[key]} ${sign}${delta}`];
+    return [{ key, delta }];
   });
 }
