@@ -14,6 +14,7 @@ import {
   getClassPassiveTraitForClass,
   grantsBasicAttackBleeding,
   grantsBasicAttackCleave,
+  grantsBoneBreakerBasicAttackBonus,
   grantsBracedBasicAttackBonus,
   grantsHolySpellCastSelfHeal,
   grantsHuntersMarkBasicAttackBonus,
@@ -22,6 +23,7 @@ import {
   grantsWildChannelPrimalSkillManaRestore,
   grantsWildChannelPrimalSpellStaminaRestore,
   getDevotionSpellHealBonus,
+  hasActiveNegativeStatModifier,
   isKingsCommandStrengthBuffTarget,
 } from "./classPassiveTraits";
 
@@ -112,6 +114,14 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     );
   });
 
+  it("assigns Bone Breaker to Brutalizer", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Brutalizer, "boneBreaker");
+    assert.equal(
+      getClassPassiveTraitForClass("Brutalizer")?.name,
+      "Bone Breaker"
+    );
+  });
+
   it("returns null for classes without a trait", () => {
     assert.equal(getClassPassiveTraitForClass("UnknownClass"), null);
   });
@@ -183,11 +193,81 @@ describe("calculateBasicAttackDamage", () => {
     );
   });
 
+  it("adds Bone Breaker bonus against defenders with negative stat modifiers", () => {
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          { turnsRemaining: 1, statModifiers: { speed: -8 } },
+        ],
+      }),
+      6
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          { turnsRemaining: 1, statModifiers: { strength: -5 } },
+        ],
+      }),
+      6
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          {
+            turnsRemaining: 1,
+            statModifiers: { strength: -10, spellDamage: -10, speed: -10 },
+          },
+        ],
+      }),
+      6
+    );
+  });
+
+  it("does not add Bone Breaker bonus against unaffected defenders", () => {
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          { turnsRemaining: 0, statModifiers: { speed: -8 } },
+        ],
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          { turnsRemaining: 1, statModifiers: { strength: 3 } },
+        ],
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [],
+      }),
+      5
+    );
+  });
+
   it("applies offensive bonuses before defender damage reduction", () => {
     assert.equal(
       calculateBasicAttackDamage(5, "Knight", {
         attackerClass: "Marksman",
         attackerHasMovedThisTurn: 0,
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Knight", {
+        attackerClass: "Brutalizer",
+        defenderStatBuffs: [
+          { turnsRemaining: 1, statModifiers: { speed: -8 } },
+        ],
       }),
       5
     );
@@ -229,6 +309,80 @@ describe("grantsHuntersMarkBasicAttackBonus", () => {
     assert.equal(
       grantsHuntersMarkBasicAttackBonus("Marksman", [
         { effectKey: "frozen", turnsRemaining: 1 },
+      ]),
+      false
+    );
+  });
+});
+
+describe("hasActiveNegativeStatModifier", () => {
+  it("detects active negative modifiers", () => {
+    assert.equal(
+      hasActiveNegativeStatModifier([
+        { turnsRemaining: 1, statModifiers: { speed: -8 } },
+      ]),
+      true
+    );
+    assert.equal(
+      hasActiveNegativeStatModifier([
+        { turnsRemaining: 2, statModifiers: { strength: 3 } },
+        { turnsRemaining: 1, statModifiers: { spellDamage: -10 } },
+      ]),
+      true
+    );
+  });
+
+  it("ignores expired, positive-only, and empty buffs", () => {
+    assert.equal(
+      hasActiveNegativeStatModifier([
+        { turnsRemaining: 0, statModifiers: { speed: -8 } },
+      ]),
+      false
+    );
+    assert.equal(
+      hasActiveNegativeStatModifier([
+        { turnsRemaining: 1, statModifiers: { strength: 5 } },
+      ]),
+      false
+    );
+    assert.equal(hasActiveNegativeStatModifier([]), false);
+    assert.equal(hasActiveNegativeStatModifier(undefined), false);
+  });
+});
+
+describe("grantsBoneBreakerBasicAttackBonus", () => {
+  it("applies to Brutalizer attacks against targets with negative stat modifiers", () => {
+    assert.equal(
+      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
+        { turnsRemaining: 1, statModifiers: { speed: -8 } },
+      ]),
+      true
+    );
+    assert.equal(
+      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
+        { turnsRemaining: 1, statModifiers: { strength: -5 } },
+      ]),
+      true
+    );
+  });
+
+  it("does not apply without a qualifying debuff or for other classes", () => {
+    assert.equal(grantsBoneBreakerBasicAttackBonus("Brutalizer", []), false);
+    assert.equal(
+      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
+        { turnsRemaining: 0, statModifiers: { speed: -8 } },
+      ]),
+      false
+    );
+    assert.equal(
+      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
+        { turnsRemaining: 1, statModifiers: { strength: 3 } },
+      ]),
+      false
+    );
+    assert.equal(
+      grantsBoneBreakerBasicAttackBonus("Berserker", [
+        { turnsRemaining: 1, statModifiers: { speed: -8 } },
       ]),
       false
     );

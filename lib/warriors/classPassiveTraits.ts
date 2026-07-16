@@ -7,6 +7,8 @@ import {
   upsertWarriorStatusEffect,
 } from "../statusEffects/warriorStatusEffect";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
+import type { WarriorStatBuffInstance } from "../statBuffs/statBuffTypes";
+import { hasNegativeStatModifiers } from "../statBuffs/sumStatBuffBonuses";
 
 export const CLASS_PASSIVE_TRAIT_KEYS = {
   plateBearing: "plateBearing",
@@ -22,6 +24,7 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   kingsCommand: "kingsCommand",
   humbleOrigins: "humbleOrigins",
   wildChannel: "wildChannel",
+  boneBreaker: "boneBreaker",
 } as const;
 
 export type ClassPassiveTraitKey =
@@ -109,6 +112,12 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     description:
       "Restore 1 stamina after casting a Primal spell, and restore 1 mana after using a Primal skill.",
   },
+  [CLASS_PASSIVE_TRAIT_KEYS.boneBreaker]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.boneBreaker,
+    name: "Bone Breaker",
+    description:
+      "Basic attacks deal 1 additional damage to enemies with a negative stat modifier.",
+  },
 };
 
 /** Passive trait granted to each warrior class. Omit classes with no trait yet. */
@@ -128,6 +137,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   King: CLASS_PASSIVE_TRAIT_KEYS.kingsCommand,
   Peasant: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
   Shaman: CLASS_PASSIVE_TRAIT_KEYS.wildChannel,
+  Brutalizer: CLASS_PASSIVE_TRAIT_KEYS.boneBreaker,
 };
 
 export function getClassPassiveTraitForClass(
@@ -430,6 +440,7 @@ export function applyTakedownTraitRestoreToWarrior(
 
 export const BRACED_BASIC_ATTACK_DAMAGE_BONUS = 1;
 export const HUNTERS_MARK_BASIC_ATTACK_DAMAGE_BONUS = 1;
+export const BONE_BREAKER_BASIC_ATTACK_DAMAGE_BONUS = 1;
 
 export interface BasicAttackDamageModifiers {
   attackerClass?: string;
@@ -437,6 +448,10 @@ export interface BasicAttackDamageModifiers {
   defenderStatusEffects?: Pick<
     WarriorStatusEffect,
     "effectKey" | "turnsRemaining"
+  >[];
+  defenderStatBuffs?: Pick<
+    WarriorStatBuffInstance,
+    "turnsRemaining" | "statModifiers"
   >[];
 }
 
@@ -465,6 +480,26 @@ export function grantsHuntersMarkBasicAttackBonus(
   );
 }
 
+export function hasActiveNegativeStatModifier(
+  defenderStatBuffs: BasicAttackDamageModifiers["defenderStatBuffs"]
+): boolean {
+  return (defenderStatBuffs ?? []).some(
+    (buff) =>
+      buff.turnsRemaining > 0 && hasNegativeStatModifiers(buff.statModifiers)
+  );
+}
+
+export function grantsBoneBreakerBasicAttackBonus(
+  attackerClass: string,
+  defenderStatBuffs: BasicAttackDamageModifiers["defenderStatBuffs"]
+): boolean {
+  const trait = getClassPassiveTraitForClass(attackerClass);
+  return (
+    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.boneBreaker &&
+    hasActiveNegativeStatModifier(defenderStatBuffs)
+  );
+}
+
 function getBasicAttackOffensiveBonus(
   modifiers: BasicAttackDamageModifiers | undefined
 ): number {
@@ -490,6 +525,15 @@ function getBasicAttackOffensiveBonus(
     )
   ) {
     bonus += HUNTERS_MARK_BASIC_ATTACK_DAMAGE_BONUS;
+  }
+
+  if (
+    grantsBoneBreakerBasicAttackBonus(
+      modifiers.attackerClass,
+      modifiers.defenderStatBuffs
+    )
+  ) {
+    bonus += BONE_BREAKER_BASIC_ATTACK_DAMAGE_BONUS;
   }
 
   return bonus;
