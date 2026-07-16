@@ -1,7 +1,7 @@
 export const BLOCKED_OBJECT_SPRITE_SHEET_BASE_PATH =
   "/objects/SpriteSheets";
 
-export const BLOCKED_OBJECT_KEYS = ["campfire", "deerHorn2", "deer6", "deerHorn6", "rock2"] as const;
+export const BLOCKED_OBJECT_KEYS = ["campfire", "deerHorn2", "deer6", "deerHorn6", "rock2", "boneSpike1", "boneSpike2"] as const;
 
 export type BlockedObjectKey = (typeof BLOCKED_OBJECT_KEYS)[number];
 
@@ -76,6 +76,14 @@ export const BLOCKED_OBJECTS: Record<BlockedObjectKey, BlockedObjectConfig> = {
     sheetRows: 6,
     frameMs: 800,
     groundShadow: "wide",
+  },
+  boneSpike1: {
+    type: "static",
+    path: "/objects/BoneSpike1.png",
+  },
+  boneSpike2: {
+    type: "static",
+    path: "/objects/BoneSpike2.png",
   },
 };
 

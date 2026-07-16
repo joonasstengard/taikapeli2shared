@@ -17,6 +17,7 @@ export const BATTLE_MAP_KEYS = [
   "fantasyGrasslands",
   "grayGrasslands1",
   "grayGrasslands2",
+  "skullCave",
   "snowLand1",
   "snowLand2",
   "snowValley",
@@ -32,6 +33,11 @@ export interface BattleMapTemplate {
   blockedTiles?: string[];
   /** Optional per-tile blocked object; falls back to map texture overlays when omitted. */
   blockedTileObjects?: Partial<Record<string, BlockedObjectKey>>;
+  /**
+   * Optional decorative/animated objects on walkable tiles.
+   * Does not block movement; uses the same object catalog as blockedTileObjects.
+   */
+  tileObjects?: Partial<Record<string, BlockedObjectKey>>;
 }
 
 export interface BattleMapConfig extends BattleMapTemplate {
@@ -41,10 +47,10 @@ export interface BattleMapConfig extends BattleMapTemplate {
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   darkCave: {
-    blockedTiles: ["A1", "E1"],
+    blockedTiles: ["A1", "D1", "E1"],
     blockedTileObjects: {
-      A1: "campfire",
-      E1: "campfire"
+      A1: "boneSpike2",
+      D1: "boneSpike1"
     },
   },
   darkend: {
@@ -64,7 +70,10 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
     blockedTiles: ["A2", "E3", "C2", "A5"],
   },
   duskWoods1: { blockedTiles: ["A3", "A1", "E2", "A4", "E4", "E5"] },
-  duskWoods2: { blockedTiles: ["A1", "A4", "E1"] },
+  duskWoods2: { blockedTiles: ["A1", "A4", "E1"],
+    tileObjects: {
+      D2: "campfire"
+    },},
   fantasyForest1: {
     blockedTiles: ["E4", "A2", "E2", "A3", "E3"],
   },
@@ -78,6 +87,10 @@ export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
     blockedTileObjects: {
       E4: "deerHorn2"
     },
+  },
+  skullCave: {
+
+  
   },
   snowLand1: {
     blockedTiles: ["A4", "A3", "E1", "E2"],
@@ -152,6 +165,43 @@ function filterBlockedTileObjectsForMap(
     : undefined;
 }
 
+function filterTileObjectsForMap(
+  tileObjects: Partial<Record<string, BlockedObjectKey>> | undefined,
+  dimensions: Pick<BattleMapConfig, "width" | "height">
+): Partial<Record<string, BlockedObjectKey>> | undefined {
+  if (!tileObjects) {
+    return undefined;
+  }
+
+  const visibleTileObjects: Partial<Record<string, BlockedObjectKey>> = {};
+
+  for (const [tileId, objectKey] of Object.entries(tileObjects)) {
+    if (isTileWithinBattleMap(tileId, dimensions)) {
+      visibleTileObjects[tileId] = objectKey;
+    }
+  }
+
+  return Object.keys(visibleTileObjects).length > 0
+    ? visibleTileObjects
+    : undefined;
+}
+
+function findTileObjectKey(
+  tileId: string,
+  tileObjects: Partial<Record<string, BlockedObjectKey>> | undefined
+): BlockedObjectKey | undefined {
+  if (!tileObjects) {
+    return undefined;
+  }
+
+  const normalizedTileId = tileId.toLowerCase();
+  const entry = Object.entries(tileObjects).find(
+    ([objectTileId]) => objectTileId.toLowerCase() === normalizedTileId
+  );
+
+  return entry?.[1];
+}
+
 export function getBattleMapConfig(
   battleMapKey: string | null | undefined,
   dimensions?: Pick<BattleMapConfig, "width" | "height"> | null
@@ -197,6 +247,10 @@ export function getBattleMapConfig(
       blockedTiles,
       resolvedDimensions
     ),
+    tileObjects: filterTileObjectsForMap(
+      template.tileObjects,
+      resolvedDimensions
+    ),
   };
 }
 
@@ -204,17 +258,14 @@ export function getBlockedTileObjectKey(
   tileId: string,
   battleMap: BattleMapConfig
 ): BlockedObjectKey | undefined {
-  const blockedTileObjects = battleMap.blockedTileObjects;
-  if (!blockedTileObjects) {
-    return undefined;
-  }
+  return findTileObjectKey(tileId, battleMap.blockedTileObjects);
+}
 
-  const normalizedTileId = tileId.toLowerCase();
-  const entry = Object.entries(blockedTileObjects).find(
-    ([blockedTileId]) => blockedTileId.toLowerCase() === normalizedTileId
-  );
-
-  return entry?.[1];
+export function getTileObjectKey(
+  tileId: string,
+  battleMap: BattleMapConfig
+): BlockedObjectKey | undefined {
+  return findTileObjectKey(tileId, battleMap.tileObjects);
 }
 
 export function isBlockedBattleTile(
