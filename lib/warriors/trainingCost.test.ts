@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   calculateTrainingCost,
+  TRAINABLE_STATS,
   TRAINING_BASE_COST,
   TRAINING_LEVEL_MULTIPLIER,
+  TRAINING_STAT_MAX,
   trainingCostForPoint,
 } from "./trainingCost";
 
@@ -40,5 +42,13 @@ describe("calculateTrainingCost", () => {
       calculateTrainingCost(10, 12),
       trainingCostForPoint(10) + trainingCostForPoint(11)
     );
+  });
+
+  it("includes armor and resistance as trainable stats at the shared cap", () => {
+    assert.ok(TRAINABLE_STATS.includes("armor"));
+    assert.ok(TRAINABLE_STATS.includes("resistance"));
+    assert.ok(TRAINABLE_STATS.includes("strength"));
+    assert.ok(TRAINABLE_STATS.includes("faith"));
+    assert.equal(TRAINING_STAT_MAX, 50);
   });
 });

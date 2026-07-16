@@ -26,8 +26,10 @@ import {
   getBloodFeudDamageBonusAgainstWarrior,
   getDevotionSpellHealBonus,
   getEldritchSpiteDamageBonusAgainstWarrior,
+  HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS,
   isKingsCommandStrengthBuffTarget,
 } from "./classPassiveTraits";
+import { applyArmorMitigation } from "./damageMitigation";
 
 describe("CLASS_PASSIVE_TRAITS", () => {
   it("assigns Plate Bearing to Knight", () => {
@@ -136,6 +138,62 @@ describe("calculateBasicAttackDamage", () => {
     assert.equal(calculateBasicAttackDamage(1, "Knight"), 1);
   });
 
+  it("applies armor before the Knight's Plate Bearing reduction", () => {
+    assert.equal(
+      calculateBasicAttackDamage(10, "Knight", { defenderArmor: 20 }),
+      5
+    );
+  });
+
+  it("Layer 3: locks strength × armor × Plate Bearing damage table", () => {
+    const cases: ReadonlyArray<{
+      attackPower: number;
+      armor: number;
+      defenderClass: string;
+      expected: number;
+    }> = [
+      { attackPower: 8, armor: 0, defenderClass: "Berserker", expected: 8 },
+      { attackPower: 8, armor: 10, defenderClass: "Berserker", expected: 6 },
+      { attackPower: 8, armor: 10, defenderClass: "Knight", expected: 5 },
+      { attackPower: 15, armor: 20, defenderClass: "Berserker", expected: 10 },
+      { attackPower: 15, armor: 20, defenderClass: "Knight", expected: 9 },
+      { attackPower: 1, armor: 50, defenderClass: "Berserker", expected: 1 },
+      { attackPower: 1, armor: 50, defenderClass: "Knight", expected: 1 },
+      { attackPower: 2, armor: 50, defenderClass: "Knight", expected: 1 },
+      { attackPower: 10, armor: 5, defenderClass: "Berserker", expected: 8 },
+      { attackPower: 10, armor: 5, defenderClass: "Knight", expected: 7 },
+      { attackPower: 0, armor: 20, defenderClass: "Berserker", expected: 0 },
+      { attackPower: 0, armor: 20, defenderClass: "Knight", expected: 0 },
+    ];
+
+    for (const row of cases) {
+      const actual = calculateBasicAttackDamage(row.attackPower, row.defenderClass, {
+        defenderArmor: row.armor,
+      });
+      assert.equal(
+        actual,
+        row.expected,
+        `power=${row.attackPower} armor=${row.armor} class=${row.defenderClass}`
+      );
+
+      const mitigated = applyArmorMitigation(
+        Math.max(0, row.attackPower),
+        row.armor
+      );
+      const expectedFromFormula =
+        row.defenderClass === "Knight"
+          ? mitigated > 0
+            ? Math.max(1, mitigated - 1)
+            : 0
+          : mitigated;
+      assert.equal(
+        actual,
+        expectedFromFormula,
+        `formula mismatch power=${row.attackPower} armor=${row.armor} class=${row.defenderClass}`
+      );
+    }
+  });
+
   it("does not modify damage against defenders without traits", () => {
     assert.equal(calculateBasicAttackDamage(5, "Berserker"), 5);
     assert.equal(calculateBasicAttackDamage(1, "Berserker"), 1);
@@ -143,7 +201,7 @@ describe("calculateBasicAttackDamage", () => {
 
   it("clamps negative attack power to zero before traits", () => {
     assert.equal(calculateBasicAttackDamage(-3, "Berserker"), 0);
-    assert.equal(calculateBasicAttackDamage(-3, "Knight"), 1);
+    assert.equal(calculateBasicAttackDamage(-3, "Knight"), 0);
   });
 
   it("adds Braced bonus for stationary Marksman attackers", () => {
@@ -856,41 +914,30 @@ describe("applyHumbleOriginsExperienceBonus", () => {
 });
 
 describe("applyHumbleOriginsLevelUpBonus", () => {
-  it("adds +1 to the selected permanent stat", () => {
-    const stats = {
-      health: 10,
-      mana: 1,
-      strength: 4,
-      stamina: 3,
-      speed: 2,
-      faith: 1,
-      spellDamage: 1,
-      currentHealth: 8,
-      currentMana: 1,
-      currentStamina: 3,
-    };
+  const baseStats = {
+    health: 10,
+    mana: 1,
+    strength: 4,
+    stamina: 3,
+    speed: 2,
+    faith: 1,
+    spellDamage: 1,
+    armor: 5,
+    resistance: 3,
+    currentHealth: 8,
+    currentMana: 1,
+    currentStamina: 3,
+  };
 
-    const result = applyHumbleOriginsLevelUpBonus(stats, 2);
+  it("adds +1 to the selected permanent stat", () => {
+    const result = applyHumbleOriginsLevelUpBonus(baseStats, 2);
 
     assert.equal(result.strength, 5);
-    assert.equal(result.health, stats.health);
+    assert.equal(result.health, baseStats.health);
   });
 
   it("also increases matching current pool stats when alive", () => {
-    const stats = {
-      health: 10,
-      mana: 1,
-      strength: 4,
-      stamina: 3,
-      speed: 2,
-      faith: 1,
-      spellDamage: 1,
-      currentHealth: 8,
-      currentMana: 1,
-      currentStamina: 3,
-    };
-
-    const result = applyHumbleOriginsLevelUpBonus(stats, 0);
+    const result = applyHumbleOriginsLevelUpBonus(baseStats, 0);
 
     assert.equal(result.health, 11);
     assert.equal(result.currentHealth, 9);
@@ -898,13 +945,7 @@ describe("applyHumbleOriginsLevelUpBonus", () => {
 
   it("does not restore current health for defeated warriors", () => {
     const stats = {
-      health: 10,
-      mana: 1,
-      strength: 4,
-      stamina: 3,
-      speed: 2,
-      faith: 1,
-      spellDamage: 1,
+      ...baseStats,
       currentHealth: 0,
       currentMana: 0,
       currentStamina: 0,
@@ -914,5 +955,47 @@ describe("applyHumbleOriginsLevelUpBonus", () => {
 
     assert.equal(result.health, 11);
     assert.equal(result.currentHealth, 0);
+  });
+
+  it("Layer 3: includes armor and resistance in the level-up stat key list", () => {
+    assert.equal(HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS[7], "armor");
+    assert.equal(HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS[8], "resistance");
+    assert.ok(HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.includes("armor"));
+    assert.ok(HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.includes("resistance"));
+  });
+
+  it("Layer 3: grants +1 armor when the random index selects armor", () => {
+    const armorIndex = HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.indexOf("armor");
+    assert.equal(armorIndex, 7);
+
+    const result = applyHumbleOriginsLevelUpBonus(baseStats, armorIndex);
+
+    assert.equal(result.armor, baseStats.armor + 1);
+    assert.equal(result.resistance, baseStats.resistance);
+    assert.equal(result.strength, baseStats.strength);
+  });
+
+  it("Layer 3: grants +1 resistance when the random index selects resistance", () => {
+    const resistanceIndex =
+      HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.indexOf("resistance");
+    assert.equal(resistanceIndex, 8);
+
+    const result = applyHumbleOriginsLevelUpBonus(baseStats, resistanceIndex);
+
+    assert.equal(result.resistance, baseStats.resistance + 1);
+    assert.equal(result.armor, baseStats.armor);
+    assert.equal(result.strength, baseStats.strength);
+  });
+
+  it("Layer 3: wraps randomStatIndex with modulo across armor/resistance", () => {
+    const length = HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.length;
+    const armorViaWrap = applyHumbleOriginsLevelUpBonus(baseStats, 7 + length);
+    const resistanceViaWrap = applyHumbleOriginsLevelUpBonus(
+      baseStats,
+      8 + length
+    );
+
+    assert.equal(armorViaWrap.armor, baseStats.armor + 1);
+    assert.equal(resistanceViaWrap.resistance, baseStats.resistance + 1);
   });
 });

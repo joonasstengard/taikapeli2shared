@@ -17,7 +17,13 @@ export type StatusEffectTag =
   | "blocks_damage"
   | "transform";
 
-export type CombatStat = "strength" | "speed" | "faith" | "spellDamage";
+export type CombatStat =
+  | "strength"
+  | "speed"
+  | "faith"
+  | "spellDamage"
+  | "armor"
+  | "resistance";
 
 /** Static status effect definition (game data, not a DB row). */
 export interface StatusEffectDefinition {

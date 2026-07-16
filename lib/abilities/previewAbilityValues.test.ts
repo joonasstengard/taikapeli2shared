@@ -10,6 +10,14 @@ import {
   previewSpellDamage,
   previewSpellManaRestore,
 } from "./previewAbilityValues";
+import {
+  applyArmorMitigation,
+  applyResistanceMitigation,
+} from "../warriors/damageMitigation";
+import {
+  ROUTING_HIGH_DEFENSE,
+  ROUTING_LOW_DEFENSE,
+} from "../warriors/mitigationRoutingAssert";
 
 describe("calculateLastStandDamage", () => {
   it("returns base damage at full health", () => {
@@ -140,6 +148,31 @@ describe("previewSpellDamage", () => {
       5
     );
   });
+
+  it("applies the defender's effective resistance", () => {
+    assert.equal(
+      previewSpellDamage(
+        holyBolt,
+        {
+          health: 10,
+          currentHealth: 10,
+          strength: 0,
+          faith: 4,
+          spellDamage: 6,
+        },
+        {
+          warriorClass: "Knight",
+          gender: "Male",
+          picture: 1,
+          resistance: 20,
+          statBuffs: [
+            { turnsRemaining: 2, statModifiers: { resistance: 10 } },
+          ],
+        }
+      ),
+      5
+    );
+  });
 });
 
 describe("previewSkillDamage", () => {
@@ -239,6 +272,29 @@ describe("previewSkillDamage", () => {
         spellDamage: 0,
       }),
       7
+    );
+  });
+
+  it("applies the defender's effective armor", () => {
+    assert.equal(
+      previewSkillDamage(
+        strike,
+        {
+          health: 10,
+          currentHealth: 10,
+          strength: 12,
+          faith: 0,
+          spellDamage: 0,
+        },
+        {
+          warriorClass: "Knight",
+          gender: "Male",
+          picture: 1,
+          armor: 10,
+          statBuffs: [{ turnsRemaining: 2, statModifiers: { armor: 10 } }],
+        }
+      ),
+      10
     );
   });
 });
@@ -356,6 +412,92 @@ describe("previewSkillCombatValues", () => {
         hasLastStandEffect: false,
         hasSacrificeEffect: false,
       }
+    );
+  });
+});
+
+describe("Layer 4: preview ↔ combat mitigation lock", () => {
+  const flatStrike = {
+    baseDamageTarget: 15,
+    baseHealTarget: 0,
+    scalingFactor: 0,
+    type: null,
+    effect: null,
+  };
+
+  const flatBolt = {
+    baseDamageTarget: 15,
+    baseHealTarget: 0,
+    scalingFactor: 0,
+    type: null,
+    effect: null,
+  };
+
+  const caster = {
+    health: 20,
+    currentHealth: 20,
+    strength: 0,
+    faith: 0,
+    spellDamage: 0,
+  };
+
+  it("previewSkillDamage matches applyArmorMitigation for the same raw and armor", () => {
+    for (const armor of [0, 1, 10, 20, 50] as const) {
+      assert.equal(
+        previewSkillDamage(flatStrike, caster, {
+          warriorClass: "Berserker",
+          gender: "Male",
+          picture: 1,
+          armor,
+          resistance: ROUTING_HIGH_DEFENSE,
+        }),
+        applyArmorMitigation(15, armor),
+        `armor=${armor}`
+      );
+    }
+  });
+
+  it("previewSpellDamage matches applyResistanceMitigation for the same raw and resistance", () => {
+    for (const resistance of [0, 1, 10, 20, 50] as const) {
+      assert.equal(
+        previewSpellDamage(flatBolt, caster, {
+          warriorClass: "Berserker",
+          gender: "Male",
+          picture: 1,
+          armor: ROUTING_HIGH_DEFENSE,
+          resistance,
+        }),
+        applyResistanceMitigation(15, resistance),
+        `resistance=${resistance}`
+      );
+    }
+  });
+
+  it("previewSkillDamage uses effective armor including buffs", () => {
+    assert.equal(
+      previewSkillDamage(flatStrike, caster, {
+        warriorClass: "Berserker",
+        gender: "Male",
+        picture: 1,
+        armor: 10,
+        resistance: ROUTING_LOW_DEFENSE,
+        statBuffs: [{ turnsRemaining: 2, statModifiers: { armor: 10 } }],
+      }),
+      applyArmorMitigation(15, 20)
+    );
+  });
+
+  it("previewSpellDamage uses effective resistance including buffs", () => {
+    assert.equal(
+      previewSpellDamage(flatBolt, caster, {
+        warriorClass: "Berserker",
+        gender: "Male",
+        picture: 1,
+        armor: ROUTING_LOW_DEFENSE,
+        resistance: 10,
+        statBuffs: [{ turnsRemaining: 2, statModifiers: { resistance: 10 } }],
+      }),
+      applyResistanceMitigation(15, 20)
     );
   });
 });

@@ -680,6 +680,8 @@ describe("Muster Edict does not affect release gold", () => {
     speed: 8,
     faith: 4,
     spellDamage: 6,
+    armor: 4,
+    resistance: 3,
     attackRange: 2,
   };
 
@@ -723,6 +725,8 @@ describe("Grave Tax release gold", () => {
     speed: 8,
     faith: 4,
     spellDamage: 6,
+    armor: 4,
+    resistance: 3,
     attackRange: 2,
   };
 

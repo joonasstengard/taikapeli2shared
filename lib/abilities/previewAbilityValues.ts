@@ -15,6 +15,8 @@ import {
   toSpellCasterCombatStats,
 } from "../spells/spellPower";
 import {
+  getEffectiveArmor,
+  getEffectiveResistance,
   toEffectiveSkillCasterCombatStats,
   toEffectiveSpellCasterCombatStats,
 } from "../statusEffects/resolveCombatStats";
@@ -24,6 +26,10 @@ import {
   getEldritchSpiteDamageBonusAgainstWarrior,
   type RaceBonusDefenderIdentity,
 } from "../warriors/classPassiveTraits";
+import {
+  applyArmorMitigation,
+  applyResistanceMitigation,
+} from "../warriors/damageMitigation";
 
 export interface AbilityPreviewCaster {
   warriorClass?: string;
@@ -44,6 +50,13 @@ export interface AbilityPreviewValues {
   manaRestore: number | null;
   hasLastStandEffect: boolean;
   hasSacrificeEffect: boolean;
+}
+
+export interface AbilityPreviewDefender extends RaceBonusDefenderIdentity {
+  armor?: number;
+  resistance?: number;
+  statusEffects?: Pick<WarriorStatusEffect, "effectKey" | "turnsRemaining">[];
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[];
 }
 
 interface AbilityPreviewInput extends SpellScalingValues {
@@ -85,7 +98,7 @@ function toPreviewSkillCasterStats(
 export function previewSpellDamage(
   spell: AbilityPreviewInput,
   caster: AbilityPreviewCaster,
-  defender?: RaceBonusDefenderIdentity
+  defender?: AbilityPreviewDefender
 ): number {
   if (spell.baseDamageTarget <= 0) {
     return 0;
@@ -97,17 +110,27 @@ export function previewSpellDamage(
     caster
   );
 
-  return (
+  const rawDamage =
     adjustedBase +
     calculateSpellDamageBonus(spell, toPreviewCasterStats(caster)) +
-    getEldritchSpiteDamageBonusAgainstWarrior(caster.warriorClass, defender)
+    getEldritchSpiteDamageBonusAgainstWarrior(caster.warriorClass, defender);
+
+  return applyResistanceMitigation(
+    rawDamage,
+    defender
+      ? getEffectiveResistance(
+          defender,
+          defender.statusEffects,
+          defender.statBuffs
+        )
+      : 0
   );
 }
 
 export function previewSkillDamage(
   skill: AbilityPreviewInput,
   caster: AbilityPreviewCaster,
-  defender?: RaceBonusDefenderIdentity
+  defender?: AbilityPreviewDefender
 ): number {
   if (skill.baseDamageTarget <= 0) {
     return 0;
@@ -119,10 +142,16 @@ export function previewSkillDamage(
     caster
   );
 
-  return (
+  const rawDamage =
     adjustedBase +
     calculateSkillDamageBonus(skill, toPreviewSkillCasterStats(caster)) +
-    getBloodFeudDamageBonusAgainstWarrior(caster.warriorClass, defender)
+    getBloodFeudDamageBonusAgainstWarrior(caster.warriorClass, defender);
+
+  return applyArmorMitigation(
+    rawDamage,
+    defender
+      ? getEffectiveArmor(defender, defender.statusEffects, defender.statBuffs)
+      : 0
   );
 }
 

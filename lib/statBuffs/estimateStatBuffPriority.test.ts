@@ -155,6 +155,8 @@ describe("resolveCombatStats with stat buffs", () => {
     speed: 4,
     faith: 2,
     spellDamage: 3,
+    armor: 0,
+    resistance: 0,
   };
 
   it("combines status and stat buff bonuses", () => {
@@ -241,6 +243,32 @@ describe("estimateInlineStatBuffPriority", () => {
 
     assert.equal(full, 41);
     assert.equal(reduced, 27);
+  });
+
+  it("Layer 4: values armor and resistance buffs at defense weight", () => {
+    assert.equal(estimateInlineStatBuffPriority({ armor: 4 }, 2), 8);
+    assert.equal(estimateInlineStatBuffPriority({ resistance: 4 }, 2), 8);
+    assert.equal(
+      estimateInlineStatBuffPriority({ armor: 3, resistance: 2 }, 1),
+      5
+    );
+  });
+
+  it("Layer 4: armor/resistance are not scaled by combat offense multiplier", () => {
+    const full = estimateInlineStatBuffPriority(
+      { armor: 4, strength: 4 },
+      1,
+      { combatOffenseMultiplier: 1 }
+    );
+    const reduced = estimateInlineStatBuffPriority(
+      { armor: 4, strength: 4 },
+      1,
+      { combatOffenseMultiplier: 0.5 }
+    );
+
+    // strength 4*1.5=6 vs 3; armor stays 4*1=4 → 10 vs 7
+    assert.equal(full, 10);
+    assert.equal(reduced, 7);
   });
 });
 
@@ -368,6 +396,17 @@ describe("estimateInlineStatDebuffPriority", () => {
   it("returns null for positive-only modifiers or invalid duration", () => {
     assert.equal(estimateInlineStatDebuffPriority({ strength: 5 }, 1), null);
     assert.equal(estimateInlineStatDebuffPriority({ strength: -5 }, 0), null);
+  });
+
+  it("Layer 4: values armor and resistance shreds at defense weight × debuff scale", () => {
+    assert.equal(
+      estimateInlineStatDebuffPriority({ armor: -4 }, 2),
+      Math.round(4 * 1.0 * STAT_DEBUFF_PRIORITY_SCALE * 2)
+    );
+    assert.equal(
+      estimateInlineStatDebuffPriority({ resistance: -4 }, 2),
+      Math.round(4 * 1.0 * STAT_DEBUFF_PRIORITY_SCALE * 2)
+    );
   });
 });
 

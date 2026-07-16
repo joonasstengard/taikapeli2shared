@@ -19,6 +19,8 @@ export const STAT_BUFF_PRIORITY_WEIGHT: Record<CombatStat, number> = {
   speed: 1.2,
   faith: 1.0,
   spellDamage: 1.0,
+  armor: 1.0,
+  resistance: 1.0,
 };
 
 /**

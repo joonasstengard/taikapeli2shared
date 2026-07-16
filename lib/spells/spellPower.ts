@@ -79,6 +79,8 @@ export function toSkillCasterCombatStats(
     speed: warrior.speed ?? 0,
     faith: warrior.faith ?? 0,
     spellDamage: warrior.spellDamage ?? 0,
+    armor: warrior.armor ?? 0,
+    resistance: warrior.resistance ?? 0,
   };
 }
 

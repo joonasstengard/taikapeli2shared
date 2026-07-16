@@ -4,8 +4,11 @@ import type { CombatStat } from "../statusEffects/statusEffectTypes";
 export type SkillTargetingType = SpellTargetingType;
 export type SkillEffect = SpellEffect;
 
-/** Combat stat used to scale skill damage via scalingFactor. Defaults to strength. */
-export type SkillDamageScalingStat = CombatStat;
+/** Offensive combat stat used to scale skill damage. Defaults to strength. */
+export type SkillDamageScalingStat = Exclude<
+  CombatStat,
+  "armor" | "resistance"
+>;
 
 /** Core skill fields shared by definitions and warrior-owned skills. */
 export interface SkillDefinition {

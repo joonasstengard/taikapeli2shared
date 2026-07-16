@@ -18,6 +18,10 @@ export interface WarriorBase {
   speed: number;
   faith: number;
   spellDamage: number;
+  /** Physical defense (basic attacks + skills). */
+  armor: number;
+  /** Magical defense (spells). */
+  resistance: number;
   battleTileCurrent: string | null;
   hasActedThisRound: boolean;
   hasUsedMoveThisTurn: boolean;

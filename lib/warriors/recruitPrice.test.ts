@@ -6,6 +6,7 @@ import {
   calculateWarriorReleaseGold,
   calculateWarriorStatRecruitValue,
   HIGH_VALUE_STAT_MULTIPLIER,
+  isHighValueStat,
   RECRUIT_BASE_PRICE,
   RECRUIT_MIN_PRICE,
   RECRUIT_PRICE_MULTIPLIER,
@@ -25,6 +26,8 @@ const BASELINE_WARRIOR = {
   speed: 1,
   faith: 1,
   spellDamage: 1,
+  armor: 1,
+  resistance: 1,
   attackRange: 1,
 };
 
@@ -56,6 +59,36 @@ describe("recruitStatContribution", () => {
       recruitStatContribution(4),
       recruitCostForPoint(1) + recruitCostForPoint(2) + recruitCostForPoint(3)
     );
+  });
+
+  it("prices armor and resistance the same as strength and faith", () => {
+    const withArmor = calculateWarriorStatRecruitValue({
+      ...BASELINE_WARRIOR,
+      armor: 10,
+    });
+    const withStrength = calculateWarriorStatRecruitValue({
+      ...BASELINE_WARRIOR,
+      strength: 10,
+    });
+    const withResistance = calculateWarriorStatRecruitValue({
+      ...BASELINE_WARRIOR,
+      resistance: 10,
+    });
+    const withFaith = calculateWarriorStatRecruitValue({
+      ...BASELINE_WARRIOR,
+      faith: 10,
+    });
+
+    assert.equal(withArmor, withStrength);
+    assert.equal(withResistance, withFaith);
+    assert.equal(withArmor, withResistance);
+  });
+
+  it("does not treat armor or resistance as high-value stats", () => {
+    assert.equal(isHighValueStat("armor"), false);
+    assert.equal(isHighValueStat("resistance"), false);
+    assert.equal(isHighValueStat("strength"), false);
+    assert.equal(isHighValueStat("attackRange"), true);
   });
 });
 

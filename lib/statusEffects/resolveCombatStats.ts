@@ -31,6 +31,8 @@ const COMBAT_STATS: CombatStat[] = [
   "speed",
   "faith",
   "spellDamage",
+  "armor",
+  "resistance",
 ];
 
 function readBaseCombatStats(
@@ -41,6 +43,8 @@ function readBaseCombatStats(
     speed: warrior.speed ?? 0,
     faith: warrior.faith ?? 0,
     spellDamage: warrior.spellDamage ?? 0,
+    armor: warrior.armor ?? 0,
+    resistance: warrior.resistance ?? 0,
   };
 }
 
@@ -113,6 +117,23 @@ export function getEffectiveSpeed(
   statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
 ): number {
   return resolveCombatStats(warrior, statusEffects, statBuffs).effective.speed;
+}
+
+export function getEffectiveArmor(
+  warrior: WarriorCombatStatSource,
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
+): number {
+  return resolveCombatStats(warrior, statusEffects, statBuffs).effective.armor;
+}
+
+export function getEffectiveResistance(
+  warrior: WarriorCombatStatSource,
+  statusEffects?: ActiveStatusEffect[],
+  statBuffs?: Pick<WarriorStatBuffInstance, "turnsRemaining" | "statModifiers">[]
+): number {
+  return resolveCombatStats(warrior, statusEffects, statBuffs).effective
+    .resistance;
 }
 
 export function toEffectiveSkillCasterCombatStats(

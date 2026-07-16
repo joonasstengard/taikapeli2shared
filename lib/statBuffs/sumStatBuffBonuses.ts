@@ -6,6 +6,8 @@ const COMBAT_STATS: CombatStat[] = [
   "speed",
   "faith",
   "spellDamage",
+  "armor",
+  "resistance",
 ];
 
 export function hasPositiveStatModifiers(

@@ -8,6 +8,7 @@ import {
 } from "../statusEffects/warriorStatusEffect";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
 import { getWarriorRace, type WarriorRace } from "./warriorRaces";
+import { applyArmorMitigation } from "./damageMitigation";
 
 export const CLASS_PASSIVE_TRAIT_KEYS = {
   plateBearing: "plateBearing",
@@ -168,6 +169,8 @@ export const HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS = [
   "speed",
   "faith",
   "spellDamage",
+  "armor",
+  "resistance",
 ] as const;
 
 export type HumbleOriginsLevelUpStatKey =
@@ -465,6 +468,8 @@ export interface BasicAttackDamageModifiers {
     "effectKey" | "turnsRemaining"
   >[];
   defenderRace?: WarriorRace | string;
+  /** Effective armor after status effects and temporary stat buffs. */
+  defenderArmor?: number;
 }
 
 export interface RaceBonusDefenderIdentity {
@@ -649,16 +654,23 @@ export function calculateBasicAttackDamage(
 ): number {
   const rawDamage =
     Math.max(0, attackPower) + getBasicAttackOffensiveBonus(modifiers);
+  const mitigatedDamage = applyArmorMitigation(
+    rawDamage,
+    modifiers?.defenderArmor ?? 0
+  );
   const trait = getClassPassiveTraitForClass(defenderClass);
 
   if (!trait) {
-    return rawDamage;
+    return mitigatedDamage;
   }
 
   switch (trait.key) {
     case CLASS_PASSIVE_TRAIT_KEYS.plateBearing:
-      return Math.max(1, rawDamage - 1);
+      // Only reduce real hits — never manufacture damage from a zero/negative swing.
+      return mitigatedDamage > 0
+        ? Math.max(1, mitigatedDamage - 1)
+        : 0;
     default:
-      return rawDamage;
+      return mitigatedDamage;
   }
 }
