@@ -47,7 +47,7 @@ export interface BattleMapConfig extends BattleMapTemplate {
 
 export const BATTLE_MAPS: Record<BattleMapKey, BattleMapTemplate> = {
   darkCave: {
-    blockedTiles: ["A1", "D1", "E1"],
+    blockedTiles: ["A1", "D1"],
     blockedTileObjects: {
       A1: "boneSpike2",
       D1: "boneSpike1"

@@ -207,12 +207,16 @@ export function applyHumbleOriginsExperienceBonus(
 /** Applies +1 to one random permanent stat after a level up. */
 export function applyHumbleOriginsLevelUpBonus<T extends HumbleOriginsLevelUpStats>(
   stats: T,
-  randomStatIndex: number
+  randomStatIndex: number,
+  eligibleStatKeys: readonly HumbleOriginsLevelUpStatKey[] =
+    HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS
 ): T {
+  if (eligibleStatKeys.length === 0) {
+    return stats;
+  }
+
   const statKey =
-    HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS[
-      randomStatIndex % HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS.length
-    ];
+    eligibleStatKeys[randomStatIndex % eligibleStatKeys.length];
   const wasDefeated = stats.currentHealth <= 0;
   const updated = { ...stats, [statKey]: stats[statKey] + 1 };
 
