@@ -96,6 +96,7 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
       armor: "1-3",
       resistance: "1-3",
       mana: "1-1",
+      faith: "1-1",
       spellDamage: "1-1",
     },
   },

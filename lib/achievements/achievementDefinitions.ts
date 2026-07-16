@@ -24,23 +24,23 @@ export const ISMO_WARRIOR_NAME_SUBSTRING = "Ismo";
 /** Minimum spell market purchases required for the arcane mysteries achievement. */
 export const ARCANE_MYSTERIES_MIN_SPELL_PURCHASES = 3;
 
-/** Warrior class that must be present in the army for the ghost warrior achievement. */
+/** Warrior class that must be recruited for the ghost warrior achievement. */
 export const GHOST_WARRIOR_REQUIRED_CLASS: WarriorClass = "Infiltrator";
 
-export type AchievementTrigger = "campaign_won";
+export type AchievementTrigger = "campaign_won" | "warrior_recruited";
 
 export type AchievementCategory = "starter" | "challenge" | "exploration";
 
-export type AchievementTier = "easy" | "medium" | "hard";
+export type AchievementTiers = "easy" | "medium" | "hard";
 
-export const ACHIEVEMENT_TIERS: AchievementTier[] = ["easy", "medium", "hard"];
+export const ACHIEVEMENT_TIERS: AchievementTiers[] = ["easy", "medium", "hard"];
 
 export interface AchievementDefinition {
   id: AchievementId;
   title: string;
   description: string;
   category: AchievementCategory;
-  tier: AchievementTier;
+  tier: AchievementTiers;
   isSecret: boolean;
   trigger: AchievementTrigger;
   counterStatKey?: StatKey;
@@ -50,7 +50,7 @@ export interface AchievementDefinition {
   minTreasuryGold?: number;
   minDistinctRecruitedWarriorClasses?: number;
   requiredWarriorNameContains?: string;
-  requiredWarriorClassInArmy?: WarriorClass;
+  requiredRecruitedWarriorClass?: WarriorClass;
   minSpellPurchases?: number;
 }
 
@@ -222,14 +222,14 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     minSpellPurchases: ARCANE_MYSTERIES_MIN_SPELL_PURCHASES,
   },
   {
-    id: ACHIEVEMENT_ID.ghostWarriorCampaignWin,
+    id: ACHIEVEMENT_ID.ghostWarriorRecruit,
     title: "Ghost warrior",
-    description: "Win a campaign with an Infiltrator in your army.",
+    description: "Recruit an Infiltrator.",
     category: "exploration",
     tier: "medium",
     isSecret: false,
-    trigger: "campaign_won",
-    requiredWarriorClassInArmy: GHOST_WARRIOR_REQUIRED_CLASS,
+    trigger: "warrior_recruited",
+    requiredRecruitedWarriorClass: GHOST_WARRIOR_REQUIRED_CLASS,
   },
   {
     id: ACHIEVEMENT_ID.humanOnlyCampaignWin,
@@ -287,4 +287,9 @@ export const ACHIEVEMENT_DEFINITIONS_BY_ID: Record<
 export const CAMPAIGN_END_ACHIEVEMENT_DEFINITIONS =
   ACHIEVEMENT_DEFINITIONS.filter(
     (definition) => definition.trigger === "campaign_won"
+  );
+
+export const WARRIOR_RECRUITED_ACHIEVEMENT_DEFINITIONS =
+  ACHIEVEMENT_DEFINITIONS.filter(
+    (definition) => definition.trigger === "warrior_recruited"
   );

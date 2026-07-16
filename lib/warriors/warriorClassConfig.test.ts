@@ -8,13 +8,14 @@ import {
 
 const MANA_CLASSES = new Set([
   "Paladin",
+  "Peasant",
   "Warlock",
   "Moonblade",
   "Priestess",
   "Shaman",
   "Sorcerer",
 ]);
-const FAITH_CLASSES = new Set(["Paladin", "Priestess", "Sorcerer"]);
+const FAITH_CLASSES = new Set(["Paladin", "Peasant", "Priestess", "Sorcerer"]);
 const NO_STAMINA_CLASSES = new Set(["Warlock", "Priestess", "Sorcerer"]);
 
 describe("warrior class conditional stats", () => {

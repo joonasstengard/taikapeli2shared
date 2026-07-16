@@ -15,7 +15,7 @@ export const ACHIEVEMENT_ID = {
   diverseCompanyCampaignWin: 14,
   ismoCampaignWin: 15,
   arcaneMysteriesCampaignWin: 16,
-  ghostWarriorCampaignWin: 17,
+  ghostWarriorRecruit: 17,
   humanOnlyCampaignWin: 18,
   elfOnlyCampaignWin: 19,
   dwarfOnlyCampaignWin: 20,

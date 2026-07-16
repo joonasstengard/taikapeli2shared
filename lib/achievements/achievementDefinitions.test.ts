@@ -127,26 +127,29 @@ describe("arcane mysteries achievement definition", () => {
 
 describe("ghost warrior achievement definition", () => {
   const ghostWarriorDefinition =
-    ACHIEVEMENT_DEFINITIONS_BY_ID[ACHIEVEMENT_ID.ghostWarriorCampaignWin];
+    ACHIEVEMENT_DEFINITIONS_BY_ID[ACHIEVEMENT_ID.ghostWarriorRecruit];
 
   it("is registered with the expected metadata", () => {
     assert.equal(ghostWarriorDefinition.title, "Ghost warrior");
     assert.equal(
       ghostWarriorDefinition.description,
-      "Win a campaign with an Infiltrator in your army."
+      "Recruit an Infiltrator."
     );
     assert.equal(ghostWarriorDefinition.category, "exploration");
     assert.equal(ghostWarriorDefinition.tier, "medium");
     assert.equal(ghostWarriorDefinition.isSecret, false);
-    assert.equal(ghostWarriorDefinition.trigger, "campaign_won");
+    assert.equal(ghostWarriorDefinition.trigger, "warrior_recruited");
   });
 
   it("uses the shared Infiltrator class constant", () => {
     assert.equal(
-      ghostWarriorDefinition.requiredWarriorClassInArmy,
+      ghostWarriorDefinition.requiredRecruitedWarriorClass,
       GHOST_WARRIOR_REQUIRED_CLASS
     );
-    assert.equal(ghostWarriorDefinition.requiredWarriorClassInArmy, "Infiltrator");
+    assert.equal(
+      ghostWarriorDefinition.requiredRecruitedWarriorClass,
+      "Infiltrator"
+    );
   });
 
   it("does not rely on counter stats or unrelated win conditions", () => {
@@ -227,7 +230,7 @@ describe("race-only campaign win achievement definitions", () => {
           undefined
         );
         assert.equal(definition.requiredWarriorNameContains, undefined);
-        assert.equal(definition.requiredWarriorClassInArmy, undefined);
+        assert.equal(definition.requiredRecruitedWarriorClass, undefined);
         assert.equal(definition.minSpellPurchases, undefined);
       });
 
