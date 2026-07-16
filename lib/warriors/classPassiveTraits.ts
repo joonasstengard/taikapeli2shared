@@ -1,4 +1,4 @@
-import type { WarriorClass } from "./warriorPictureVariants";
+import type { WarriorClass, WarriorGender } from "./warriorPictureVariants";
 import { STATUS_EFFECT_KEY } from "../statusEffects/statusEffectTypes";
 import { isWarriorBleeding } from "../abilities/requiresBleedingTarget";
 import {
@@ -7,8 +7,7 @@ import {
   upsertWarriorStatusEffect,
 } from "../statusEffects/warriorStatusEffect";
 import type { WarriorStatusEffect } from "../statusEffects/warriorStatusEffect";
-import type { WarriorStatBuffInstance } from "../statBuffs/statBuffTypes";
-import { hasNegativeStatModifiers } from "../statBuffs/sumStatBuffBonuses";
+import { getWarriorRace, type WarriorRace } from "./warriorRaces";
 
 export const CLASS_PASSIVE_TRAIT_KEYS = {
   plateBearing: "plateBearing",
@@ -17,6 +16,7 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   relentlessPursuit: "relentlessPursuit",
   rend: "rend",
   devotion: "devotion",
+  // unused atm, repurpose later
   manaMastery: "manaMastery",
   cleave: "cleave",
   braced: "braced",
@@ -24,7 +24,8 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   kingsCommand: "kingsCommand",
   humbleOrigins: "humbleOrigins",
   wildChannel: "wildChannel",
-  boneBreaker: "boneBreaker",
+  bloodFeud: "bloodFeud",
+  eldritchSpite: "eldritchSpite",
 } as const;
 
 export type ClassPassiveTraitKey =
@@ -112,11 +113,17 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     description:
       "Restore 1 stamina after casting a Primal spell, and restore 1 mana after using a Primal skill.",
   },
-  [CLASS_PASSIVE_TRAIT_KEYS.boneBreaker]: {
-    key: CLASS_PASSIVE_TRAIT_KEYS.boneBreaker,
-    name: "Bone Breaker",
+  [CLASS_PASSIVE_TRAIT_KEYS.bloodFeud]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.bloodFeud,
+    name: "Blood Feud",
     description:
-      "Basic attacks deal 1 additional damage to enemies with a negative stat modifier.",
+      "Basic attacks and skills deal 1 additional damage to Humans and Elves.",
+  },
+  [CLASS_PASSIVE_TRAIT_KEYS.eldritchSpite]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.eldritchSpite,
+    name: "Eldritch Spite",
+    description:
+      "Basic attacks and spells deal 1 additional damage to Orcs.",
   },
 };
 
@@ -130,14 +137,14 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Charger: CLASS_PASSIVE_TRAIT_KEYS.relentlessPursuit,
   Berserker: CLASS_PASSIVE_TRAIT_KEYS.rend,
   Priestess: CLASS_PASSIVE_TRAIT_KEYS.devotion,
-  Sorcerer: CLASS_PASSIVE_TRAIT_KEYS.manaMastery,
+  Sorcerer: CLASS_PASSIVE_TRAIT_KEYS.eldritchSpite,
   Moonblade: CLASS_PASSIVE_TRAIT_KEYS.cleave,
   Marksman: CLASS_PASSIVE_TRAIT_KEYS.braced,
   Ranger: CLASS_PASSIVE_TRAIT_KEYS.huntersMark,
   King: CLASS_PASSIVE_TRAIT_KEYS.kingsCommand,
   Peasant: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
   Shaman: CLASS_PASSIVE_TRAIT_KEYS.wildChannel,
-  Brutalizer: CLASS_PASSIVE_TRAIT_KEYS.boneBreaker,
+  Brutalizer: CLASS_PASSIVE_TRAIT_KEYS.bloodFeud,
 };
 
 export function getClassPassiveTraitForClass(
@@ -440,7 +447,15 @@ export function applyTakedownTraitRestoreToWarrior(
 
 export const BRACED_BASIC_ATTACK_DAMAGE_BONUS = 1;
 export const HUNTERS_MARK_BASIC_ATTACK_DAMAGE_BONUS = 1;
-export const BONE_BREAKER_BASIC_ATTACK_DAMAGE_BONUS = 1;
+export const BLOOD_FEUD_DAMAGE_BONUS = 1;
+export const ELDRITCH_SPITE_DAMAGE_BONUS = 1;
+
+export const BLOOD_FEUD_TARGET_RACES: readonly WarriorRace[] = [
+  "Human",
+  "Elf",
+];
+
+export const ELDRITCH_SPITE_TARGET_RACES: readonly WarriorRace[] = ["Orc"];
 
 export interface BasicAttackDamageModifiers {
   attackerClass?: string;
@@ -449,11 +464,16 @@ export interface BasicAttackDamageModifiers {
     WarriorStatusEffect,
     "effectKey" | "turnsRemaining"
   >[];
-  defenderStatBuffs?: Pick<
-    WarriorStatBuffInstance,
-    "turnsRemaining" | "statModifiers"
-  >[];
+  defenderRace?: WarriorRace | string;
 }
+
+export interface RaceBonusDefenderIdentity {
+  warriorClass: string;
+  gender: string;
+  picture: number;
+}
+
+export type BloodFeudDefenderIdentity = RaceBonusDefenderIdentity;
 
 export function grantsBracedBasicAttackBonus(
   attackerClass: string,
@@ -480,23 +500,104 @@ export function grantsHuntersMarkBasicAttackBonus(
   );
 }
 
-export function hasActiveNegativeStatModifier(
-  defenderStatBuffs: BasicAttackDamageModifiers["defenderStatBuffs"]
+export function isBloodFeudTargetRace(
+  defenderRace: WarriorRace | string | undefined
 ): boolean {
-  return (defenderStatBuffs ?? []).some(
-    (buff) =>
-      buff.turnsRemaining > 0 && hasNegativeStatModifiers(buff.statModifiers)
+  return (
+    !!defenderRace &&
+    (BLOOD_FEUD_TARGET_RACES as readonly string[]).includes(defenderRace)
   );
 }
 
-export function grantsBoneBreakerBasicAttackBonus(
+export function grantsBloodFeudDamageBonus(
   attackerClass: string,
-  defenderStatBuffs: BasicAttackDamageModifiers["defenderStatBuffs"]
+  defenderRace: WarriorRace | string | undefined
 ): boolean {
   const trait = getClassPassiveTraitForClass(attackerClass);
   return (
-    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.boneBreaker &&
-    hasActiveNegativeStatModifier(defenderStatBuffs)
+    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.bloodFeud &&
+    isBloodFeudTargetRace(defenderRace)
+  );
+}
+
+export function getBloodFeudDamageBonus(
+  attackerClass: string | undefined,
+  defenderRace: WarriorRace | string | undefined
+): number {
+  if (!attackerClass || !grantsBloodFeudDamageBonus(attackerClass, defenderRace)) {
+    return 0;
+  }
+
+  return BLOOD_FEUD_DAMAGE_BONUS;
+}
+
+export function getBloodFeudDamageBonusAgainstWarrior(
+  attackerClass: string | undefined,
+  defender: RaceBonusDefenderIdentity | undefined
+): number {
+  if (!attackerClass || !defender) {
+    return 0;
+  }
+
+  return getBloodFeudDamageBonus(
+    attackerClass,
+    getWarriorRace(
+      defender.warriorClass as WarriorClass,
+      defender.gender as WarriorGender,
+      defender.picture
+    )
+  );
+}
+
+export function isEldritchSpiteTargetRace(
+  defenderRace: WarriorRace | string | undefined
+): boolean {
+  return (
+    !!defenderRace &&
+    (ELDRITCH_SPITE_TARGET_RACES as readonly string[]).includes(defenderRace)
+  );
+}
+
+export function grantsEldritchSpiteDamageBonus(
+  attackerClass: string,
+  defenderRace: WarriorRace | string | undefined
+): boolean {
+  const trait = getClassPassiveTraitForClass(attackerClass);
+  return (
+    trait?.key === CLASS_PASSIVE_TRAIT_KEYS.eldritchSpite &&
+    isEldritchSpiteTargetRace(defenderRace)
+  );
+}
+
+export function getEldritchSpiteDamageBonus(
+  attackerClass: string | undefined,
+  defenderRace: WarriorRace | string | undefined
+): number {
+  if (
+    !attackerClass ||
+    !grantsEldritchSpiteDamageBonus(attackerClass, defenderRace)
+  ) {
+    return 0;
+  }
+
+  return ELDRITCH_SPITE_DAMAGE_BONUS;
+}
+
+export function getEldritchSpiteDamageBonusAgainstWarrior(
+  attackerClass: string | undefined,
+  defender: RaceBonusDefenderIdentity | undefined
+): number {
+  if (!attackerClass || !defender) {
+    return 0;
+  }
+
+  return getEldritchSpiteDamageBonus(
+    attackerClass,
+    getWarriorRace(
+      defender.warriorClass as WarriorClass,
+      defender.gender as WarriorGender,
+      defender.picture
+    )
   );
 }
 
@@ -527,14 +628,15 @@ function getBasicAttackOffensiveBonus(
     bonus += HUNTERS_MARK_BASIC_ATTACK_DAMAGE_BONUS;
   }
 
-  if (
-    grantsBoneBreakerBasicAttackBonus(
-      modifiers.attackerClass,
-      modifiers.defenderStatBuffs
-    )
-  ) {
-    bonus += BONE_BREAKER_BASIC_ATTACK_DAMAGE_BONUS;
-  }
+  bonus += getBloodFeudDamageBonus(
+    modifiers.attackerClass,
+    modifiers.defenderRace
+  );
+
+  bonus += getEldritchSpiteDamageBonus(
+    modifiers.attackerClass,
+    modifiers.defenderRace
+  );
 
   return bonus;
 }

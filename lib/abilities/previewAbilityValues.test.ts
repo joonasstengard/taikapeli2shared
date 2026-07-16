@@ -96,6 +96,50 @@ describe("previewSpellDamage", () => {
       10
     );
   });
+
+  it("adds Eldritch Spite bonus against Orc defenders", () => {
+    assert.equal(
+      previewSpellDamage(
+        holyBolt,
+        {
+          warriorClass: "Sorcerer",
+          health: 10,
+          currentHealth: 10,
+          strength: 0,
+          faith: 0,
+          spellDamage: 0,
+        },
+        {
+          warriorClass: "Brutalizer",
+          gender: "Male",
+          picture: 1,
+        }
+      ),
+      6
+    );
+  });
+
+  it("does not add Eldritch Spite bonus against non-Orc defenders", () => {
+    assert.equal(
+      previewSpellDamage(
+        holyBolt,
+        {
+          warriorClass: "Sorcerer",
+          health: 10,
+          currentHealth: 10,
+          strength: 0,
+          faith: 0,
+          spellDamage: 0,
+        },
+        {
+          warriorClass: "Knight",
+          gender: "Male",
+          picture: 1,
+        }
+      ),
+      5
+    );
+  });
 });
 
 describe("previewSkillDamage", () => {

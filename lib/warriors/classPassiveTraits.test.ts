@@ -14,16 +14,18 @@ import {
   getClassPassiveTraitForClass,
   grantsBasicAttackBleeding,
   grantsBasicAttackCleave,
-  grantsBoneBreakerBasicAttackBonus,
+  grantsBloodFeudDamageBonus,
   grantsBracedBasicAttackBonus,
+  grantsEldritchSpiteDamageBonus,
   grantsHolySpellCastSelfHeal,
   grantsHuntersMarkBasicAttackBonus,
   grantsKingsCommandAllyStrengthBuff,
   grantsSpellCastManaMasteryRestore,
   grantsWildChannelPrimalSkillManaRestore,
   grantsWildChannelPrimalSpellStaminaRestore,
+  getBloodFeudDamageBonusAgainstWarrior,
   getDevotionSpellHealBonus,
-  hasActiveNegativeStatModifier,
+  getEldritchSpiteDamageBonusAgainstWarrior,
   isKingsCommandStrengthBuffTarget,
 } from "./classPassiveTraits";
 
@@ -64,11 +66,11 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     assert.equal(getClassPassiveTraitForClass("Priestess")?.name, "Devotion");
   });
 
-  it("assigns Mana Mastery to Sorcerer", () => {
-    assert.equal(CLASS_PASSIVE_TRAITS.Sorcerer, "manaMastery");
+  it("assigns Eldritch Spite to Sorcerer", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Sorcerer, "eldritchSpite");
     assert.equal(
       getClassPassiveTraitForClass("Sorcerer")?.name,
-      "Mana Mastery"
+      "Eldritch Spite"
     );
   });
 
@@ -114,11 +116,11 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     );
   });
 
-  it("assigns Bone Breaker to Brutalizer", () => {
-    assert.equal(CLASS_PASSIVE_TRAITS.Brutalizer, "boneBreaker");
+  it("assigns Blood Feud to Brutalizer", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Brutalizer, "bloodFeud");
     assert.equal(
       getClassPassiveTraitForClass("Brutalizer")?.name,
-      "Bone Breaker"
+      "Blood Feud"
     );
   });
 
@@ -193,62 +195,81 @@ describe("calculateBasicAttackDamage", () => {
     );
   });
 
-  it("adds Bone Breaker bonus against defenders with negative stat modifiers", () => {
+  it("adds Blood Feud bonus against Human and Elf defenders", () => {
     assert.equal(
       calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          { turnsRemaining: 1, statModifiers: { speed: -8 } },
-        ],
+        defenderRace: "Human",
       }),
       6
     );
     assert.equal(
       calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          { turnsRemaining: 1, statModifiers: { strength: -5 } },
-        ],
-      }),
-      6
-    );
-    assert.equal(
-      calculateBasicAttackDamage(5, "Berserker", {
-        attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          {
-            turnsRemaining: 1,
-            statModifiers: { strength: -10, spellDamage: -10, speed: -10 },
-          },
-        ],
+        defenderRace: "Elf",
       }),
       6
     );
   });
 
-  it("does not add Bone Breaker bonus against unaffected defenders", () => {
+  it("does not add Blood Feud bonus against other races", () => {
     assert.equal(
       calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          { turnsRemaining: 0, statModifiers: { speed: -8 } },
-        ],
+        defenderRace: "Orc",
       }),
       5
     );
     assert.equal(
       calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          { turnsRemaining: 1, statModifiers: { strength: 3 } },
-        ],
+        defenderRace: "Dwarf",
       }),
       5
     );
     assert.equal(
       calculateBasicAttackDamage(5, "Berserker", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [],
+      }),
+      5
+    );
+  });
+
+  it("adds Eldritch Spite bonus against Orc defenders", () => {
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Sorcerer",
+        defenderRace: "Orc",
+      }),
+      6
+    );
+  });
+
+  it("does not add Eldritch Spite bonus against other races", () => {
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Sorcerer",
+        defenderRace: "Human",
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Sorcerer",
+        defenderRace: "Elf",
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Sorcerer",
+        defenderRace: "Dwarf",
+      }),
+      5
+    );
+    assert.equal(
+      calculateBasicAttackDamage(5, "Berserker", {
+        attackerClass: "Sorcerer",
       }),
       5
     );
@@ -265,9 +286,7 @@ describe("calculateBasicAttackDamage", () => {
     assert.equal(
       calculateBasicAttackDamage(5, "Knight", {
         attackerClass: "Brutalizer",
-        defenderStatBuffs: [
-          { turnsRemaining: 1, statModifiers: { speed: -8 } },
-        ],
+        defenderRace: "Human",
       }),
       5
     );
@@ -315,76 +334,118 @@ describe("grantsHuntersMarkBasicAttackBonus", () => {
   });
 });
 
-describe("hasActiveNegativeStatModifier", () => {
-  it("detects active negative modifiers", () => {
-    assert.equal(
-      hasActiveNegativeStatModifier([
-        { turnsRemaining: 1, statModifiers: { speed: -8 } },
-      ]),
-      true
-    );
-    assert.equal(
-      hasActiveNegativeStatModifier([
-        { turnsRemaining: 2, statModifiers: { strength: 3 } },
-        { turnsRemaining: 1, statModifiers: { spellDamage: -10 } },
-      ]),
-      true
-    );
+describe("grantsBloodFeudDamageBonus", () => {
+  it("applies to Brutalizer attacks against Humans and Elves", () => {
+    assert.equal(grantsBloodFeudDamageBonus("Brutalizer", "Human"), true);
+    assert.equal(grantsBloodFeudDamageBonus("Brutalizer", "Elf"), true);
   });
 
-  it("ignores expired, positive-only, and empty buffs", () => {
-    assert.equal(
-      hasActiveNegativeStatModifier([
-        { turnsRemaining: 0, statModifiers: { speed: -8 } },
-      ]),
-      false
-    );
-    assert.equal(
-      hasActiveNegativeStatModifier([
-        { turnsRemaining: 1, statModifiers: { strength: 5 } },
-      ]),
-      false
-    );
-    assert.equal(hasActiveNegativeStatModifier([]), false);
-    assert.equal(hasActiveNegativeStatModifier(undefined), false);
+  it("does not apply against other races or for other classes", () => {
+    assert.equal(grantsBloodFeudDamageBonus("Brutalizer", "Orc"), false);
+    assert.equal(grantsBloodFeudDamageBonus("Brutalizer", "Dwarf"), false);
+    assert.equal(grantsBloodFeudDamageBonus("Brutalizer", undefined), false);
+    assert.equal(grantsBloodFeudDamageBonus("Berserker", "Human"), false);
   });
 });
 
-describe("grantsBoneBreakerBasicAttackBonus", () => {
-  it("applies to Brutalizer attacks against targets with negative stat modifiers", () => {
+describe("getBloodFeudDamageBonusAgainstWarrior", () => {
+  it("resolves Human and Elf defenders from class picture identity", () => {
     assert.equal(
-      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
-        { turnsRemaining: 1, statModifiers: { speed: -8 } },
-      ]),
-      true
+      getBloodFeudDamageBonusAgainstWarrior("Brutalizer", {
+        warriorClass: "Knight",
+        gender: "Male",
+        picture: 1,
+      }),
+      1
     );
     assert.equal(
-      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
-        { turnsRemaining: 1, statModifiers: { strength: -5 } },
-      ]),
-      true
+      getBloodFeudDamageBonusAgainstWarrior("Brutalizer", {
+        warriorClass: "Moonblade",
+        gender: "Male",
+        picture: 3,
+      }),
+      1
     );
   });
 
-  it("does not apply without a qualifying debuff or for other classes", () => {
-    assert.equal(grantsBoneBreakerBasicAttackBonus("Brutalizer", []), false);
+  it("does not bonus Orc or Dwarf defenders", () => {
     assert.equal(
-      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
-        { turnsRemaining: 0, statModifiers: { speed: -8 } },
-      ]),
-      false
+      getBloodFeudDamageBonusAgainstWarrior("Brutalizer", {
+        warriorClass: "Brutalizer",
+        gender: "Male",
+        picture: 1,
+      }),
+      0
     );
     assert.equal(
-      grantsBoneBreakerBasicAttackBonus("Brutalizer", [
-        { turnsRemaining: 1, statModifiers: { strength: 3 } },
-      ]),
-      false
+      getBloodFeudDamageBonusAgainstWarrior("Brutalizer", {
+        warriorClass: "Marksman",
+        gender: "Male",
+        picture: 12,
+      }),
+      0
+    );
+  });
+});
+
+describe("grantsEldritchSpiteDamageBonus", () => {
+  it("applies to Sorcerer attacks against Orcs", () => {
+    assert.equal(grantsEldritchSpiteDamageBonus("Sorcerer", "Orc"), true);
+  });
+
+  it("does not apply against other races or for other classes", () => {
+    assert.equal(grantsEldritchSpiteDamageBonus("Sorcerer", "Human"), false);
+    assert.equal(grantsEldritchSpiteDamageBonus("Sorcerer", "Elf"), false);
+    assert.equal(grantsEldritchSpiteDamageBonus("Sorcerer", "Dwarf"), false);
+    assert.equal(grantsEldritchSpiteDamageBonus("Sorcerer", undefined), false);
+    assert.equal(grantsEldritchSpiteDamageBonus("Brutalizer", "Orc"), false);
+  });
+});
+
+describe("getEldritchSpiteDamageBonusAgainstWarrior", () => {
+  it("resolves Orc defenders from class picture identity", () => {
+    assert.equal(
+      getEldritchSpiteDamageBonusAgainstWarrior("Sorcerer", {
+        warriorClass: "Brutalizer",
+        gender: "Male",
+        picture: 1,
+      }),
+      1
     );
     assert.equal(
-      grantsBoneBreakerBasicAttackBonus("Berserker", [
-        { turnsRemaining: 1, statModifiers: { speed: -8 } },
-      ]),
-      false
+      getEldritchSpiteDamageBonusAgainstWarrior("Sorcerer", {
+        warriorClass: "Charger",
+        gender: "Male",
+        picture: 10,
+      }),
+      1
+    );
+  });
+
+  it("does not bonus Human, Elf, or Dwarf defenders", () => {
+    assert.equal(
+      getEldritchSpiteDamageBonusAgainstWarrior("Sorcerer", {
+        warriorClass: "Knight",
+        gender: "Male",
+        picture: 1,
+      }),
+      0
+    );
+    assert.equal(
+      getEldritchSpiteDamageBonusAgainstWarrior("Sorcerer", {
+        warriorClass: "Moonblade",
+        gender: "Male",
+        picture: 3,
+      }),
+      0
+    );
+    assert.equal(
+      getEldritchSpiteDamageBonusAgainstWarrior("Sorcerer", {
+        warriorClass: "Marksman",
+        gender: "Male",
+        picture: 12,
+      }),
+      0
     );
   });
 });
@@ -491,36 +552,22 @@ describe("grantsBasicAttackCleave", () => {
 });
 
 describe("grantsSpellCastManaMasteryRestore", () => {
-  it("applies to Sorcerer spell casts", () => {
-    assert.equal(grantsSpellCastManaMasteryRestore("Sorcerer"), true);
-  });
-
-  it("does not apply to other classes", () => {
+  it("is unused while no class is assigned Mana Mastery", () => {
+    assert.equal(grantsSpellCastManaMasteryRestore("Sorcerer"), false);
     assert.equal(grantsSpellCastManaMasteryRestore("Warlock"), false);
     assert.equal(grantsSpellCastManaMasteryRestore("Priestess"), false);
   });
 });
 
 describe("applySpellCastManaMasteryRestoreToWarrior", () => {
-  it("restores 1 mana for Sorcerer spell casts", () => {
+  it("does not restore mana while Mana Mastery is unassigned", () => {
     assert.deepEqual(
       applySpellCastManaMasteryRestoreToWarrior({
         warriorClass: "Sorcerer",
         currentMana: 4,
         mana: 12,
       }),
-      { currentMana: 5 }
-    );
-  });
-
-  it("caps restored mana at max", () => {
-    assert.deepEqual(
-      applySpellCastManaMasteryRestoreToWarrior({
-        warriorClass: "Sorcerer",
-        currentMana: 12,
-        mana: 12,
-      }),
-      { currentMana: 12 }
+      { currentMana: 4 }
     );
   });
 

@@ -18,7 +18,12 @@ import {
   toEffectiveSkillCasterCombatStats,
   toEffectiveSpellCasterCombatStats,
 } from "../statusEffects/resolveCombatStats";
-import { getDevotionSpellHealBonus } from "../warriors/classPassiveTraits";
+import {
+  getDevotionSpellHealBonus,
+  getBloodFeudDamageBonusAgainstWarrior,
+  getEldritchSpiteDamageBonusAgainstWarrior,
+  type RaceBonusDefenderIdentity,
+} from "../warriors/classPassiveTraits";
 
 export interface AbilityPreviewCaster {
   warriorClass?: string;
@@ -79,7 +84,8 @@ function toPreviewSkillCasterStats(
 
 export function previewSpellDamage(
   spell: AbilityPreviewInput,
-  caster: AbilityPreviewCaster
+  caster: AbilityPreviewCaster,
+  defender?: RaceBonusDefenderIdentity
 ): number {
   if (spell.baseDamageTarget <= 0) {
     return 0;
@@ -93,13 +99,15 @@ export function previewSpellDamage(
 
   return (
     adjustedBase +
-    calculateSpellDamageBonus(spell, toPreviewCasterStats(caster))
+    calculateSpellDamageBonus(spell, toPreviewCasterStats(caster)) +
+    getEldritchSpiteDamageBonusAgainstWarrior(caster.warriorClass, defender)
   );
 }
 
 export function previewSkillDamage(
   skill: AbilityPreviewInput,
-  caster: AbilityPreviewCaster
+  caster: AbilityPreviewCaster,
+  defender?: RaceBonusDefenderIdentity
 ): number {
   if (skill.baseDamageTarget <= 0) {
     return 0;
@@ -112,7 +120,9 @@ export function previewSkillDamage(
   );
 
   return (
-    adjustedBase + calculateSkillDamageBonus(skill, toPreviewSkillCasterStats(caster))
+    adjustedBase +
+    calculateSkillDamageBonus(skill, toPreviewSkillCasterStats(caster)) +
+    getBloodFeudDamageBonusAgainstWarrior(caster.warriorClass, defender)
   );
 }
 
