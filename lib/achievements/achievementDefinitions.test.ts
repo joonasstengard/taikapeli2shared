@@ -164,10 +164,57 @@ describe("ghost warrior achievement definition", () => {
     );
     assert.equal(ghostWarriorDefinition.requiredWarriorNameContains, undefined);
     assert.equal(ghostWarriorDefinition.minSpellPurchases, undefined);
+    assert.equal(ghostWarriorDefinition.requiresShiningWarrior, undefined);
   });
 
   it("uses a valid tier label", () => {
     assert.ok(ACHIEVEMENT_TIERS.includes(ghostWarriorDefinition.tier));
+  });
+});
+
+describe("shining warrior achievement definition", () => {
+  const shiningWarriorDefinition =
+    ACHIEVEMENT_DEFINITIONS_BY_ID[ACHIEVEMENT_ID.shiningWarriorRecruit];
+
+  it("is registered with the expected metadata", () => {
+    assert.equal(shiningWarriorDefinition.title, "Shining warrior");
+    assert.equal(
+      shiningWarriorDefinition.description,
+      "Recruit a shining warrior."
+    );
+    assert.equal(shiningWarriorDefinition.category, "exploration");
+    assert.equal(shiningWarriorDefinition.tier, "medium");
+    assert.equal(shiningWarriorDefinition.isSecret, false);
+    assert.equal(shiningWarriorDefinition.trigger, "warrior_recruited");
+  });
+
+  it("requires a shining warrior", () => {
+    assert.equal(shiningWarriorDefinition.requiresShiningWarrior, true);
+  });
+
+  it("does not rely on counter stats or unrelated win conditions", () => {
+    assert.equal(shiningWarriorDefinition.counterStatKey, undefined);
+    assert.equal(shiningWarriorDefinition.targetCount, undefined);
+    assert.equal(shiningWarriorDefinition.campaignChallengeKey, undefined);
+    assert.equal(shiningWarriorDefinition.requiredLeaguePoints, undefined);
+    assert.equal(shiningWarriorDefinition.minTreasuryGold, undefined);
+    assert.equal(
+      shiningWarriorDefinition.minDistinctRecruitedWarriorClasses,
+      undefined
+    );
+    assert.equal(
+      shiningWarriorDefinition.requiredWarriorNameContains,
+      undefined
+    );
+    assert.equal(
+      shiningWarriorDefinition.requiredRecruitedWarriorClass,
+      undefined
+    );
+    assert.equal(shiningWarriorDefinition.minSpellPurchases, undefined);
+  });
+
+  it("uses a valid tier label", () => {
+    assert.ok(ACHIEVEMENT_TIERS.includes(shiningWarriorDefinition.tier));
   });
 });
 
@@ -231,6 +278,7 @@ describe("race-only campaign win achievement definitions", () => {
         );
         assert.equal(definition.requiredWarriorNameContains, undefined);
         assert.equal(definition.requiredRecruitedWarriorClass, undefined);
+        assert.equal(definition.requiresShiningWarrior, undefined);
         assert.equal(definition.minSpellPurchases, undefined);
       });
 

@@ -51,6 +51,7 @@ export interface AchievementDefinition {
   minDistinctRecruitedWarriorClasses?: number;
   requiredWarriorNameContains?: string;
   requiredRecruitedWarriorClass?: WarriorClass;
+  requiresShiningWarrior?: boolean;
   minSpellPurchases?: number;
 }
 
@@ -230,6 +231,16 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     isSecret: false,
     trigger: "warrior_recruited",
     requiredRecruitedWarriorClass: GHOST_WARRIOR_REQUIRED_CLASS,
+  },
+  {
+    id: ACHIEVEMENT_ID.shiningWarriorRecruit,
+    title: "Shining warrior",
+    description: "Recruit a shining warrior.",
+    category: "exploration",
+    tier: "medium",
+    isSecret: false,
+    trigger: "warrior_recruited",
+    requiresShiningWarrior: true,
   },
   {
     id: ACHIEVEMENT_ID.humanOnlyCampaignWin,
