@@ -227,7 +227,7 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     title: "Ghost warrior",
     description: "Recruit an Infiltrator.",
     category: "exploration",
-    tier: "medium",
+    tier: "easy",
     isSecret: false,
     trigger: "warrior_recruited",
     requiredRecruitedWarriorClass: GHOST_WARRIOR_REQUIRED_CLASS,

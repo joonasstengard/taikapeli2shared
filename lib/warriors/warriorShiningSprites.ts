@@ -144,3 +144,22 @@ export function isShiningWarriorSprite(
 ): boolean {
   return getWarriorShiningSprite(warriorClass, gender, picture) !== undefined;
 }
+
+/** Stable identity for shining collection rows and catalog lookups. */
+export function getShiningWarriorCollectionKey(
+  warriorClass: WarriorClass,
+  gender: WarriorGender,
+  picture: number
+): string {
+  return `${warriorClass}${gender}${picture}`;
+}
+
+export function getShiningWarriorCollectionKeyForSprite(
+  sprite: Pick<WarriorShiningSprite, "warriorClass" | "gender" | "picture">
+): string {
+  return getShiningWarriorCollectionKey(
+    sprite.warriorClass,
+    sprite.gender,
+    sprite.picture
+  );
+}

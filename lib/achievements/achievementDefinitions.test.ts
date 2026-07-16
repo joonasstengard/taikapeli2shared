@@ -136,7 +136,7 @@ describe("ghost warrior achievement definition", () => {
       "Recruit an Infiltrator."
     );
     assert.equal(ghostWarriorDefinition.category, "exploration");
-    assert.equal(ghostWarriorDefinition.tier, "medium");
+    assert.equal(ghostWarriorDefinition.tier, "easy");
     assert.equal(ghostWarriorDefinition.isSecret, false);
     assert.equal(ghostWarriorDefinition.trigger, "warrior_recruited");
   });

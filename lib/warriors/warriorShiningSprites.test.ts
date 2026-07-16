@@ -12,6 +12,7 @@ import {
   WARRIOR_RACES,
 } from "./warriorRaces";
 import {
+  getShiningWarriorCollectionKeyForSprite,
   getShiningWarriorSpritesForClass,
   getWarriorShiningSprite,
   isShiningWarriorSprite,
@@ -23,7 +24,7 @@ import {
 const SHINING_PICTURE = 999;
 
 function shiningSpriteKey(sprite: WarriorShiningSprite): string {
-  return `${sprite.warriorClass}${sprite.gender}${sprite.picture}`;
+  return getShiningWarriorCollectionKeyForSprite(sprite);
 }
 
 function expectedSpriteSheetPath(sprite: WarriorShiningSprite): string {
