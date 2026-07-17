@@ -21,6 +21,13 @@ export const ACHIEVEMENT_ID = {
   dwarfOnlyCampaignWin: 20,
   orcOnlyCampaignWin: 21,
   shiningWarriorRecruit: 22,
+  actionDamage10: 23,
+  actionDamage15: 24,
+  actionDamage20: 25,
+  actionDamage25: 26,
+  actionHealing10: 27,
+  actionHealing15: 28,
+  actionHealing20: 29,
 } as const;
 
 export type AchievementId =

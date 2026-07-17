@@ -23,11 +23,17 @@ export interface BattleKillEntry {
 export interface BattleRuntimeSummary {
   warriorSnapshots: BattleWarriorStartSnapshot[];
   kills: BattleKillEntry[];
+  /** Highest total enemy HP removed by one player action this battle. */
+  maxPlayerActionDamage: number;
+  /** Highest total player-army HP restored by one player action this battle. */
+  maxPlayerActionHealing: number;
 }
 
 export const EMPTY_BATTLE_RUNTIME_SUMMARY: BattleRuntimeSummary = {
   warriorSnapshots: [],
   kills: [],
+  maxPlayerActionDamage: 0,
+  maxPlayerActionHealing: 0,
 };
 
 export interface BattleWarriorStatDeltas {
@@ -169,7 +175,12 @@ export function parseBattleRuntimeSummary(
         .filter((kill): kill is BattleKillEntry => Boolean(kill))
     : [];
 
-  return { warriorSnapshots, kills };
+  return {
+    warriorSnapshots,
+    kills,
+    maxPlayerActionDamage: Math.max(0, toNumber(value.maxPlayerActionDamage)),
+    maxPlayerActionHealing: Math.max(0, toNumber(value.maxPlayerActionHealing)),
+  };
 }
 
 export function createBattleWarriorSnapshots(

@@ -27,7 +27,20 @@ export const ARCANE_MYSTERIES_MIN_SPELL_PURCHASES = 3;
 /** Warrior class that must be recruited for the ghost warrior achievement. */
 export const GHOST_WARRIOR_REQUIRED_CLASS: WarriorClass = "Infiltrator";
 
-export type AchievementTrigger = "campaign_won" | "warrior_recruited";
+export type AchievementTrigger =
+  | "campaign_won"
+  | "warrior_recruited"
+  | "battle_ended";
+
+/** Minimum total enemy damage from one player action for action-damage achievements. */
+export const ACTION_DAMAGE_10_THRESHOLD = 10;
+export const ACTION_DAMAGE_15_THRESHOLD = 15;
+export const ACTION_DAMAGE_20_THRESHOLD = 20;
+export const ACTION_DAMAGE_25_THRESHOLD = 25;
+
+export const ACTION_HEALING_10_THRESHOLD = 10;
+export const ACTION_HEALING_15_THRESHOLD = 15;
+export const ACTION_HEALING_20_THRESHOLD = 20;
 
 export type AchievementCategory = "starter" | "challenge" | "exploration";
 
@@ -53,6 +66,8 @@ export interface AchievementDefinition {
   requiredRecruitedWarriorClass?: WarriorClass;
   requiresShiningWarrior?: boolean;
   minSpellPurchases?: number;
+  minActionDamage?: number;
+  minActionHealing?: number;
 }
 
 export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
@@ -282,6 +297,76 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     trigger: "campaign_won",
     campaignChallengeKey: CAMPAIGN_CHALLENGE_KEY.orcOnlyRecruitment,
   },
+  {
+    id: ACHIEVEMENT_ID.actionDamage10,
+    title: "Heavy blow",
+    description: "Deal 10 or more damage with one action in battle.",
+    category: "challenge",
+    tier: "easy",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionDamage: ACTION_DAMAGE_10_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionDamage15,
+    title: "Crushing strike",
+    description: "Deal 15 or more damage with one action in battle.",
+    category: "challenge",
+    tier: "medium",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionDamage: ACTION_DAMAGE_15_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionDamage20,
+    title: "Devastating assault",
+    description: "Deal 20 or more damage with one action in battle.",
+    category: "challenge",
+    tier: "medium",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionDamage: ACTION_DAMAGE_20_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionDamage25,
+    title: "Annihilation",
+    description: "Deal 25 or more damage with one action in battle.",
+    category: "challenge",
+    tier: "hard",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionDamage: ACTION_DAMAGE_25_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionHealing10,
+    title: "Mending touch",
+    description: "Heal 10 or more health with one action in battle.",
+    category: "challenge",
+    tier: "easy",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionHealing: ACTION_HEALING_10_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionHealing15,
+    title: "Blessed hands",
+    description: "Heal 15 or more health with one action in battle.",
+    category: "challenge",
+    tier: "medium",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionHealing: ACTION_HEALING_15_THRESHOLD,
+  },
+  {
+    id: ACHIEVEMENT_ID.actionHealing20,
+    title: "Divine restoration",
+    description: "Heal 20 or more health with one action in battle.",
+    category: "challenge",
+    tier: "hard",
+    isSecret: false,
+    trigger: "battle_ended",
+    minActionHealing: ACTION_HEALING_20_THRESHOLD,
+  },
 ];
 
 export const ACHIEVEMENT_DEFINITIONS_BY_ID: Record<
@@ -303,4 +388,9 @@ export const CAMPAIGN_END_ACHIEVEMENT_DEFINITIONS =
 export const WARRIOR_RECRUITED_ACHIEVEMENT_DEFINITIONS =
   ACHIEVEMENT_DEFINITIONS.filter(
     (definition) => definition.trigger === "warrior_recruited"
+  );
+
+export const BATTLE_ENDED_ACHIEVEMENT_DEFINITIONS =
+  ACHIEVEMENT_DEFINITIONS.filter(
+    (definition) => definition.trigger === "battle_ended"
   );

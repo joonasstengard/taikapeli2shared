@@ -6,6 +6,14 @@ import {
   ACHIEVEMENT_DEFINITIONS,
   ACHIEVEMENT_DEFINITIONS_BY_ID,
   ACHIEVEMENT_TIERS,
+  ACTION_DAMAGE_10_THRESHOLD,
+  ACTION_DAMAGE_15_THRESHOLD,
+  ACTION_DAMAGE_20_THRESHOLD,
+  ACTION_DAMAGE_25_THRESHOLD,
+  ACTION_HEALING_10_THRESHOLD,
+  ACTION_HEALING_15_THRESHOLD,
+  ACTION_HEALING_20_THRESHOLD,
+  BATTLE_ENDED_ACHIEVEMENT_DEFINITIONS,
   CAMPAIGN_END_ACHIEVEMENT_DEFINITIONS,
   ISMO_WARRIOR_NAME_SUBSTRING,
   ARCANE_MYSTERIES_MIN_SPELL_PURCHASES,
@@ -36,6 +44,109 @@ describe("achievement definitions", () => {
       }
     }
   });
+
+  it("includes every battle-ended definition in the battle-ended list", () => {
+    const battleEndedIds = new Set(
+      BATTLE_ENDED_ACHIEVEMENT_DEFINITIONS.map((definition) => definition.id)
+    );
+
+    for (const definition of ACHIEVEMENT_DEFINITIONS) {
+      if (definition.trigger === "battle_ended") {
+        assert.ok(battleEndedIds.has(definition.id));
+      }
+    }
+  });
+});
+
+describe("action damage battle-ended achievements", () => {
+  const cases = [
+    {
+      id: ACHIEVEMENT_ID.actionDamage10,
+      title: "Heavy blow",
+      threshold: ACTION_DAMAGE_10_THRESHOLD,
+      tier: "easy" as const,
+    },
+    {
+      id: ACHIEVEMENT_ID.actionDamage15,
+      title: "Crushing strike",
+      threshold: ACTION_DAMAGE_15_THRESHOLD,
+      tier: "medium" as const,
+    },
+    {
+      id: ACHIEVEMENT_ID.actionDamage20,
+      title: "Devastating assault",
+      threshold: ACTION_DAMAGE_20_THRESHOLD,
+      tier: "medium" as const,
+    },
+    {
+      id: ACHIEVEMENT_ID.actionDamage25,
+      title: "Annihilation",
+      threshold: ACTION_DAMAGE_25_THRESHOLD,
+      tier: "hard" as const,
+    },
+  ];
+
+  for (const achievementCase of cases) {
+    describe(achievementCase.title, () => {
+      const definition = ACHIEVEMENT_DEFINITIONS_BY_ID[achievementCase.id];
+
+      it("is registered with the expected metadata", () => {
+        assert.equal(definition.title, achievementCase.title);
+        assert.equal(
+          definition.description,
+          `Deal ${achievementCase.threshold} or more damage with one action in battle.`
+        );
+        assert.equal(definition.category, "challenge");
+        assert.equal(definition.tier, achievementCase.tier);
+        assert.equal(definition.isSecret, false);
+        assert.equal(definition.trigger, "battle_ended");
+        assert.equal(definition.minActionDamage, achievementCase.threshold);
+      });
+    });
+  }
+});
+
+describe("action healing battle-ended achievements", () => {
+  const cases = [
+    {
+      id: ACHIEVEMENT_ID.actionHealing10,
+      title: "Mending touch",
+      threshold: ACTION_HEALING_10_THRESHOLD,
+      tier: "easy" as const,
+    },
+    {
+      id: ACHIEVEMENT_ID.actionHealing15,
+      title: "Blessed hands",
+      threshold: ACTION_HEALING_15_THRESHOLD,
+      tier: "medium" as const,
+    },
+    {
+      id: ACHIEVEMENT_ID.actionHealing20,
+      title: "Divine restoration",
+      threshold: ACTION_HEALING_20_THRESHOLD,
+      tier: "hard" as const,
+    },
+  ];
+
+  for (const achievementCase of cases) {
+    describe(achievementCase.title, () => {
+      const definition = ACHIEVEMENT_DEFINITIONS_BY_ID[achievementCase.id];
+
+      it("is registered with the expected metadata", () => {
+        assert.equal(definition.title, achievementCase.title);
+        assert.equal(
+          definition.description,
+          `Heal ${achievementCase.threshold} or more health with one action in battle.`
+        );
+        assert.equal(definition.category, "challenge");
+        assert.equal(definition.tier, achievementCase.tier);
+        assert.equal(definition.isSecret, false);
+        assert.equal(definition.trigger, "battle_ended");
+        assert.equal(definition.minActionHealing, achievementCase.threshold);
+        assert.equal(definition.minActionDamage, undefined);
+      });
+    });
+  }
 });
 
 describe("legends of ismo achievement definition", () => {

@@ -9,7 +9,12 @@ import {
 describe("parseBattleRuntimeSummary", () => {
   it("returns empty summary for invalid input", () => {
     const summary = parseBattleRuntimeSummary(null);
-    assert.deepEqual(summary, { warriorSnapshots: [], kills: [] });
+    assert.deepEqual(summary, {
+      warriorSnapshots: [],
+      kills: [],
+      maxPlayerActionDamage: 0,
+      maxPlayerActionHealing: 0,
+    });
   });
 
   it("parses snapshots and kills", () => {
@@ -31,10 +36,14 @@ describe("parseBattleRuntimeSummary", () => {
         },
       ],
       kills: [{ attackerId: 1, victimId: 2 }],
+      maxPlayerActionDamage: 16,
+      maxPlayerActionHealing: 12,
     });
 
     assert.equal(summary.warriorSnapshots.length, 1);
     assert.equal(summary.kills.length, 1);
+    assert.equal(summary.maxPlayerActionDamage, 16);
+    assert.equal(summary.maxPlayerActionHealing, 12);
   });
 });
 
@@ -72,6 +81,8 @@ describe("buildBattleSummary", () => {
         },
       ]),
       kills: [{ attackerId: 1, victimId: 2 }],
+      maxPlayerActionDamage: 0,
+      maxPlayerActionHealing: 0,
     };
 
     const summary = buildBattleSummary({
