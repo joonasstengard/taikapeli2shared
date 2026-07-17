@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 
 import { ACHIEVEMENT_ID } from "./achievementIds";
 import {
+  ACHIEVEMENT_CATEGORIES,
+  ACHIEVEMENT_CATEGORY_LABELS,
   ACHIEVEMENT_DEFINITIONS,
   ACHIEVEMENT_DEFINITIONS_BY_ID,
   ACHIEVEMENT_TIERS,
@@ -25,6 +27,18 @@ describe("achievement definitions", () => {
   it("uses unique achievement ids", () => {
     const ids = ACHIEVEMENT_DEFINITIONS.map((definition) => definition.id);
     assert.equal(ids.length, new Set(ids).size);
+  });
+
+  it("assigns every definition a known category", () => {
+    const categories = new Set(ACHIEVEMENT_CATEGORIES);
+
+    for (const definition of ACHIEVEMENT_DEFINITIONS) {
+      assert.ok(categories.has(definition.category));
+      assert.equal(
+        typeof ACHIEVEMENT_CATEGORY_LABELS[definition.category],
+        "string"
+      );
+    }
   });
 
   it("maps every definition by id", () => {

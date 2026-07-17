@@ -48,6 +48,20 @@ export type AchievementTiers = "easy" | "medium" | "hard";
 
 export const ACHIEVEMENT_TIERS: AchievementTiers[] = ["easy", "medium", "hard"];
 
+/** Display order for category subgroups within a difficulty tier. */
+export const ACHIEVEMENT_CATEGORIES: AchievementCategory[] = [
+  "starter",
+  "challenge",
+  "exploration",
+];
+
+export const ACHIEVEMENT_CATEGORY_LABELS: Record<AchievementCategory, string> =
+  {
+    starter: "Starter",
+    challenge: "Challenge",
+    exploration: "Exploration",
+  };
+
 export interface AchievementDefinition {
   id: AchievementId;
   title: string;
@@ -186,6 +200,17 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     minTreasuryGold: GOLD_HOARDER_MIN_TREASURY,
   },
   {
+    id: ACHIEVEMENT_ID.diverseCompanyCampaignWin,
+    title: "Diverse company",
+    description: "Win a campaign with warriors from 5 different classes.",
+    category: "exploration",
+    tier: "easy",
+    isSecret: false,
+    trigger: "campaign_won",
+    minDistinctRecruitedWarriorClasses:
+      DIVERSE_COMPANY_MIN_DISTINCT_WARRIOR_CLASSES,
+  },
+  {
     id: ACHIEVEMENT_ID.arcaneCircleCampaignWin,
     title: "Arcane circle",
     description: "Win a campaign only using Sorcerers, Shamans and Warlocks.",
@@ -204,17 +229,6 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     isSecret: false,
     trigger: "campaign_won",
     campaignChallengeKey: CAMPAIGN_CHALLENGE_KEY.holyOrderRecruitment,
-  },
-  {
-    id: ACHIEVEMENT_ID.diverseCompanyCampaignWin,
-    title: "Diverse company",
-    description: "Win a campaign with warriors from 5 different classes.",
-    category: "exploration",
-    tier: "easy",
-    isSecret: false,
-    trigger: "campaign_won",
-    minDistinctRecruitedWarriorClasses:
-      DIVERSE_COMPANY_MIN_DISTINCT_WARRIOR_CLASSES,
   },
   {
     id: ACHIEVEMENT_ID.ismoCampaignWin,
