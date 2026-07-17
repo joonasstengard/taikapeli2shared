@@ -2,6 +2,7 @@ export const STATUS_EFFECT_KEY = {
   frozen: "frozen",
   stunned: "stunned",
   invulnerable: "invulnerable",
+  invisible: "invisible",
   bleeding: "bleeding",
   transformSkarWolf: "transformSkarWolf",
   transformThalenStag: "transformThalenStag",
@@ -15,6 +16,7 @@ export type StatusEffectTag =
   | "blocks_movement"
   | "blocks_actions"
   | "blocks_damage"
+  | "blocks_targeting"
   | "transform";
 
 export type CombatStat =

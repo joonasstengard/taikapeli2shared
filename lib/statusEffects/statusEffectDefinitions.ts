@@ -34,6 +34,12 @@ export const STATUS_EFFECTS: StatusEffect[] = [
     tags: ["blocks_damage"],
   },
   {
+    key: STATUS_EFFECT_KEY.invisible,
+    name: "Invisible",
+    tags: ["blocks_targeting"],
+    hideBadge: true,
+  },
+  {
     key: STATUS_EFFECT_KEY.bleeding,
     name: "Bleeding",
     tags: [],

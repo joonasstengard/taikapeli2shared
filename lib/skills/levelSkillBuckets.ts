@@ -44,6 +44,9 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
     1: {
       skillIds: [SKILL_ID.stealthStrike],
     },
+    2: {
+      skillIds: [SKILL_ID.camouflage],
+    },
     3: {
       skillIds: [SKILL_ID.shadowStrike],
     },
