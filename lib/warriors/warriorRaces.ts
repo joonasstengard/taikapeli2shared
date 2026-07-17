@@ -45,7 +45,7 @@ export const WARRIOR_PICTURE_RACE_RANGES: Partial<
   BrutalizerMale: [{ race: "Orc", from: 1, to: 13 }],
   RangerMale: [{ race: "Elf", from: 1, to: 7 }, { race: "Orc", from: 8, to: 11 }],
   ShamanMale: [{ race: "Human", from: 1, to: 4 }, { race: "Orc", from: 5, to: 8 }],
-  SorcererMale: [{ race: "Human", from: 1, to: 10 }, { race: "Elf", from: 11, to: 18 }],
+  SorcererMale: [{ race: "Human", from: 1, to: 10 }],
 };
 
 export function getWarriorRaceDisplayName(race: WarriorRace): string {

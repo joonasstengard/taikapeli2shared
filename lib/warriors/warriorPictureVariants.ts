@@ -76,7 +76,7 @@ export const WARRIOR_PICTURE_COUNT_OVERRIDES: Partial<
   ShamanMale: 8,
   ShamanFemale: 0,
   SorcererFemale: 0,
-  SorcererMale: 18,
+  SorcererMale: 10,
   InfiltratorMale: 4,
   InfiltratorFemale: 0,
 };
