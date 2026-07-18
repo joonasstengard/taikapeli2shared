@@ -111,6 +111,9 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.blessHammer, SKILL_ID.hammerPummel],
       skipChancePercent: 1,
       },
+    2: {
+      skillIds: [SKILL_ID.frontlineOath],
+    },
     3: {
       skillIds: [SKILL_ID.crusade],
       skipChancePercent: 1,

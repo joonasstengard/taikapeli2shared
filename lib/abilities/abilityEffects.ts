@@ -7,6 +7,7 @@ export type AbilityEffect =
   | { effectType: "leap" }
   | { effectType: "retreat" }
   | { effectType: "knockback" }
+  | { effectType: "swapTiles" }
   | { effectType: "drain" }
   | { effectType: "sacrifice" }
   | { effectType: "requiresBleeding" }
