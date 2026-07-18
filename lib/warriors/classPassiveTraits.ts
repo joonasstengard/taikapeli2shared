@@ -27,6 +27,7 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   wildChannel: "wildChannel",
   bloodFeud: "bloodFeud",
   eldritchSpite: "eldritchSpite",
+  shadowFade: "shadowFade",
 } as const;
 
 export type ClassPassiveTraitKey =
@@ -126,6 +127,12 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     description:
       "Basic attacks and spells deal 1 additional damage to Orcs.",
   },
+  [CLASS_PASSIVE_TRAIT_KEYS.shadowFade]: {
+    key: CLASS_PASSIVE_TRAIT_KEYS.shadowFade,
+    name: "Shadow Fade",
+    description:
+      "Become Invisible until the end of your next turn when you score a takedown. Invisible warriors cannot be directly targeted.",
+  },
 };
 
 /** Passive trait granted to each warrior class. Omit classes with no trait yet. */
@@ -146,6 +153,7 @@ export const CLASS_PASSIVE_TRAITS: Partial<
   Peasant: CLASS_PASSIVE_TRAIT_KEYS.humbleOrigins,
   Shaman: CLASS_PASSIVE_TRAIT_KEYS.wildChannel,
   Brutalizer: CLASS_PASSIVE_TRAIT_KEYS.bloodFeud,
+  Infiltrator: CLASS_PASSIVE_TRAIT_KEYS.shadowFade,
 };
 
 export function getClassPassiveTraitForClass(
@@ -425,6 +433,33 @@ export interface TakedownTraitWarriorResources {
   mana: number;
   currentStamina: number;
   stamina: number;
+}
+
+/** Duration matching Camouflage: survives end-of-turn tick, lasts until end of next turn. */
+export const SHADOW_FADE_INVISIBILITY_DURATION = 2;
+
+export function grantsTakedownInvisibility(warriorClass: string): boolean {
+  const trait = getClassPassiveTraitForClass(warriorClass);
+  return trait?.key === CLASS_PASSIVE_TRAIT_KEYS.shadowFade;
+}
+
+export function applyTakedownTraitInvisibilityToWarrior(
+  warriorClass: string,
+  statusEffects: WarriorStatusEffect[] | undefined
+): WarriorStatusEffect[] {
+  if (!grantsTakedownInvisibility(warriorClass)) {
+    return [...(statusEffects ?? [])];
+  }
+
+  return upsertWarriorStatusEffect(
+    statusEffects,
+    {
+      effectKey: STATUS_EFFECT_KEY.invisible,
+      name: "Invisible",
+      tags: ["blocks_targeting"],
+    },
+    SHADOW_FADE_INVISIBILITY_DURATION
+  );
 }
 
 /** Applies takedown trait resource restore for battle replay and tests. */

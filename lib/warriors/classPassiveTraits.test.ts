@@ -6,6 +6,7 @@ import {
   applyHumbleOriginsExperienceBonus,
   applyHumbleOriginsLevelUpBonus,
   applySpellCastManaMasteryRestoreToWarrior,
+  applyTakedownTraitInvisibilityToWarrior,
   applyTakedownTraitRestoreToWarrior,
   applyWildChannelPrimalSkillManaRestoreToWarrior,
   applyWildChannelPrimalSpellStaminaRestoreToWarrior,
@@ -21,6 +22,7 @@ import {
   grantsHuntersMarkBasicAttackBonus,
   grantsKingsCommandAllyStrengthBuff,
   grantsSpellCastManaMasteryRestore,
+  grantsTakedownInvisibility,
   grantsWildChannelPrimalSkillManaRestore,
   grantsWildChannelPrimalSpellStaminaRestore,
   getBloodFeudDamageBonusAgainstWarrior,
@@ -28,6 +30,7 @@ import {
   getEldritchSpiteDamageBonusAgainstWarrior,
   HUMBLE_ORIGINS_LEVEL_UP_STAT_KEYS,
   isKingsCommandStrengthBuffTarget,
+  SHADOW_FADE_INVISIBILITY_DURATION,
 } from "./classPassiveTraits";
 import { applyArmorMitigation } from "./damageMitigation";
 
@@ -123,6 +126,14 @@ describe("CLASS_PASSIVE_TRAITS", () => {
     assert.equal(
       getClassPassiveTraitForClass("Brutalizer")?.name,
       "Blood Feud"
+    );
+  });
+
+  it("assigns Shadow Fade to Infiltrator", () => {
+    assert.equal(CLASS_PASSIVE_TRAITS.Infiltrator, "shadowFade");
+    assert.equal(
+      getClassPassiveTraitForClass("Infiltrator")?.name,
+      "Shadow Fade"
     );
   });
 
@@ -584,6 +595,66 @@ describe("applyTakedownTraitRestoreToWarrior", () => {
       }),
       { currentMana: 3, currentStamina: 4 }
     );
+  });
+
+  it("does not restore resources for Infiltrator Shadow Fade", () => {
+    assert.deepEqual(
+      applyTakedownTraitRestoreToWarrior({
+        warriorClass: "Infiltrator",
+        ...baseResources,
+      }),
+      { currentMana: 3, currentStamina: 4 }
+    );
+  });
+});
+
+describe("grantsTakedownInvisibility", () => {
+  it("applies to Infiltrator takedowns", () => {
+    assert.equal(grantsTakedownInvisibility("Infiltrator"), true);
+  });
+
+  it("does not apply to other classes", () => {
+    assert.equal(grantsTakedownInvisibility("Warlock"), false);
+    assert.equal(grantsTakedownInvisibility("Charger"), false);
+    assert.equal(grantsTakedownInvisibility("Knight"), false);
+  });
+});
+
+describe("applyTakedownTraitInvisibilityToWarrior", () => {
+  it("applies Invisible for Camouflage-equivalent duration on Infiltrator", () => {
+    const result = applyTakedownTraitInvisibilityToWarrior(
+      "Infiltrator",
+      undefined
+    );
+    assert.equal(result.length, 1);
+    assert.equal(result[0]?.effectKey, "invisible");
+    assert.equal(result[0]?.turnsRemaining, SHADOW_FADE_INVISIBILITY_DURATION);
+    assert.equal(SHADOW_FADE_INVISIBILITY_DURATION, 2);
+  });
+
+  it("extends existing Invisible duration via max", () => {
+    const result = applyTakedownTraitInvisibilityToWarrior("Infiltrator", [
+      {
+        effectKey: "invisible",
+        name: "Invisible",
+        turnsRemaining: 1,
+        tags: ["blocks_targeting"],
+      },
+    ]);
+    assert.equal(result[0]?.turnsRemaining, 2);
+  });
+
+  it("does not apply Invisible for other classes", () => {
+    const existing = [
+      {
+        effectKey: "bleeding",
+        name: "Bleeding",
+        turnsRemaining: 2,
+        tags: [] as [],
+      },
+    ];
+    const result = applyTakedownTraitInvisibilityToWarrior("Warlock", existing);
+    assert.deepEqual(result, existing);
   });
 });
 
