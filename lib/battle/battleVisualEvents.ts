@@ -1,3 +1,5 @@
+import type { StatModifiers } from "../statBuffs/statBuffTypes";
+
 export type BattleVisualEvent =
   | {
       type: "move";
@@ -31,6 +33,11 @@ export type BattleVisualEvent =
       skillId: number;
       originTile: string;
       hitTiles: string[];
+    }
+  | {
+      type: "statBuffApplied";
+      warriorId: number;
+      statModifiers: StatModifiers;
     }
   | {
       type: "wait";
@@ -101,6 +108,13 @@ export function bladeDanceEvent(
 
 export function waitEvent(warriorId: number): BattleVisualEvent {
   return { type: "wait", warriorId };
+}
+
+export function statBuffAppliedEvent(
+  warriorId: number,
+  statModifiers: StatModifiers
+): BattleVisualEvent {
+  return { type: "statBuffApplied", warriorId, statModifiers };
 }
 
 export function prependMoveEventIfNeeded(

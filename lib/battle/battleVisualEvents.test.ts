@@ -5,6 +5,7 @@ import {
   castSpellEvent,
   meleeAttackEvent,
   moveEvent,
+  statBuffAppliedEvent,
   uniqueTiles,
   useSkillEvent,
 } from "./battleVisualEvents";
@@ -79,5 +80,13 @@ describe("battleVisualEvents", () => {
         casterWalkToTile: "C3",
       }
     );
+  });
+
+  it("builds a statBuffApplied event", () => {
+    assert.deepEqual(statBuffAppliedEvent(4, { strength: 3 }), {
+      type: "statBuffApplied",
+      warriorId: 4,
+      statModifiers: { strength: 3 },
+    });
   });
 });
