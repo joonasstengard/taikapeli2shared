@@ -22,7 +22,7 @@ export const RARE_WARRIOR_CLASSES = ["Infiltrator"] as const;
 
 /** Chance (0–1) that recruitment rolls a rare class instead of a common one. */
 // 0.01 = 1%
-export const RARE_WARRIOR_CLASS_ROLL_CHANCE = 0.01;
+export const RARE_WARRIOR_CLASS_ROLL_CHANCE = 0.04;
 
 export const WARRIOR_CLASSES = [
   ...COMMON_WARRIOR_CLASSES,
