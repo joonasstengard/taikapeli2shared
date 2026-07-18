@@ -1,6 +1,8 @@
 import {
   calculateTileDistance,
   getAreaAbilityTargets,
+  isAllyAreaTargeting,
+  type AbilityTargetingType,
 } from "../battle/abilityTargeting";
 import { isWarriorAliveOnBattleMap } from "../battle/tileOccupancy";
 import type { AbilityEffect } from "./abilityEffects";
@@ -84,13 +86,18 @@ export function canAnyAllyReceiveCommandAttack<
   range: number,
   battleMapWidth: number,
   isAttackableEnemy: (enemy: T) => boolean,
-  canAllyAct: (ally: T) => boolean = () => true
+  canAllyAct: (ally: T) => boolean = () => true,
+  targetingType: AbilityTargetingType = "otherAllies"
 ): boolean {
+  if (!isAllyAreaTargeting(targetingType)) {
+    return false;
+  }
+
   const alliesInRange = getAreaAbilityTargets(
     allWarriors,
     commander,
     range,
-    "allAllies",
+    targetingType,
     battleMapWidth
   );
 

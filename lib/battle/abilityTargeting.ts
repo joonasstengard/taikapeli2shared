@@ -3,10 +3,12 @@
 export type AbilityTargetingType =
   | "self"
   | "ally"
+  | "otherAlly"
   | "enemy"
   | "enemyAoE"
   | "enemyChain"
   | "allAllies"
+  | "otherAllies"
   | "allEnemies";
 
 /** Tile distance from the primary target for enemyAoE splash hits. */
@@ -37,10 +39,17 @@ export function isEnemyChainTargeting(
   return targetingType === "enemyChain";
 }
 
+/** Single-target ally abilities (with or without the caster). */
+export function isSingleAllyTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "ally" | "otherAlly" {
+  return targetingType === "ally" || targetingType === "otherAlly";
+}
+
 export function isSingleTargetTargeting(
   targetingType: AbilityTargetingType
-): targetingType is "ally" | "enemy" | "enemyAoE" | "enemyChain" {
-  return targetingType === "ally" || isEnemyTargeting(targetingType);
+): targetingType is "ally" | "otherAlly" | "enemy" | "enemyAoE" | "enemyChain" {
+  return isSingleAllyTargeting(targetingType) || isEnemyTargeting(targetingType);
 }
 
 export function isValidAbilityTarget(
@@ -48,7 +57,7 @@ export function isValidAbilityTarget(
   casterArmyId: number,
   targetArmyId: number
 ): boolean {
-  if (targetingType === "ally") {
+  if (isSingleAllyTargeting(targetingType)) {
     return casterArmyId === targetArmyId;
   }
 
@@ -59,10 +68,37 @@ export function isValidAbilityTarget(
   return true;
 }
 
+/**
+ * Army + warrior identity checks for single-target abilities.
+ * `otherAlly` requires a different ally (not the caster).
+ */
+export function isValidAbilityTargetWarrior(
+  targetingType: AbilityTargetingType,
+  caster: { id: number; armyId: number },
+  target: { id: number; armyId: number }
+): boolean {
+  if (!isValidAbilityTarget(targetingType, caster.armyId, target.armyId)) {
+    return false;
+  }
+
+  if (targetingType === "otherAlly" && caster.id === target.id) {
+    return false;
+  }
+
+  return true;
+}
+
+/** Area abilities that hit allies in range (with or without the caster). */
+export function isAllyAreaTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "allAllies" | "otherAllies" {
+  return targetingType === "allAllies" || targetingType === "otherAllies";
+}
+
 export function isAreaTargeting(
   targetingType: AbilityTargetingType
-): targetingType is "allAllies" | "allEnemies" {
-  return targetingType === "allAllies" || targetingType === "allEnemies";
+): targetingType is "allAllies" | "otherAllies" | "allEnemies" {
+  return isAllyAreaTargeting(targetingType) || targetingType === "allEnemies";
 }
 
 /** Abilities that fire immediately without selecting a map tile. */
@@ -72,15 +108,31 @@ export function isInstantCastTargeting(
   return targetingType === "self" || isAreaTargeting(targetingType);
 }
 
-/** Targeting types that can apply supportive effects to allies (including self). */
+/** Targeting types that can apply supportive effects to allies. */
 export function isAllySupportTargeting(
   targetingType: AbilityTargetingType
 ): boolean {
   return (
     targetingType === "self" ||
-    targetingType === "ally" ||
-    targetingType === "allAllies"
+    isSingleAllyTargeting(targetingType) ||
+    isAllyAreaTargeting(targetingType)
   );
+}
+
+/**
+ * Living allies for single-target ally abilities.
+ * `otherAlly` excludes the caster; `ally` includes them.
+ */
+export function filterSingleAllyTargets<T extends { id: number }>(
+  targetingType: AbilityTargetingType,
+  casterId: number,
+  allies: readonly T[]
+): T[] {
+  if (targetingType === "otherAlly") {
+    return allies.filter((ally) => ally.id !== casterId);
+  }
+
+  return allies.slice();
 }
 
 export interface AbilityTargetWarrior {
@@ -120,13 +172,14 @@ function isWithinRange(
 
 /**
  * Returns living warriors affected by an area ability.
- * Never includes the caster. Never includes dead warriors.
+ * `allAllies` includes the caster; `otherAllies` and `allEnemies` do not.
+ * Never includes dead warriors.
  */
 export function getAreaAbilityTargets<T extends AbilityTargetWarrior>(
   allWarriors: readonly T[],
   caster: AbilityTargetWarrior,
   range: number,
-  targetingType: "allAllies" | "allEnemies",
+  targetingType: "allAllies" | "otherAllies" | "allEnemies",
   battleMapWidth: number
 ): T[] {
   if (!caster.battleTileCurrent) {
@@ -134,7 +187,7 @@ export function getAreaAbilityTargets<T extends AbilityTargetWarrior>(
   }
 
   return allWarriors.filter((warrior) => {
-    if (warrior.id === caster.id) {
+    if (targetingType !== "allAllies" && warrior.id === caster.id) {
       return false;
     }
 
@@ -153,7 +206,7 @@ export function getAreaAbilityTargets<T extends AbilityTargetWarrior>(
       return false;
     }
 
-    if (targetingType === "allAllies") {
+    if (isAllyAreaTargeting(targetingType)) {
       return warrior.armyId === caster.armyId;
     }
 

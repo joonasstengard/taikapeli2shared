@@ -41,6 +41,15 @@ describe("formatAbilityTargetingType", () => {
   it("maps every targeting type to a readable label", () => {
     assert.equal(formatAbilityTargetingType("self"), "Self");
     assert.equal(formatAbilityTargetingType("enemyAoE"), "Enemy (area splash)");
+    assert.equal(
+      formatAbilityTargetingType("allAllies"),
+      "All allies in range (including self)"
+    );
+    assert.equal(
+      formatAbilityTargetingType("otherAllies"),
+      "Other allies in range"
+    );
+    assert.equal(formatAbilityTargetingType("otherAlly"), "Other ally");
     assert.equal(formatAbilityTargetingType("allEnemies"), "All enemies in range");
   });
 });

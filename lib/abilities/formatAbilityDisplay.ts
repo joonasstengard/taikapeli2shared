@@ -56,10 +56,12 @@ export type AbilityDisplayRow =
 const TARGETING_LABELS: Record<AbilityTargetingType, string> = {
   self: "Self",
   ally: "Ally",
+  otherAlly: "Other ally",
   enemy: "Enemy",
   enemyAoE: "Enemy (area splash)",
   enemyChain: "Enemy (chain)",
-  allAllies: "All allies in range",
+  allAllies: "All allies in range (including self)",
+  otherAllies: "Other allies in range",
   allEnemies: "All enemies in range",
 };
 
