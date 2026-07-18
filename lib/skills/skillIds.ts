@@ -58,4 +58,5 @@ export const SKILL_ID = {
   guardianLeap: 58,
   hammerPummel: 59,
   frontlineOath: 60,
+  spiritMaul: 61,
 } as const;
