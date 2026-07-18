@@ -5,6 +5,7 @@ export type StatModifiers = Partial<Record<CombatStat, number>>;
 export type AbilityEffect =
   | { effectType: "lastStand" }
   | { effectType: "leap" }
+  | { effectType: "teleport" }
   | { effectType: "retreat" }
   | { effectType: "knockback" }
   | { effectType: "swapTiles" }

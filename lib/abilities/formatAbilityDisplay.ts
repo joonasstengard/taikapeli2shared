@@ -63,6 +63,7 @@ const TARGETING_LABELS: Record<AbilityTargetingType, string> = {
   allAllies: "All allies in range (including self)",
   otherAllies: "Other allies in range",
   allEnemies: "All enemies in range",
+  tile: "Empty tile",
 };
 
 const SCALING_STAT_LABELS = {

@@ -15,6 +15,7 @@ import {
   isInstantCastTargeting,
   isSingleAllyTargeting,
   isSingleTargetTargeting,
+  isTileTargeting,
   isValidAbilityTarget,
   isValidAbilityTargetWarrior,
 } from "./abilityTargeting";
@@ -44,6 +45,13 @@ describe("abilityTargeting", () => {
     assert.equal(isSingleTargetTargeting("enemyAoE"), true);
     assert.equal(isSingleTargetTargeting("enemyChain"), true);
     assert.equal(isSingleTargetTargeting("self"), false);
+    assert.equal(isSingleTargetTargeting("tile"), false);
+  });
+
+  it("identifies tile targeting", () => {
+    assert.equal(isTileTargeting("tile"), true);
+    assert.equal(isTileTargeting("enemy"), false);
+    assert.equal(isInstantCastTargeting("tile"), false);
   });
 
   it("identifies single-ally targeting types", () => {

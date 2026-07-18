@@ -51,6 +51,7 @@ describe("formatAbilityTargetingType", () => {
     );
     assert.equal(formatAbilityTargetingType("otherAlly"), "Other ally");
     assert.equal(formatAbilityTargetingType("allEnemies"), "All enemies in range");
+    assert.equal(formatAbilityTargetingType("tile"), "Empty tile");
   });
 });
 

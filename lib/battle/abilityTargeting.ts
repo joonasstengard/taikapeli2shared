@@ -9,7 +9,8 @@ export type AbilityTargetingType =
   | "enemyChain"
   | "allAllies"
   | "otherAllies"
-  | "allEnemies";
+  | "allEnemies"
+  | "tile";
 
 /** Tile distance from the primary target for enemyAoE splash hits. */
 export const ENEMY_AOE_SPLASH_RANGE = 1;
@@ -106,6 +107,13 @@ export function isInstantCastTargeting(
   targetingType: AbilityTargetingType
 ): boolean {
   return targetingType === "self" || isAreaTargeting(targetingType);
+}
+
+/** Abilities that target an empty map tile (no warrior). */
+export function isTileTargeting(
+  targetingType: AbilityTargetingType
+): targetingType is "tile" {
+  return targetingType === "tile";
 }
 
 /** Targeting types that can apply supportive effects to allies. */
