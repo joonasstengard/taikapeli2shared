@@ -55,4 +55,6 @@ export const SKILL_ID = {
   ribShatter: 55,
   spineCrack: 56,
   camouflage: 57,
+  guardianLeap: 58,
+  hammerPummel: 59,
 } as const;

@@ -54,7 +54,7 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
       spellIds: [
         SPELL_ID.manaPrayer,
         SPELL_ID.vaelsAegis,
-        SPELL_ID.ilyrsSmite,
+        SPELL_ID.holySmite,
       ],
     },
     3: {
@@ -73,15 +73,14 @@ export const LEVEL_SPELL_BUCKETS_BY_CLASS: Partial<
   },
   Paladin: {
     1: {
-      spellIds: [SPELL_ID.beaconOfLight, SPELL_ID.ilyrsSmite],
+      spellIds: [SPELL_ID.beaconOfLight, SPELL_ID.holySmite],
       skipChancePercent: 2,
     },
     2: {
       spellIds: [SPELL_ID.vaelsAegis, SPELL_ID.consecrate],
     },
     4: {
-      spellIds: [SPELL_ID.penance, SPELL_ID.consecrate],
-      skipChancePercent: 10,
+      spellIds: [SPELL_ID.penance, SPELL_ID.ilyrsSmite],
     },
   },
   Warlock: {

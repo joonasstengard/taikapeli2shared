@@ -34,7 +34,10 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
       skillIds: [SKILL_ID.decisiveStrike, SKILL_ID.repellingBlow],
     },
     2: {
-      skillIds: [SKILL_ID.protect, SKILL_ID.martyrdom],
+      skillIds: [SKILL_ID.protect],
+    },
+    3: {
+      skillIds: [SKILL_ID.martyrdom, SKILL_ID.guardianLeap],
     },
     4: {
       skillIds: [SKILL_ID.repellingSlam, SKILL_ID.stunningSlam],
@@ -105,11 +108,12 @@ export const LEVEL_SKILL_BUCKETS_BY_CLASS: Partial<
   },
   Paladin: {
     1: {
-      skillIds: [SKILL_ID.blessHammer],
-      skipChancePercent: 50,
-    },
+      skillIds: [SKILL_ID.blessHammer, SKILL_ID.hammerPummel],
+      skipChancePercent: 1,
+      },
     3: {
       skillIds: [SKILL_ID.crusade],
+      skipChancePercent: 1,
     },
   },
   Berserker: {

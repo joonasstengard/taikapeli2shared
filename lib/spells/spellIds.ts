@@ -4,7 +4,7 @@ export const SPELL_ID = {
   frostball: 3,
   thunderball: 4,
   desperateRune: 5,
-  ilyrsSmite: 6,
+  holySmite: 6,
   shadowBlink: 7,
   teleport: 8,
   freezingWhisper: 9,
@@ -33,4 +33,5 @@ export const SPELL_ID = {
   blightWave: 32,
   hemorrhage: 33,
   chainRot: 34,
+  ilyrsSmite: 35,
 } as const;
