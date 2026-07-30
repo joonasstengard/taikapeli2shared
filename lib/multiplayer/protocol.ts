@@ -77,6 +77,8 @@ export interface MultiplayerMatchSnapshot {
   opponentArmyId: number;
   winnerUserId: number | null;
   finishReason: MultiplayerFinishReason | null;
+  /** Consecutive idle (no-move) soft timeouts for the viewing player. */
+  myConsecutiveIdleTimeouts: number;
   battle: MultiplayerBattleView;
   armies: [MultiplayerArmyView, MultiplayerArmyView];
   visualEvents: BattleVisualEvent[];
