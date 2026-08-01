@@ -63,6 +63,12 @@ export interface MultiplayerArmyView {
   connected: boolean;
 }
 
+export interface MultiplayerRatingChange {
+  ratingBefore: number;
+  ratingAfter: number;
+  delta: number;
+}
+
 export interface MultiplayerMatchSnapshot {
   matchId: string;
   mode: MultiplayerMatchMode;
@@ -79,6 +85,8 @@ export interface MultiplayerMatchSnapshot {
   finishReason: MultiplayerFinishReason | null;
   /** Consecutive idle (no-move) soft timeouts for the viewing player. */
   myConsecutiveIdleTimeouts: number;
+  /** Elo change for the viewing player when the match was rated. */
+  myRatingChange: MultiplayerRatingChange | null;
   battle: MultiplayerBattleView;
   armies: [MultiplayerArmyView, MultiplayerArmyView];
   visualEvents: BattleVisualEvent[];
