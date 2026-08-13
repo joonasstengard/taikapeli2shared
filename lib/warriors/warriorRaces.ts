@@ -33,7 +33,7 @@ export const WARRIOR_PICTURE_RACE_RANGES: Partial<
     { race: "Orc", from: 10, to: 13 },
     { race: "Elf", from: 14, to: 23 },
   ],
-  KingMale: [{ race: "Human", from: 1, to: 7 }, { race: "Dwarf", from: 8, to: 14 }],
+  KingMale: [{ race: "Human", from: 1, to: 8 }, { race: "Dwarf", from: 9, to: 14 }],
   KnightMale: [
     { race: "Human", from: 1, to: 10 },
     { race: "Elf", from: 11, to: 23 },
