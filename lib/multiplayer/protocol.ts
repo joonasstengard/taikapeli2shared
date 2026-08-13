@@ -146,6 +146,10 @@ export interface ClientToServerEvents {
     payload: MultiplayerActionCommand,
     acknowledge: (result: MultiplayerAck<MultiplayerMatchSnapshot>) => void
   ) => void;
+  "match:enableTimer": (
+    payload: { matchId: string },
+    acknowledge: (result: MultiplayerAck<MultiplayerMatchSnapshot>) => void
+  ) => void;
 }
 
 export interface ServerToClientEvents {
