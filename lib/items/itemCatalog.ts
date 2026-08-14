@@ -51,7 +51,7 @@ export const ITEMS: ItemDefinition[] = [
     description: null,
     icon: `${ITEM_ICON_BASE}/amber_signet.png`,
     goldCost: 15,
-    statBonuses: { spellDamage: 3, speed: 3 },
+    statBonuses: { spellDamage: 3, faith: 3 },
   },
   {
     id: ITEM_ID.nightglassRing,
