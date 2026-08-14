@@ -19,7 +19,9 @@ export interface ResolvedCombatStats {
   bonuses: Partial<Record<CombatStat, number>>;
 }
 
-type WarriorCombatStatSource = Partial<CombatStatValues>;
+type WarriorCombatStatSource = Partial<CombatStatValues> & {
+  item?: { statBonuses?: Partial<Record<CombatStat, number>> } | null;
+};
 
 type ActiveStatusEffect = Pick<
   WarriorStatusEffect,
@@ -76,6 +78,28 @@ export function sumStatusEffectStatBonuses(
   return bonuses;
 }
 
+export function sumItemStatBonuses(
+  item: WarriorCombatStatSource["item"]
+): Partial<Record<CombatStat, number>> {
+  const bonuses: Partial<Record<CombatStat, number>> = {};
+  const modifiers = item?.statBonuses;
+
+  if (!modifiers) {
+    return bonuses;
+  }
+
+  for (const stat of COMBAT_STATS) {
+    const modifier = modifiers[stat];
+    if (modifier === undefined) {
+      continue;
+    }
+
+    bonuses[stat] = (bonuses[stat] ?? 0) + modifier;
+  }
+
+  return bonuses;
+}
+
 export function resolveCombatStats(
   warrior: WarriorCombatStatSource,
   statusEffects?: ActiveStatusEffect[],
@@ -84,10 +108,14 @@ export function resolveCombatStats(
   const base = readBaseCombatStats(warrior);
   const statusBonuses = sumStatusEffectStatBonuses(statusEffects);
   const buffBonuses = sumStatBuffBonuses(statBuffs);
+  const itemBonuses = sumItemStatBonuses(warrior.item);
   const bonuses: Partial<Record<CombatStat, number>> = {};
 
   for (const stat of COMBAT_STATS) {
-    const total = (statusBonuses[stat] ?? 0) + (buffBonuses[stat] ?? 0);
+    const total =
+      (statusBonuses[stat] ?? 0) +
+      (buffBonuses[stat] ?? 0) +
+      (itemBonuses[stat] ?? 0);
     if (total !== 0) {
       bonuses[stat] = total;
     }

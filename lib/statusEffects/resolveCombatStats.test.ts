@@ -115,6 +115,38 @@ describe("resolveCombatStats", () => {
     assert.equal(result.bonuses.resistance, 2);
   });
 
+  it("applies equipped item bonuses without changing base stats", () => {
+    const result = resolveCombatStats(
+      {
+        ...baseWarrior,
+        item: { statBonuses: { strength: 4, resistance: 2 } },
+      },
+      []
+    );
+
+    assert.deepEqual(result.base, baseWarrior);
+    assert.equal(result.effective.strength, 11);
+    assert.equal(result.effective.resistance, 8);
+    assert.equal(result.bonuses.strength, 4);
+    assert.equal(result.bonuses.resistance, 2);
+  });
+
+  it("stacks item bonuses with temporary stat buffs", () => {
+    const result = resolveCombatStats(
+      {
+        ...baseWarrior,
+        item: { statBonuses: { armor: 3, spellDamage: 8 } },
+      },
+      [],
+      [{ turnsRemaining: 2, statModifiers: { armor: 2, spellDamage: 1 } }]
+    );
+
+    assert.equal(result.effective.armor, 13);
+    assert.equal(result.effective.spellDamage, 12);
+    assert.equal(result.bonuses.armor, 5);
+    assert.equal(result.bonuses.spellDamage, 9);
+  });
+
   it("does not apply transform stats from status effect alone", () => {
     const result = resolveCombatStats(baseWarrior, [
       {

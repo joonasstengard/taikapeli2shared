@@ -1,3 +1,4 @@
+import type { ItemDefinition } from "../items/itemTypes";
 import type { OwnedSkill } from "../skills/skillTypes";
 import type { OwnedSpell } from "../spells/spellTypes";
 import type { WarriorStatBuff } from "@taikapeli2/shared/lib/statBuffs/statBuffTypes";
@@ -33,12 +34,15 @@ export interface WarriorBase {
   level: number;
   takedowns: number;
   isDeleted: boolean;
+  /** Equipped item catalog id; null/undefined means the slot is empty. */
+  itemId?: number | null;
 }
 
 /** Warrior as returned by game APIs (army, battle, market). */
 export interface Warrior extends WarriorBase {
   spells: OwnedSpell[];
   skills: OwnedSkill[];
+  item?: ItemDefinition | null;
   statusEffects?: WarriorStatusEffect[];
   statBuffs?: WarriorStatBuff[];
   /** Recruitment cost; only present for market free agents */
