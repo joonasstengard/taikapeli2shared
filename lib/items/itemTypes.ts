@@ -1,7 +1,28 @@
 import type { CombatStat } from "../statusEffects/statusEffectTypes";
 
-/** Battle passives granted by an item. None in v1; extend this union later. */
-export type ItemPassiveEffect = never;
+export const ITEM_PASSIVE_EFFECT_KEY = {
+  manaMastery: "manaMastery",
+} as const;
+
+export type ItemPassiveEffect =
+  (typeof ITEM_PASSIVE_EFFECT_KEY)[keyof typeof ITEM_PASSIVE_EFFECT_KEY];
+
+export interface ItemPassiveEffectDefinition {
+  key: ItemPassiveEffect;
+  name: string;
+  description: string;
+}
+
+export const ITEM_PASSIVE_EFFECT_DEFINITIONS: Record<
+  ItemPassiveEffect,
+  ItemPassiveEffectDefinition
+> = {
+  [ITEM_PASSIVE_EFFECT_KEY.manaMastery]: {
+    key: ITEM_PASSIVE_EFFECT_KEY.manaMastery,
+    name: "Mana Mastery",
+    description: "Restore 1 mana after casting any spell.",
+  },
+};
 
 /** Static item definition (catalog data, not a DB row). */
 export interface ItemDefinition {
@@ -12,6 +33,14 @@ export interface ItemDefinition {
   goldCost: number;
   statBonuses?: Partial<Record<CombatStat, number>>;
   effects?: ItemPassiveEffect[];
+}
+
+export function getItemPassiveEffectDefinitions(
+  item: Pick<ItemDefinition, "effects"> | null | undefined
+): ItemPassiveEffectDefinition[] {
+  return (item?.effects ?? []).map(
+    (effect) => ITEM_PASSIVE_EFFECT_DEFINITIONS[effect]
+  );
 }
 
 export const ITEM_STAT_ORDER: CombatStat[] = [

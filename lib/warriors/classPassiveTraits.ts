@@ -17,8 +17,6 @@ export const CLASS_PASSIVE_TRAIT_KEYS = {
   relentlessPursuit: "relentlessPursuit",
   rend: "rend",
   devotion: "devotion",
-  // unused atm, repurpose later
-  manaMastery: "manaMastery",
   cleave: "cleave",
   braced: "braced",
   huntersMark: "huntersMark",
@@ -73,11 +71,6 @@ export const CLASS_PASSIVE_TRAIT_DEFINITIONS: Record<
     key: CLASS_PASSIVE_TRAIT_KEYS.devotion,
     name: "Devotion",
     description: "Healing spells restore 1 additional health.",
-  },
-  [CLASS_PASSIVE_TRAIT_KEYS.manaMastery]: {
-    key: CLASS_PASSIVE_TRAIT_KEYS.manaMastery,
-    name: "Mana Mastery",
-    description: "Restore 1 mana after casting any spell.",
   },
   [CLASS_PASSIVE_TRAIT_KEYS.cleave]: {
     key: CLASS_PASSIVE_TRAIT_KEYS.cleave,
@@ -293,27 +286,6 @@ export function getDevotionSpellHealBonus(casterClass: string | undefined): numb
   return trait?.key === CLASS_PASSIVE_TRAIT_KEYS.devotion
     ? DEVOTION_SPELL_HEAL_BONUS
     : 0;
-}
-
-export function grantsSpellCastManaMasteryRestore(
-  casterClass: string
-): boolean {
-  const trait = getClassPassiveTraitForClass(casterClass);
-  return trait?.key === CLASS_PASSIVE_TRAIT_KEYS.manaMastery;
-}
-
-export function applySpellCastManaMasteryRestoreToWarrior(warrior: {
-  warriorClass: string;
-  currentMana: number;
-  mana: number;
-}): Pick<TakedownTraitWarriorResources, "currentMana"> {
-  if (!grantsSpellCastManaMasteryRestore(warrior.warriorClass)) {
-    return { currentMana: warrior.currentMana };
-  }
-
-  return {
-    currentMana: Math.min(warrior.currentMana + 1, warrior.mana),
-  };
 }
 
 export const WILD_CHANNEL_PRIMAL_SPELL_STAMINA_RESTORE = 1;

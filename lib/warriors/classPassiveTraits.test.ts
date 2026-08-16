@@ -5,7 +5,6 @@ import {
   createKingsCommandStrengthBuffParams,
   applyHumbleOriginsExperienceBonus,
   applyHumbleOriginsLevelUpBonus,
-  applySpellCastManaMasteryRestoreToWarrior,
   applyTakedownTraitInvisibilityToWarrior,
   applyTakedownTraitRestoreToWarrior,
   applyWildChannelPrimalSkillManaRestoreToWarrior,
@@ -21,7 +20,6 @@ import {
   grantsHolySpellCastSelfHeal,
   grantsHuntersMarkBasicAttackBonus,
   grantsKingsCommandAllyStrengthBuff,
-  grantsSpellCastManaMasteryRestore,
   grantsTakedownInvisibility,
   grantsWildChannelPrimalSkillManaRestore,
   grantsWildChannelPrimalSpellStaminaRestore,
@@ -677,38 +675,6 @@ describe("grantsBasicAttackCleave", () => {
   it("does not apply to other classes", () => {
     assert.equal(grantsBasicAttackCleave("Berserker"), false);
     assert.equal(grantsBasicAttackCleave("Knight"), false);
-  });
-});
-
-describe("grantsSpellCastManaMasteryRestore", () => {
-  it("is unused while no class is assigned Mana Mastery", () => {
-    assert.equal(grantsSpellCastManaMasteryRestore("Sorcerer"), false);
-    assert.equal(grantsSpellCastManaMasteryRestore("Warlock"), false);
-    assert.equal(grantsSpellCastManaMasteryRestore("Priestess"), false);
-  });
-});
-
-describe("applySpellCastManaMasteryRestoreToWarrior", () => {
-  it("does not restore mana while Mana Mastery is unassigned", () => {
-    assert.deepEqual(
-      applySpellCastManaMasteryRestoreToWarrior({
-        warriorClass: "Sorcerer",
-        currentMana: 4,
-        mana: 12,
-      }),
-      { currentMana: 4 }
-    );
-  });
-
-  it("does not restore mana for other classes", () => {
-    assert.deepEqual(
-      applySpellCastManaMasteryRestoreToWarrior({
-        warriorClass: "Priestess",
-        currentMana: 4,
-        mana: 12,
-      }),
-      { currentMana: 4 }
-    );
   });
 });
 

@@ -14,6 +14,7 @@ export const ITEM_ID = {
   woundBead: 13,
   palesilverBelt: 14,
   leatherBelt: 15,
+  arkenfallCrystals: 16,
 } as const;
 
 export type ItemId = (typeof ITEM_ID)[keyof typeof ITEM_ID];

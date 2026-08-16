@@ -1,5 +1,5 @@
 import { ITEM_ID } from "./itemIds";
-import type { ItemDefinition } from "./itemTypes";
+import { ITEM_PASSIVE_EFFECT_KEY, type ItemDefinition } from "./itemTypes";
 
 const ITEM_ICON_BASE = "/icons/items";
 
@@ -124,6 +124,15 @@ export const ITEMS: ItemDefinition[] = [
     icon: `${ITEM_ICON_BASE}/leather_belt.png`,
     goldCost: 10,
     statBonuses: { resistance: 2, armor: 2 },
+  },
+  {
+    id: ITEM_ID.arkenfallCrystals,
+    name: "Arkenfall Crystals",
+    description: "Restore 1 mana after casting any spell.",
+    icon: `${ITEM_ICON_BASE}/arkenfall_crystals.png`,
+    goldCost: 16,
+    statBonuses: { spellDamage: 4, speed: 2 },
+    effects: [ITEM_PASSIVE_EFFECT_KEY.manaMastery],
   },
 ];
 

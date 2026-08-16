@@ -18,14 +18,18 @@ describe("item catalog", () => {
     assert.deepEqual([...catalogIds].sort((a, b) => a - b), [...definedIds].sort((a, b) => a - b));
   });
 
-  it("requires a name, icon, positive gold cost, and combat-stat bonuses", () => {
+  it("requires a name, icon, positive gold cost, and bonuses or effects", () => {
     for (const item of ITEMS) {
       assert.ok(item.name.length > 0, `item ${item.id} is missing a name`);
       assert.ok(item.icon.startsWith("/icons/items/"), `item ${item.id} has a bad icon path`);
       assert.ok(item.goldCost > 0, `item ${item.id} must cost gold`);
 
       const bonusStats = Object.keys(item.statBonuses ?? {});
-      assert.ok(bonusStats.length > 0, `item ${item.id} has no stat bonuses`);
+      const effects = item.effects ?? [];
+      assert.ok(
+        bonusStats.length > 0 || effects.length > 0,
+        `item ${item.id} has no stat bonuses or effects`
+      );
       for (const stat of bonusStats) {
         assert.ok(
           (ITEM_STAT_ORDER as string[]).includes(stat),
@@ -35,9 +39,15 @@ describe("item catalog", () => {
     }
   });
 
+  it("gives Arkenfall Crystals Mana Mastery", () => {
+    const crystals = getItemById(ITEM_ID.arkenfallCrystals);
+    assert.deepEqual(crystals?.effects, ["manaMastery"]);
+    assert.equal(crystals?.statBonuses, undefined);
+  });
+
   it("resolves equipped items and ignores unknown ids", () => {
     const wornBand = getItemById(ITEM_ID.wornBand);
-    assert.equal(wornBand?.name, "Worn Band");
+    assert.equal(wornBand?.name, "Worn Leather Band");
     assert.equal(resolveEquippedItem(ITEM_ID.wornBand)?.id, ITEM_ID.wornBand);
     assert.equal(resolveEquippedItem(null), null);
     assert.equal(resolveEquippedItem(9999), null);
