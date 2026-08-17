@@ -16,6 +16,7 @@ export const ITEM_ID = {
   leatherBelt: 15,
   arkenfallCrystals: 16,
   aeronorMandrake: 17,
+  thalenAntleredSkull: 18,
 } as const;
 
 export type ItemId = (typeof ITEM_ID)[keyof typeof ITEM_ID];

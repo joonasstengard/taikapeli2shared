@@ -50,6 +50,12 @@ describe("item catalog", () => {
     assert.equal(mandrake?.statBonuses, undefined);
   });
 
+  it("gives Thalen Antlered Skull Trophy Harvest", () => {
+    const skull = getItemById(ITEM_ID.thalenAntleredSkull);
+    assert.deepEqual(skull?.effects, ["trophyHarvest"]);
+    assert.equal(skull?.statBonuses, undefined);
+  });
+
   it("resolves equipped items and ignores unknown ids", () => {
     const wornBand = getItemById(ITEM_ID.wornBand);
     assert.equal(wornBand?.name, "Worn Leather Band");

@@ -16,6 +16,7 @@ export function grantsSpellCastManaMasteryRestore(
 
 export const MANA_MASTERY_SPELL_CAST_MANA_RESTORE = 1;
 export const PRIMAL_MENDING_HEALTH_RESTORE = 5;
+export const TROPHY_HARVEST_HEALTH_RESTORE_PERCENT = 50;
 
 export function grantsPrimalAbilityHealthRestore(
   item: Pick<ItemDefinition, "effects"> | null | undefined,
@@ -41,6 +42,49 @@ export function applySpellCastManaMasteryRestoreToWarrior(warrior: {
     currentMana: Math.min(
       warrior.currentMana + MANA_MASTERY_SPELL_CAST_MANA_RESTORE,
       warrior.mana
+    ),
+  };
+}
+
+export function grantsTakedownVictimHealthRestore(
+  item: Pick<ItemDefinition, "effects"> | null | undefined
+): boolean {
+  return itemGrantsPassiveEffect(item, ITEM_PASSIVE_EFFECT_KEY.trophyHarvest);
+}
+
+export function calculateTakedownVictimHealthRestore(
+  victimMaxHealth: number
+): number {
+  if (victimMaxHealth <= 0) {
+    return 0;
+  }
+
+  return Math.round(
+    victimMaxHealth * (TROPHY_HARVEST_HEALTH_RESTORE_PERCENT / 100)
+  );
+}
+
+/** Applies Trophy Harvest health restore after scoring a takedown. */
+export function applyTakedownVictimHealthRestoreToWarrior(
+  warrior: {
+    item?: Pick<ItemDefinition, "effects"> | null;
+    currentHealth: number;
+    health: number;
+  },
+  victimMaxHealth: number
+): { currentHealth: number } {
+  if (
+    !grantsTakedownVictimHealthRestore(warrior.item) ||
+    warrior.currentHealth <= 0
+  ) {
+    return { currentHealth: warrior.currentHealth };
+  }
+
+  return {
+    currentHealth: Math.min(
+      warrior.currentHealth +
+        calculateTakedownVictimHealthRestore(victimMaxHealth),
+      warrior.health
     ),
   };
 }

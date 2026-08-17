@@ -136,9 +136,18 @@ export const ITEMS: ItemDefinition[] = [
   {
     id: ITEM_ID.aeronorMandrake,
     name: "Aeronor Mandrake",
+    description: "It remembers the soil it was torn from.",
     icon: `${ITEM_ICON_BASE}/aeronor_mandrake.png`,
     goldCost: 16,
     effects: [ITEM_PASSIVE_EFFECT_KEY.primalMending],
+  },
+  {
+    id: ITEM_ID.thalenAntleredSkull,
+    name: "Thalen Antlered Skull",
+    description: "The Thalen forest keeps what it kills.",
+    icon: `${ITEM_ICON_BASE}/thalen_antlered_skull.png`,
+    goldCost: 20,
+    effects: [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest],
   },
 ];
 

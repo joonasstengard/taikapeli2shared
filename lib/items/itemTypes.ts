@@ -3,6 +3,7 @@ import type { CombatStat } from "../statusEffects/statusEffectTypes";
 export const ITEM_PASSIVE_EFFECT_KEY = {
   manaMastery: "manaMastery",
   primalMending: "primalMending",
+  trophyHarvest: "trophyHarvest",
 } as const;
 
 export type ItemPassiveEffect =
@@ -28,6 +29,12 @@ export const ITEM_PASSIVE_EFFECT_DEFINITIONS: Record<
     name: "Primal Mending",
     description:
       "Restore 5 health after casting a Primal spell or using a Primal skill.",
+  },
+  [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest]: {
+    key: ITEM_PASSIVE_EFFECT_KEY.trophyHarvest,
+    name: "Trophy Harvest",
+    description:
+      "Restore 50% of the defeated enemy's max health when you score a takedown.",
   },
 };
 

@@ -5,8 +5,10 @@ import { getItemById } from "./itemCatalog";
 import {
   applyPrimalAbilityHealthRestoreToWarrior,
   applySpellCastManaMasteryRestoreToWarrior,
+  applyTakedownVictimHealthRestoreToWarrior,
   grantsPrimalAbilityHealthRestore,
   grantsSpellCastManaMasteryRestore,
+  grantsTakedownVictimHealthRestore,
 } from "./itemPassiveEffects";
 import { ITEM_PASSIVE_EFFECT_KEY } from "./itemTypes";
 
@@ -153,6 +155,101 @@ describe("applyPrimalAbilityHealthRestoreToWarrior", () => {
           health: 12,
         },
         "Primal"
+      ),
+      { currentHealth: 0 }
+    );
+  });
+});
+
+describe("grantsTakedownVictimHealthRestore", () => {
+  it("applies when Thalen Antlered Skull is equipped", () => {
+    const skull = getItemById(ITEM_ID.thalenAntleredSkull);
+    assert.equal(grantsTakedownVictimHealthRestore(skull), true);
+  });
+
+  it("does not apply without the item effect", () => {
+    assert.equal(grantsTakedownVictimHealthRestore(null), false);
+    assert.equal(
+      grantsTakedownVictimHealthRestore(getItemById(ITEM_ID.wornBand)),
+      false
+    );
+  });
+});
+
+describe("applyTakedownVictimHealthRestoreToWarrior", () => {
+  it("restores half of the victim's max health when Trophy Harvest is equipped", () => {
+    assert.deepEqual(
+      applyTakedownVictimHealthRestoreToWarrior(
+        {
+          item: {
+            effects: [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest],
+          },
+          currentHealth: 4,
+          health: 20,
+        },
+        10
+      ),
+      { currentHealth: 9 }
+    );
+  });
+
+  it("rounds half of odd victim max health", () => {
+    assert.deepEqual(
+      applyTakedownVictimHealthRestoreToWarrior(
+        {
+          item: {
+            effects: [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest],
+          },
+          currentHealth: 4,
+          health: 20,
+        },
+        11
+      ),
+      { currentHealth: 10 }
+    );
+  });
+
+  it("does not restore health without Trophy Harvest", () => {
+    assert.deepEqual(
+      applyTakedownVictimHealthRestoreToWarrior(
+        {
+          item: null,
+          currentHealth: 4,
+          health: 20,
+        },
+        10
+      ),
+      { currentHealth: 4 }
+    );
+  });
+
+  it("does not exceed max health", () => {
+    assert.deepEqual(
+      applyTakedownVictimHealthRestoreToWarrior(
+        {
+          item: {
+            effects: [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest],
+          },
+          currentHealth: 18,
+          health: 20,
+        },
+        10
+      ),
+      { currentHealth: 20 }
+    );
+  });
+
+  it("does not restore health for defeated warriors", () => {
+    assert.deepEqual(
+      applyTakedownVictimHealthRestoreToWarrior(
+        {
+          item: {
+            effects: [ITEM_PASSIVE_EFFECT_KEY.trophyHarvest],
+          },
+          currentHealth: 0,
+          health: 20,
+        },
+        10
       ),
       { currentHealth: 0 }
     );
