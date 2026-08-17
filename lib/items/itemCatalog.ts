@@ -128,11 +128,17 @@ export const ITEMS: ItemDefinition[] = [
   {
     id: ITEM_ID.arkenfallCrystals,
     name: "Arkenfall Crystals",
-    description: "Restore 1 mana after casting any spell.",
     icon: `${ITEM_ICON_BASE}/arkenfall_crystals.png`,
     goldCost: 16,
     statBonuses: { spellDamage: 4, speed: 2 },
     effects: [ITEM_PASSIVE_EFFECT_KEY.manaMastery],
+  },
+  {
+    id: ITEM_ID.aeronorMandrake,
+    name: "Aeronor Mandrake",
+    icon: `${ITEM_ICON_BASE}/aeronor_mandrake.png`,
+    goldCost: 16,
+    effects: [ITEM_PASSIVE_EFFECT_KEY.primalMending],
   },
 ];
 

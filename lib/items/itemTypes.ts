@@ -2,6 +2,7 @@ import type { CombatStat } from "../statusEffects/statusEffectTypes";
 
 export const ITEM_PASSIVE_EFFECT_KEY = {
   manaMastery: "manaMastery",
+  primalMending: "primalMending",
 } as const;
 
 export type ItemPassiveEffect =
@@ -21,6 +22,12 @@ export const ITEM_PASSIVE_EFFECT_DEFINITIONS: Record<
     key: ITEM_PASSIVE_EFFECT_KEY.manaMastery,
     name: "Mana Mastery",
     description: "Restore 1 mana after casting any spell.",
+  },
+  [ITEM_PASSIVE_EFFECT_KEY.primalMending]: {
+    key: ITEM_PASSIVE_EFFECT_KEY.primalMending,
+    name: "Primal Mending",
+    description:
+      "Restore 5 health after casting a Primal spell or using a Primal skill.",
   },
 };
 

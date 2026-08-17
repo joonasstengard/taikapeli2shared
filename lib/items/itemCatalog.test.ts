@@ -42,7 +42,12 @@ describe("item catalog", () => {
   it("gives Arkenfall Crystals Mana Mastery", () => {
     const crystals = getItemById(ITEM_ID.arkenfallCrystals);
     assert.deepEqual(crystals?.effects, ["manaMastery"]);
-    assert.equal(crystals?.statBonuses, undefined);
+  });
+
+  it("gives Aeronor Mandrake Primal Mending", () => {
+    const mandrake = getItemById(ITEM_ID.aeronorMandrake);
+    assert.deepEqual(mandrake?.effects, ["primalMending"]);
+    assert.equal(mandrake?.statBonuses, undefined);
   });
 
   it("resolves equipped items and ignores unknown ids", () => {

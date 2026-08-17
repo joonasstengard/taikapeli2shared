@@ -237,7 +237,7 @@ describe("race-only recruitment challenges", () => {
       recruitmentEvent("Ranger", 1, "Male", 5),
       recruitmentEvent("Moonblade", 1, "Male", 3),
       recruitmentEvent("Charger", 1, "Male", 10),
-      recruitmentEvent("King", 1, "Male", 8),
+      recruitmentEvent("King", 1, "Male", 9),
       recruitmentEvent("Peasant", 1, "Male", 21),
     ] as const;
 
@@ -291,7 +291,7 @@ describe("race-only recruitment challenges", () => {
 
   it("does not break dwarf-only when recruiting Dwarf portrait variants", () => {
     const dwarfRecruits = [
-      recruitmentEvent("King", 1, "Male", 8),
+      recruitmentEvent("King", 1, "Male", 9),
       recruitmentEvent("Marksman", 2, "Male", 10),
       recruitmentEvent("Peasant", 3, "Male", 21),
     ] as const;
