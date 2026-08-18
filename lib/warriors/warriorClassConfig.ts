@@ -42,54 +42,54 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Charger: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "6-12",
+      health: "8-12",
       stamina: "5-10",
       speed: "5-13",
       strength: "5-10",
-      armor: "3-8",
+      armor: "5-10",
       resistance: "1-4",
     },
   },
   King: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "9-15",
+      health: "10-15",
       stamina: "6-12",
       speed: "2-7",
       strength: "2-7",
-      armor: "3-14",
+      armor: "4-16",
       resistance: "2-6",
     },
   },
   Knight: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "8-13",
+      health: "9-14",
       stamina: "3-8",
       speed: "1-5",
       strength: "4-7",
-      armor: "6-18",
+      armor: "8-19",
       resistance: "1-5",
     },
   },
   Paladin: {
     optionalStats: [...MANA_STATS, ...STAMINA_STATS, "faith"],
     weightedStats: {
-      health: "7-13",
+      health: "8-14",
       stamina: "2-4",
       speed: "1-4",
       strength: "3-9",
       mana: "5-7",
       faith: "3-9",
       spellDamage: "1-3",
-      armor: "4-14",
+      armor: "4-16",
       resistance: "3-12",
     },
   },
   Peasant: {
     optionalStats: [...MANA_STATS, ...STAMINA_STATS, "faith"],
     weightedStats: {
-      health: "4-10",
+      health: "5-11",
       stamina: "2-5",
       speed: "1-4",
       strength: "1-4",
@@ -103,9 +103,9 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Warlock: {
     optionalStats: MANA_STATS,
     weightedStats: {
-      health: "7-12",
+      health: "7-14",
       speed: "1-7",
-      mana: "6-10",
+      mana: "6-12",
       spellDamage: "3-10",
       strength: "1-5",
       armor: "2-6",
@@ -115,7 +115,7 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Marksman: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "6-9",
+      health: "7-10",
       stamina: "4-7",
       strength: "4-8",
       attackRange: "2-2",
@@ -127,20 +127,20 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Moonblade: {
     optionalStats: [...MANA_STATS, ...STAMINA_STATS],
     weightedStats: {
-      health: "7-12",
+      health: "8-13",
       stamina: "5-7",
       mana: "1-2",
       spellDamage: "1-2",
       speed: "4-10",
       strength: "6-13",
       armor: "1-2",
-      resistance: "3-12",
+      resistance: "3-16",
     },
   },
   Priestess: {
     optionalStats: [...MANA_STATS, "faith"],
     weightedStats: {
-      health: "6-12",
+      health: "8-15",
       speed: "3-10",
       mana: "6-12",
       faith: "5-16",
@@ -153,7 +153,7 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Ranger: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "5-9",
+      health: "6-10",
       stamina: "4-12",
       strength: "3-9",
       attackRange: "2-2",
@@ -165,18 +165,18 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Berserker: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "7-11",
+      health: "8-12",
       stamina: "4-9",
       speed: "5-12",
       strength: "6-13",
-      armor: "3-8",
+      armor: "3-9",
       resistance: "1-3",
     },
   },
   Brutalizer: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "7-14",
+      health: "9-15",
       stamina: "4-7",
       speed: "2-5",
       strength: "6-13",
@@ -187,7 +187,7 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Shaman: {
     optionalStats: [...MANA_STATS, ...STAMINA_STATS],
     weightedStats: {
-      health: "8-13",
+      health: "9-15",
       stamina: "4-6",
       speed: "3-8",
       strength: "4-8",
@@ -200,7 +200,7 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Sorcerer: {
     optionalStats: [...MANA_STATS, "faith"],
     weightedStats: {
-      health: "6-12",
+      health: "7-13",
       mana: "6-12",
       faith: "1-3",
       spellDamage: "5-14",
@@ -211,9 +211,9 @@ export const WARRIOR_CLASS_CONFIG: Record<WarriorClass, WarriorClassConfig> = {
   Infiltrator: {
     optionalStats: STAMINA_STATS,
     weightedStats: {
-      health: "6-12",
+      health: "7-13",
       stamina: "4-8",
-      speed: "6-18",
+      speed: "6-17",
       strength: "6-10",
       armor: "1-2",
       resistance: "1-2",
